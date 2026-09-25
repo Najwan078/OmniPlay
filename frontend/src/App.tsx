@@ -7,7 +7,7 @@ import {
   User, CheckCircle2, ShieldAlert, 
   ShieldCheck, Smartphone, Cpu, LogOut,
   Trophy, LifeBuoy, Layers, SlidersHorizontal, 
-  AlertTriangle, Users
+  AlertTriangle, Users, Menu, X, Edit3
 } from 'lucide-react';
 import CloudResourcesDashboard from './components/CloudResourcesDashboard';
 import OmniRemote from './components/OmniRemote';
@@ -53,7 +53,8 @@ function NavItem({
 
 // --- Top Navbar Component ---
 interface TopNavbarProps {
-  userName: string;
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
   activeTab: string;
   onTabChange: (tab: string) => void;
   onLogout?: () => void;
@@ -61,7 +62,8 @@ interface TopNavbarProps {
 }
 
 function TopNavbar({
-  userName,
+  isSidebarOpen,
+  toggleSidebar,
   activeTab,
   onTabChange,
   onLogout,
@@ -69,6 +71,28 @@ function TopNavbar({
 }: TopNavbarProps) {
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Profile Edit Modal States (saved to localStorage)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [nickname, setNickname] = useState(() => localStorage.getItem('omniplay_nickname') || 'Operator');
+  const [bio, setBio] = useState(() => localStorage.getItem('omniplay_bio') || 'Ready to stream.');
+  const [tempNickname, setTempNickname] = useState(nickname);
+  const [tempBio, setTempBio] = useState(bio);
+
+  const handleOpenProfileModal = () => {
+    setTempNickname(nickname);
+    setTempBio(bio);
+    setIsProfileModalOpen(true);
+  };
+
+  const handleSaveProfile = () => {
+    const finalNick = tempNickname.trim() || 'Operator';
+    setNickname(finalNick);
+    setBio(tempBio);
+    localStorage.setItem('omniplay_nickname', finalNick);
+    localStorage.setItem('omniplay_bio', tempBio);
+    setIsProfileModalOpen(false);
+  };
 
   const handleSignOutClick = () => {
     setIsLoggingOut(true);
@@ -101,8 +125,81 @@ function TopNavbar({
         </div>
       )}
 
+      {/* Profile Edit Glassmorphism Modal */}
+      {isProfileModalOpen && (
+        <div className="profile-modal-overlay" onClick={() => setIsProfileModalOpen(false)}>
+          <div className="profile-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="profile-modal-header">
+              <h2>Edit Operator Profile</h2>
+              <button 
+                type="button" 
+                className="profile-modal-close-icon"
+                onClick={() => setIsProfileModalOpen(false)}
+                aria-label="Close modal"
+              >
+                <X style={{ width: 18, height: 18 }} />
+              </button>
+            </div>
+
+            <div className="profile-modal-body">
+              <div className="profile-modal-field">
+                <label className="profile-modal-label">Operator Nickname</label>
+                <input 
+                  type="text" 
+                  className="profile-modal-input" 
+                  value={tempNickname} 
+                  onChange={(e) => setTempNickname(e.target.value)}
+                  placeholder="Enter operator nickname..."
+                  maxLength={30}
+                />
+              </div>
+
+              <div className="profile-modal-field">
+                <label className="profile-modal-label">Operator Bio / Status</label>
+                <textarea 
+                  className="profile-modal-textarea" 
+                  value={tempBio} 
+                  onChange={(e) => setTempBio(e.target.value)}
+                  placeholder="Tell other operators about yourself..."
+                  rows={3}
+                  maxLength={160}
+                />
+              </div>
+            </div>
+
+            <div className="profile-modal-footer">
+              <button 
+                type="button" 
+                className="profile-modal-btn cancel"
+                onClick={() => setIsProfileModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="profile-modal-btn save"
+                onClick={handleSaveProfile}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <header className="omni-topbar">
         <div className="omni-topbar-left">
+          {/* Hamburger Menu Toggle Button */}
+          <button 
+            type="button" 
+            className="omni-sidebar-toggle-btn" 
+            onClick={toggleSidebar}
+            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            aria-label="Toggle navigation sidebar"
+          >
+            <Menu style={{ width: 20, height: 20 }} />
+          </button>
+
           <div className="omni-brand-logo" onClick={() => onTabChange('library')}>
             <Gamepad2 className="omni-brand-icon" />
             <span className="omni-brand-text">OmniPlay</span>
@@ -176,8 +273,14 @@ function TopNavbar({
         </div>
 
         <div className="omni-topbar-right">
-          {/* Operator Profile Pill */}
-          <div className="omni-profile-pill">
+          {/* Operator Profile Pill - Clickable to open Profile Edit Modal */}
+          <div 
+            className="omni-profile-pill clickable"
+            onClick={handleOpenProfileModal}
+            title="Click to Edit Operator Profile"
+            role="button"
+            tabIndex={0}
+          >
             <div className="omni-avatar">
               {isAdmin ? (
                 <ShieldCheck style={{ width: 14, height: 14, color: 'var(--neon-rose)' }} />
@@ -187,9 +290,13 @@ function TopNavbar({
             </div>
             <div className="omni-profile-info" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               <span className="omni-username" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {userName}
+                {nickname}
+              </span>
+              <span className="omni-userbio-preview">
+                {bio}
               </span>
             </div>
+            <Edit3 style={{ width: 12, height: 12, color: 'rgba(0, 210, 255, 0.6)', marginLeft: 4 }} />
           </div>
 
           <button 
@@ -209,20 +316,20 @@ function TopNavbar({
 
 // --- Sidebar Navigation Component ---
 interface SidebarProps {
-  userName: string;
+  isSidebarOpen: boolean;
   activeTab: string;
   onTabChange: (tab: string) => void;
   isAdmin: boolean;
 }
 
 function Sidebar({
-  userName,
+  isSidebarOpen,
   activeTab,
   onTabChange,
   isAdmin
 }: SidebarProps) {
   return (
-    <aside className={`omni-sidebar ${isAdmin ? 'admin-sidebar' : ''}`}>
+    <aside className={`omni-sidebar ${isAdmin ? 'admin-sidebar' : ''} ${!isSidebarOpen ? 'collapsed' : ''}`}>
       <div>
         <div className="sidebar-role-indicator">
           {isAdmin ? (
@@ -232,21 +339,7 @@ function Sidebar({
           )}
         </div>
 
-        {/* Operator Identity Card in Sidebar */}
-        <div className="sidebar-operator-card">
-          <div className="sidebar-operator-avatar">
-            {isAdmin ? (
-              <ShieldCheck style={{ width: 15, height: 15, color: 'var(--neon-rose)' }} />
-            ) : (
-              <User style={{ width: 15, height: 15, color: 'var(--neon-cyan)' }} />
-            )}
-          </div>
-          <div className="sidebar-operator-meta" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            <span className="sidebar-operator-handle" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {userName}
-            </span>
-          </div>
-        </div>
+        {/* User profile section completely removed as requested */}
 
         <div className="omni-nav-list">
           {isAdmin ? (
@@ -346,35 +439,12 @@ function DashboardShell({
   const role = authContext?.user?.role || authContext?.role || 'user';
   const isAdmin = role === 'admin';
 
-  const [operatorName, setOperatorName] = useState<string>("Loading...");
-  const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
-        setOperatorName('admin1');
-        return;
-      }
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user?.email) {
-          setOperatorName(user.email.split('@')[0]); // Get text before @
-        } else if (authContext?.nickname && authContext.nickname !== 'Player1') {
-          setOperatorName(authContext.nickname.includes('@') ? authContext.nickname.split('@')[0] : authContext.nickname);
-        } else {
-          setOperatorName('Guest');
-        }
-      } catch (err) {
-        console.warn('Error fetching Supabase user in DashboardShell:', err);
-        if (authContext?.nickname) {
-          setOperatorName(authContext.nickname.includes('@') ? authContext.nickname.split('@')[0] : authContext.nickname);
-        } else {
-          setOperatorName('Guest');
-        }
-      }
-    };
-    fetchUser();
-  }, [authContext?.nickname]);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
 
   // Menu Click Simulation: Wrap the sidebar navigation logic in a function that sets isPageLoading(true), waits ~600ms via setTimeout, updates the view, and sets isPageLoading(false)
   const handleMenuClick = (tab: string) => {
@@ -391,7 +461,8 @@ function DashboardShell({
       
       {/* 1. TOP NAVBAR */}
       <TopNavbar 
-        userName={operatorName} 
+        isSidebarOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
         activeTab={activeTab} 
         onTabChange={handleMenuClick} 
         onLogout={onLogout} 
@@ -401,7 +472,7 @@ function DashboardShell({
       {/* 2. APP BODY & SIDEBAR */}
       <div className="omni-body">
         <Sidebar 
-          userName={operatorName} 
+          isSidebarOpen={isSidebarOpen}
           activeTab={activeTab} 
           onTabChange={handleMenuClick} 
           isAdmin={isAdmin} 
