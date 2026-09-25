@@ -320,13 +320,15 @@ interface SidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   isAdmin: boolean;
+  onClose?: () => void;
 }
 
 function Sidebar({
   isSidebarOpen,
   activeTab,
   onTabChange,
-  isAdmin
+  isAdmin,
+  onClose
 }: SidebarProps) {
   return (
     <aside className={`omni-sidebar ${isAdmin ? 'admin-sidebar' : ''} ${!isSidebarOpen ? 'collapsed' : ''}`}>
@@ -336,6 +338,16 @@ function Sidebar({
             <span className="role-tag admin">ADMINISTRATOR CONSOLE</span>
           ) : (
             <span className="role-tag customer">OPERATOR CONSOLE</span>
+          )}
+          {onClose && (
+            <button 
+              type="button" 
+              className="sidebar-mobile-close-btn" 
+              onClick={onClose}
+              aria-label="Close sidebar"
+            >
+              <X style={{ width: 18, height: 18 }} />
+            </button>
           )}
         </div>
 
@@ -439,15 +451,27 @@ function DashboardShell({
   const role = authContext?.user?.role || authContext?.role || 'user';
   const isAdmin = role === 'admin';
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth > 768;
+    }
+    return true;
+  });
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };
 
+  const closeSidebarMobile = () => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   // Menu Click Simulation: Wrap the sidebar navigation logic in a function that sets isPageLoading(true), waits ~600ms via setTimeout, updates the view, and sets isPageLoading(false)
   const handleMenuClick = (tab: string) => {
+    closeSidebarMobile();
     if (tab === activeTab) return;
     setIsPageLoading(true);
     setTimeout(() => {
@@ -459,6 +483,15 @@ function DashboardShell({
   return (
     <div className="omni-app enter-dashboard">
       
+      {/* Mobile Drawer Overlay Backdrop */}
+      {isSidebarOpen && (
+        <div 
+          className="omni-sidebar-mobile-backdrop"
+          onClick={closeSidebarMobile}
+          aria-hidden="true"
+        />
+      )}
+
       {/* 1. TOP NAVBAR */}
       <TopNavbar 
         isSidebarOpen={isSidebarOpen}
@@ -476,6 +509,7 @@ function DashboardShell({
           activeTab={activeTab} 
           onTabChange={handleMenuClick} 
           isAdmin={isAdmin} 
+          onClose={closeSidebarMobile}
         />
 
         {/* Main Content View with Page Loading Spinner */}
