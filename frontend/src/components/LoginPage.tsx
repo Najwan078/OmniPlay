@@ -426,8 +426,8 @@ interface LoginPageProps {
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
   const { nickname, setNickname } = useUser();
-  const [username, setUsername] = useState(nickname || 'Player1');
-  const [password, setPassword] = useState('••••••••');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState<'user' | 'admin'>('user');
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -511,7 +511,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           <button
             type="button"
             className={`login-role-btn ${selectedRole === 'user' ? 'active' : ''}`}
-            onClick={() => handleTriggerAuth('user')}
+            onClick={() => setSelectedRole('user')}
             disabled={isExiting}
           >
             <Gamepad2 style={{ width: 15, height: 15 }} />
@@ -520,7 +520,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           <button
             type="button"
             className={`login-role-btn ${selectedRole === 'admin' ? 'active' : ''}`}
-            onClick={() => handleTriggerAuth('admin')}
+            onClick={() => setSelectedRole('admin')}
             disabled={isExiting}
           >
             <ShieldAlert style={{ width: 15, height: 15 }} />

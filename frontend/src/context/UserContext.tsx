@@ -23,9 +23,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [nickname, setNicknameState] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('omni_operator_nickname');
-      return saved && saved.trim() ? saved.trim() : 'Player1';
+      return saved && saved.trim() ? saved.trim() : '';
     } catch {
-      return 'Player1';
+      return '';
     }
   });
 
