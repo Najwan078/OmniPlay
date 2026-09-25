@@ -5198,6 +5198,39 @@ body {
   box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4), 0 0 12px rgba(0, 212, 255, 0.25);
 }
 
+/* Authorization Failure Alert Banner */
+.login-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  margin-bottom: 16px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  border-radius: 10px;
+  color: #fca5a5;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+  animation: loginErrorShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.login-error-icon {
+  width: 17px;
+  height: 17px;
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+@keyframes loginErrorShake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -5244,6 +5277,40 @@ body {
   font-size: 14px;
   outline: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* Ensure password text never overlaps the eye toggle icon */
+.login-input.login-input-passcode {
+  padding-right: 44px;
+}
+
+/* Password Visibility Toggle Button (Pure CSS) */
+.login-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+  outline: none;
+}
+
+.login-password-toggle:hover {
+  color: #00d2ff;
+  background-color: rgba(0, 210, 255, 0.1);
+}
+
+.login-password-toggle:active {
+  transform: translateY(-50%) scale(0.92);
 }
 
 /* Subtle cyan glow on input focus */
@@ -5298,6 +5365,10 @@ body {
   .login-input {
     font-size: 16px; /* Strictly 16px to prevent iOS Safari auto-zoom */
     padding: 12px 14px 12px 38px;
+  }
+
+  .login-input.login-input-passcode {
+    padding-right: 40px;
   }
 
   .login-card-header {

@@ -413,6 +413,8 @@ export default function OmniPlayApp() {
       {/* Root & Dashboard redirects: Direct to /library if authenticated, or /login if unauthenticated */}
       <Route path="/" element={<Navigate to={isAuthenticated && user ? "/library" : "/login"} replace />} />
       <Route path="/dashboard" element={<Navigate to={isAuthenticated && user ? "/library" : "/login"} replace />} />
+      <Route path="/admin" element={<Navigate to={isAuthenticated && user ? "/library" : "/login"} replace />} />
+      <Route path="/operator" element={<Navigate to={isAuthenticated && user ? "/library" : "/login"} replace />} />
 
       {/* Protected: Game Library */}
       <Route 

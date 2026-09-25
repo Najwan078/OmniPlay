@@ -1,8 +1,10 @@
 import React, { useRef, useState, useEffect, useMemo, Component, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Gamepad2, ShieldAlert, Lock, User, ArrowRight } from 'lucide-react';
+import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import * as THREE from 'three';
 import { useUser } from '../context/UserContext';
+import { authApi } from '../services/api';
 
 // Resilient Error Boundary for WebGL Contexts
 class CanvasErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
@@ -425,10 +427,13 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
-  const { nickname, setNickname } = useUser();
-  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+  const { setNickname } = useUser();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedRole] = useState<'user' | 'admin'>('user');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -448,26 +453,46 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     };
   }, []);
 
-  const handleTriggerAuth = (role?: 'user' | 'admin') => {
-    if (isExiting) return;
-    const finalRole = role || selectedRole;
-    setSelectedRole(finalRole);
-    setIsSubmitting(true);
-    setIsExiting(true);
+  const handleAuth = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (isSubmitting || isExiting) return;
 
-    // Save operator handle globally
-    const finalNickname = username.trim() || (finalRole === 'admin' ? 'Admin' : 'Player1');
-    setNickname(finalNickname);
+    setErrorMsg('');
 
-    // Exactly 2500ms delay for cinematic multi-stage 3D dive and fade-to-black
-    setTimeout(() => {
-      onLogin(finalRole);
-    }, 2500);
-  };
+    // FORK 1: Admin Mode - Bypass standard Supabase Auth and check hardcoded Admin ID & Password
+    if (isAdminMode) {
+      if (email.trim() === 'admin1' && password === 'admin123') {
+        setErrorMsg('');
+        setNickname('admin1');
+        onLogin('admin');
+        navigate('/admin');
+      } else {
+        setErrorMsg('AUTHORIZATION FAILED: Invalid Admin ID or Passcode.');
+      }
+      return;
+    }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleTriggerAuth(selectedRole);
+    // FORK 2: User Mode - Proceed with standard Supabase Auth logic
+    try {
+      setIsSubmitting(true);
+      const userNickname = email.trim() || 'Player1';
+      setNickname(userNickname);
+
+      // Attempt Supabase backend sync
+      try {
+        await authApi.login({ nickname: userNickname, password, role: 'user' });
+      } catch (err) {
+        console.warn('Backend Supabase sync notice:', err);
+      }
+
+      onLogin('user');
+      navigate('/library');
+    } catch (err: unknown) {
+      console.error('Authentication error:', err);
+      setErrorMsg(err instanceof Error ? err.message : 'Authentication failed.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -490,7 +515,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       {/* Overlay Vignette Gradients */}
       <div className="login-overlay-vignette" />
 
-      {/* STAGE 1: Glassmorphic Auth Card (Fades to 0 opacity over 0.5s when isExiting) */}
+      {/* STAGE 1: Glassmorphic Auth Card */}
       <div className={`login-card ${isExiting ? 'exit-login' : ''}`}>
         <div className="login-card-header">
           <div className="login-brand-logo">
@@ -506,12 +531,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </p>
         </div>
 
-        {/* Role Toggle Selector / Quick Login */}
+        {/* Role Toggle Selector / Mode Tabs */}
         <div className="login-role-selector">
           <button
             type="button"
-            className={`login-role-btn ${selectedRole === 'user' ? 'active' : ''}`}
-            onClick={() => setSelectedRole('user')}
+            className={`login-role-btn ${!isAdminMode ? 'active' : ''}`}
+            onClick={() => {
+              setIsAdminMode(false);
+              setErrorMsg('');
+            }}
             disabled={isExiting}
           >
             <Gamepad2 style={{ width: 15, height: 15 }} />
@@ -519,45 +547,80 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </button>
           <button
             type="button"
-            className={`login-role-btn ${selectedRole === 'admin' ? 'active' : ''}`}
-            onClick={() => setSelectedRole('admin')}
+            className={`login-role-btn ${isAdminMode ? 'active' : ''}`}
+            onClick={() => {
+              setIsAdminMode(true);
+              setIsCreatingAccount(false);
+              setErrorMsg('');
+            }}
             disabled={isExiting}
           >
             <ShieldAlert style={{ width: 15, height: 15 }} />
-            <span>{isCreatingAccount ? "Register as Admin" : "Login as Admin"}</span>
+            <span>Login as Admin</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="login-form">
+        {/* Authorization Failure Warning Banner */}
+        {errorMsg && (
+          <div className="login-error-banner" role="alert">
+            <ShieldAlert className="login-error-icon" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleAuth} className="login-form">
           <div className="login-input-group">
-            <label className="login-label">Operator Handle / Steam ID</label>
+            <label className="login-label">
+              {isAdminMode ? "Admin Identifier" : "Operator Handle / Email Address"}
+            </label>
             <div className="login-input-wrap">
               <User className="login-input-icon" />
               <input
                 type="text"
                 className="login-input"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter handle or SteamID"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder={isAdminMode ? "Enter Admin ID" : "Enter Email Address"}
                 required
-                disabled={isExiting}
+                disabled={isSubmitting || isExiting}
               />
             </div>
           </div>
 
           <div className="login-input-group">
-            <label className="login-label">Neural Passcode / Auth Token</label>
-            <div className="login-input-wrap">
+            <label className="login-label">
+              {isAdminMode ? "Admin Passcode / Security Key" : "Neural Passcode / Auth Token"}
+            </label>
+            <div className="login-input-wrap" style={{ position: 'relative' }}>
               <Lock className="login-input-icon" />
               <input
-                type="password"
-                className="login-input"
+                type={showPassword ? 'text' : 'password'}
+                className="login-input login-input-passcode"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter passcode"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder={isAdminMode ? "Enter Admin Passcode" : "Enter passcode"}
                 required
-                disabled={isExiting}
+                disabled={isSubmitting || isExiting}
               />
+              <button
+                type="button"
+                className="login-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide passcode" : "Show passcode"}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff style={{ width: 17, height: 17 }} />
+                ) : (
+                  <Eye style={{ width: 17, height: 17 }} />
+                )}
+              </button>
             </div>
           </div>
 
@@ -569,25 +632,30 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             <span>
               {isSubmitting
                 ? (isCreatingAccount ? 'INITIALIZING PROFILE...' : 'AUTHENTICATING...')
-                : (isCreatingAccount ? 'Register & Initialize ->' : `Login as ${selectedRole === 'admin' ? 'Admin' : 'User'}`)
+                : (isAdminMode 
+                    ? 'Login as Admin ->' 
+                    : (isCreatingAccount ? 'Register & Initialize ->' : 'Login as User ->')
+                  )
               }
             </span>
             <ArrowRight style={{ width: 18, height: 18 }} />
           </button>
 
-          {/* Account Creation Toggle */}
-          <div className="login-toggle-wrap">
-            <button
-              type="button"
-              className="login-toggle-btn"
-              onClick={() => setIsCreatingAccount(!isCreatingAccount)}
-              disabled={isExiting}
-            >
-              {isCreatingAccount
-                ? "Already have an operator clearance? Sign In."
-                : "Don't have an operator clearance? Create Account."}
-            </button>
-          </div>
+          {/* Account Creation Toggle - Hidden when in Admin Mode */}
+          {!isAdminMode && (
+            <div className="login-toggle-wrap">
+              <button
+                type="button"
+                className="login-toggle-btn"
+                onClick={() => setIsCreatingAccount(!isCreatingAccount)}
+                disabled={isSubmitting || isExiting}
+              >
+                {isCreatingAccount
+                  ? "Already have an operator clearance? Sign In."
+                  : "Don't have an operator clearance? Create Account."}
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
