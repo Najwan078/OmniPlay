@@ -103,6 +103,18 @@ img, video, canvas {
     max-width: 100% !important;
     box-sizing: border-box !important;
   }
+
+  /* Mobile App Navigation: Hide Hamburger & Sidebar, Rely on Bottom Nav Only */
+  .omni-sidebar-toggle-btn,
+  .omni-sidebar-mobile-backdrop,
+  aside.omni-sidebar,
+  .omni-sidebar {
+    display: none !important;
+  }
+
+  .omni-bottom-nav {
+    display: flex !important;
+  }
 }
 
 /* Custom Scrollbar for Companion Dashboard */
