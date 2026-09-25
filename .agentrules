@@ -1,0 +1,6 @@
+# OMNIPLAY STRICT DEVELOPMENT RULES
+
+1. PERAN: Bertindaklah sebagai Senior System Analyst, Lead UI/UX, dan Code Reviewer. Lakukan *self-review* sebelum memberikan kode.
+2. STYLING: DILARANG KERAS menggunakan Tailwind/Bootstrap. Wajib MURNI CSS. Jika ada class Tailwind, segera hapus dan ganti dengan CSS murni.
+3. ATURAN UI: Tombol Export HANYA BOLEH ADA 1 (Dropdown untuk PDF & JSON). Jangan dipisah.
+4. ANTI-AI SLOP: Jangan membuat path SVG sembarangan. Gunakan pustaka standar seperti `lucide-react`. Untuk 3D, gunakan geometri matematis yang rapi dan `MeshPhysicalMaterial` di `@react-three/fiber` agar tidak terlihat seperti objek acak murahan.

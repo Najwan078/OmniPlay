@@ -1,0 +1,595 @@
+import React, { useRef, useState, useEffect, useMemo, Component, type ReactNode } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Gamepad2, ShieldAlert, Lock, User, ArrowRight } from 'lucide-react';
+import * as THREE from 'three';
+import { useUser } from '../context/UserContext';
+
+// Resilient Error Boundary for WebGL Contexts
+class CanvasErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.warn("3D Canvas fallback activated:", error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div className="login-fallback-bg" />;
+    }
+    return this.props.children;
+  }
+}
+
+// 1. Tilted Deep-Blue Planetary Satellite Rings & Rotating Geodesic Sphere
+function PlanetarySphereAndSatellites({
+  mouse,
+  isExiting,
+}: {
+  mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
+  isExiting: boolean;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const innerCoreRef = useRef<THREE.Mesh>(null!);
+  const ring1GroupRef = useRef<THREE.Group>(null!);
+  const ring2GroupRef = useRef<THREE.Group>(null!);
+  const ring1MeshRef = useRef<THREE.Mesh>(null!);
+  const ring2MeshRef = useRef<THREE.Mesh>(null!);
+  const satNode1Ref = useRef<THREE.Group>(null!);
+  const satNode2Ref = useRef<THREE.Group>(null!);
+  const mainGroupRef = useRef<THREE.Group>(null!);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime;
+    const accel = isExiting ? 3.0 : 1.0;
+
+    // Central Sphere continuous rotation
+    if (meshRef.current) {
+      meshRef.current.rotation.x += delta * 0.16 * accel;
+      meshRef.current.rotation.y += delta * 0.22 * accel;
+    }
+    if (innerCoreRef.current) {
+      const scale = 1 + Math.sin(t * 2.5) * 0.08;
+      innerCoreRef.current.scale.set(scale, scale, scale);
+    }
+
+    // Satellite Ring 1: Smooth planetary orbit on inclined axis (deep dark blue)
+    if (ring1MeshRef.current) {
+      ring1MeshRef.current.rotation.z += delta * 0.38 * accel;
+    }
+    if (satNode1Ref.current) {
+      satNode1Ref.current.rotation.z += delta * 0.38 * accel;
+    }
+    if (ring1GroupRef.current) {
+      ring1GroupRef.current.rotation.y += delta * 0.06 * accel;
+    }
+
+    // Satellite Ring 2: Smooth planetary orbit on secondary tilted axis
+    if (ring2MeshRef.current) {
+      ring2MeshRef.current.rotation.z -= delta * 0.32 * accel;
+    }
+    if (satNode2Ref.current) {
+      satNode2Ref.current.rotation.z -= delta * 0.32 * accel;
+    }
+    if (ring2GroupRef.current) {
+      ring2GroupRef.current.rotation.y -= delta * 0.05 * accel;
+    }
+
+    // Gentle mouse reaction
+    if (mainGroupRef.current) {
+      mainGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+        mainGroupRef.current.rotation.y,
+        mouse.current.targetX * 0.45,
+        0.05
+      );
+      mainGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        mainGroupRef.current.rotation.x,
+        -mouse.current.targetY * 0.35,
+        0.05
+      );
+      mainGroupRef.current.position.y = Math.sin(t * 0.8) * 0.12;
+    }
+  });
+
+  return (
+    <group ref={mainGroupRef} position={[0, 0.1, 0]}>
+      {/* Central Wireframe Geodesic Sphere */}
+      <mesh ref={meshRef}>
+        <icosahedronGeometry args={[2.5, 2]} />
+        <meshStandardMaterial
+          color="#00d2ff"
+          emissive="#005577"
+          emissiveIntensity={0.32}
+          wireframe
+          transparent
+          opacity={0.4}
+          roughness={0.2}
+          metalness={0.9}
+        />
+      </mesh>
+
+      {/* Pulsating Glowing Core */}
+      <mesh ref={innerCoreRef}>
+        <sphereGeometry args={[1.02, 32, 32]} />
+        <meshStandardMaterial
+          color="#0a192f"
+          emissive="#00d2ff"
+          emissiveIntensity={0.8}
+          roughness={0.1}
+          metalness={0.95}
+        />
+      </mesh>
+
+      {/* SATELLITE RING 1: Deep Dark Blue (#0f3460) on realistic tilted planetary axis */}
+      <group ref={ring1GroupRef} rotation={[0.58, 0.22, 0.35]}>
+        <mesh ref={ring1MeshRef}>
+          <torusGeometry args={[3.45, 0.038, 16, 120]} />
+          <meshStandardMaterial
+            color="#0f3460"
+            emissive="#16213e"
+            emissiveIntensity={1.3}
+            roughness={0.2}
+            metalness={0.85}
+          />
+        </mesh>
+        {/* Orbiting Planetary Satellite Probe */}
+        <group ref={satNode1Ref}>
+          <mesh position={[3.45, 0, 0]}>
+            <sphereGeometry args={[0.09, 16, 16]} />
+            <meshStandardMaterial
+              color="#00d2ff"
+              emissive="#38bdf8"
+              emissiveIntensity={1.8}
+            />
+          </mesh>
+        </group>
+      </group>
+
+      {/* SATELLITE RING 2: Deep Dark Blue (#16213e) on cross-tilted planetary axis */}
+      <group ref={ring2GroupRef} rotation={[-0.88, -0.3, -0.45]}>
+        <mesh ref={ring2MeshRef}>
+          <torusGeometry args={[3.9, 0.032, 16, 120]} />
+          <meshStandardMaterial
+            color="#16213e"
+            emissive="#0f3460"
+            emissiveIntensity={1.1}
+            roughness={0.2}
+            metalness={0.85}
+          />
+        </mesh>
+        {/* Orbiting Planetary Satellite Probe */}
+        <group ref={satNode2Ref}>
+          <mesh position={[-3.9, 0, 0]}>
+            <sphereGeometry args={[0.075, 16, 16]} />
+            <meshStandardMaterial
+              color="#38bdf8"
+              emissive="#00d2ff"
+              emissiveIntensity={1.6}
+            />
+          </mesh>
+        </group>
+      </group>
+    </group>
+  );
+}
+
+// 2. METEOR PARTICLES: Stretched, fast-moving shooting stars with trail effect along velocity vector
+interface MeteorSpec {
+  pos: THREE.Vector3;
+  vel: THREE.Vector3;
+  length: number;
+  radius: number;
+  color: THREE.Color;
+}
+
+function MeteorParticles() {
+  const meteorCount = 42;
+  const groupRef = useRef<THREE.Group>(null!);
+
+  const meteorsData = useMemo(() => {
+    const list: MeteorSpec[] = [];
+    const colors = [
+      new THREE.Color('#00d2ff'),
+      new THREE.Color('#38bdf8'),
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#60a5fa'),
+      new THREE.Color('#93c5fd'),
+    ];
+
+    for (let i = 0; i < meteorCount; i++) {
+      const speed = 14 + Math.random() * 16;
+      // Trajectory: diagonal downward velocity
+      const dir = new THREE.Vector3(
+        0.5 + (Math.random() - 0.5) * 0.25,
+        -1,
+        -0.35 + (Math.random() - 0.5) * 0.3
+      ).normalize();
+
+      const vel = dir.clone().multiplyScalar(speed);
+      const pos = new THREE.Vector3(
+        (Math.random() - 0.5) * 36 - 6,
+        (Math.random() - 0.5) * 28 + 8,
+        (Math.random() - 0.5) * 20 - 4
+      );
+
+      list.push({
+        pos,
+        vel,
+        length: 1.2 + Math.random() * 2.0,
+        radius: 0.035 + Math.random() * 0.04,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+    return list;
+  }, [meteorCount]);
+
+  useFrame((_, delta) => {
+    if (!groupRef.current) return;
+    const children = groupRef.current.children;
+
+    for (let i = 0; i < children.length; i++) {
+      const group = children[i] as THREE.Group;
+      const data = meteorsData[i];
+      if (!data) continue;
+
+      // Move along velocity vector
+      data.pos.addScaledVector(data.vel, delta);
+
+      // Respawn if beyond visible cosmic envelope
+      if (data.pos.y < -18 || data.pos.x > 25 || data.pos.z < -22) {
+        data.pos.set(
+          -22 - Math.random() * 10,
+          16 + Math.random() * 8,
+          (Math.random() - 0.5) * 16
+        );
+      }
+
+      group.position.copy(data.pos);
+    }
+  });
+
+  const upVec = useMemo(() => new THREE.Vector3(0, 1, 0), []);
+
+  return (
+    <group ref={groupRef}>
+      {meteorsData.map((meteor, idx) => {
+        const dir = meteor.vel.clone().normalize();
+        const quat = new THREE.Quaternion().setFromUnitVectors(upVec, dir);
+
+        return (
+          <group key={idx} position={meteor.pos} quaternion={quat}>
+            {/* Glowing Meteor Sphere Head */}
+            <mesh position={[0, meteor.length * 0.5, 0]}>
+              <sphereGeometry args={[meteor.radius * 1.5, 12, 12]} />
+              <meshBasicMaterial color="#ffffff" />
+            </mesh>
+
+            {/* Stretched Tapered Trail along Velocity Vector */}
+            <mesh position={[0, 0, 0]}>
+              <coneGeometry args={[meteor.radius * 1.1, meteor.length, 8]} />
+              <meshBasicMaterial
+                color={meteor.color}
+                transparent
+                opacity={0.8}
+                blending={THREE.AdditiveBlending}
+                depthWrite={false}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// 3. Ambient Cosmic Stardust Backing
+function AmbientStardust() {
+  const pointsRef = useRef<THREE.Points>(null!);
+  const count = 500;
+
+  const [positions, colors] = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
+    const palette = [new THREE.Color('#00d2ff'), new THREE.Color('#38bdf8'), new THREE.Color('#1e3a8a')];
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      pos[i3] = (Math.random() - 0.5) * 35;
+      pos[i3 + 1] = (Math.random() - 0.5) * 25;
+      pos[i3 + 2] = (Math.random() - 0.5) * 20 - 5;
+
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      col[i3] = c.r;
+      col[i3 + 1] = c.g;
+      col[i3 + 2] = c.b;
+    }
+    return [pos, col];
+  }, [count]);
+
+  useFrame((_, delta) => {
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y += delta * 0.02;
+    }
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.055}
+        vertexColors
+        transparent
+        opacity={0.65}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
+// 4. Glowing Perspective Cyber-Grid
+function CyberGrid({ mouse }: { mouse: React.MutableRefObject<{ targetX: number; targetY: number }> }) {
+  const gridRef = useRef<THREE.Group>(null!);
+
+  useFrame(() => {
+    if (gridRef.current) {
+      gridRef.current.position.x = THREE.MathUtils.lerp(gridRef.current.position.x, mouse.current.targetX * 0.35, 0.04);
+      gridRef.current.rotation.z = THREE.MathUtils.lerp(gridRef.current.rotation.z, -mouse.current.targetX * 0.03, 0.04);
+    }
+  });
+
+  return (
+    <group ref={gridRef} position={[0, -3.2, 0]}>
+      <gridHelper args={[45, 45, '#00d2ff', '#0f3460']} />
+    </group>
+  );
+}
+
+// 5. STAGE 2: 3D Camera Dive Controller (Deep Forward Dive through the Central Sphere)
+function CameraDiveController({
+  isExiting,
+  mouse,
+}: {
+  isExiting: boolean;
+  mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
+}) {
+  const targetZ = useRef(7.2);
+
+  useFrame((state, delta) => {
+    if (isExiting) {
+      // Damped acceleration straight forward through the sphere core
+      targetZ.current = THREE.MathUtils.lerp(targetZ.current, -6.5, delta * 1.55);
+      state.camera.position.z = THREE.MathUtils.lerp(
+        state.camera.position.z,
+        targetZ.current,
+        delta * 3.4
+      );
+      // Center camera towards sphere singularity [0, 0.1, 0]
+      state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, delta * 3.8);
+      state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 0.1, delta * 3.8);
+    } else {
+      // Gentle idle mouse parallax
+      state.camera.position.x = THREE.MathUtils.lerp(
+        state.camera.position.x,
+        mouse.current.targetX * 0.45,
+        delta * 2.5
+      );
+      state.camera.position.y = THREE.MathUtils.lerp(
+        state.camera.position.y,
+        mouse.current.targetY * 0.35,
+        delta * 2.5
+      );
+      state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, 7.2, delta * 2.5);
+    }
+    state.camera.lookAt(0, 0.1, 0);
+  });
+
+  return null;
+}
+
+// Cinematic Sci-Fi Scene Composition
+function CinematicSciFiScene({
+  mouse,
+  isExiting,
+}: {
+  mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
+  isExiting: boolean;
+}) {
+  return (
+    <>
+      <color attach="background" args={['#05050a']} />
+      <fog attach="fog" args={['#05050a', 5, 24]} />
+
+      <ambientLight intensity={0.4} color="#0a192f" />
+      <pointLight position={[8, 8, 8]} intensity={2.2} color="#00d2ff" distance={25} />
+      <pointLight position={[-8, -6, -4]} intensity={1.8} color="#0f3460" distance={22} />
+      <directionalLight position={[0, 6, 4]} intensity={0.6} color="#38bdf8" />
+
+      <CameraDiveController isExiting={isExiting} mouse={mouse} />
+      <PlanetarySphereAndSatellites mouse={mouse} isExiting={isExiting} />
+      <MeteorParticles />
+      <AmbientStardust />
+      <CyberGrid mouse={mouse} />
+    </>
+  );
+}
+
+interface LoginPageProps {
+  onLogin: (role: 'user' | 'admin') => void;
+}
+
+export default function LoginPage({ onLogin }: LoginPageProps) {
+  const { nickname, setNickname } = useUser();
+  const [username, setUsername] = useState(nickname || 'Player1');
+  const [password, setPassword] = useState('••••••••');
+  const [selectedRole, setSelectedRole] = useState<'user' | 'admin'>('user');
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+
+  // Mouse reaction coordinates normalized to [-1, 1]
+  const mouseRef = useRef({ targetX: 0, targetY: 0 });
+
+  useEffect(() => {
+    const handlePointerMove = (e: PointerEvent) => {
+      mouseRef.current.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+    };
+  }, []);
+
+  const handleTriggerAuth = (role?: 'user' | 'admin') => {
+    if (isExiting) return;
+    const finalRole = role || selectedRole;
+    setSelectedRole(finalRole);
+    setIsSubmitting(true);
+    setIsExiting(true);
+
+    // Save operator handle globally
+    const finalNickname = username.trim() || (finalRole === 'admin' ? 'Admin' : 'Player1');
+    setNickname(finalNickname);
+
+    // Exactly 2500ms delay for cinematic multi-stage 3D dive and fade-to-black
+    setTimeout(() => {
+      onLogin(finalRole);
+    }, 2500);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleTriggerAuth(selectedRole);
+  };
+
+  return (
+    <div className={`login-page-container ${isExiting ? 'page-exiting' : ''}`}>
+      {/* STAGE 3: Cinematic Full-Screen Fade to Black Overlay */}
+      <div className={`cinematic-fade-overlay ${isExiting ? 'fade-active' : ''}`} />
+
+      {/* Three.js Interactive Sci-Fi Canvas Background */}
+      <div className="login-canvas-wrap">
+        <CanvasErrorBoundary>
+          <Canvas
+            camera={{ position: [0, 0, 7.2], fov: 55 }}
+            gl={{ antialias: true, alpha: true }}
+          >
+            <CinematicSciFiScene mouse={mouseRef} isExiting={isExiting} />
+          </Canvas>
+        </CanvasErrorBoundary>
+      </div>
+
+      {/* Overlay Vignette Gradients */}
+      <div className="login-overlay-vignette" />
+
+      {/* STAGE 1: Glassmorphic Auth Card (Fades to 0 opacity over 0.5s when isExiting) */}
+      <div className={`login-card ${isExiting ? 'exit-login' : ''}`}>
+        <div className="login-card-header">
+          <div className="login-brand-logo">
+            <Gamepad2 className="login-brand-icon" />
+            <span className="login-brand-text">
+              {isCreatingAccount ? "Create Operator Profile" : "OmniPlay"}
+            </span>
+          </div>
+          <p className="login-subtitle">
+            {isCreatingAccount
+              ? "Register New Neural Node Clearance • OmniCloud"
+              : "Cloud Gaming Ecosystem • Next-Gen Infrastructure"}
+          </p>
+        </div>
+
+        {/* Role Toggle Selector / Quick Login */}
+        <div className="login-role-selector">
+          <button
+            type="button"
+            className={`login-role-btn ${selectedRole === 'user' ? 'active' : ''}`}
+            onClick={() => handleTriggerAuth('user')}
+            disabled={isExiting}
+          >
+            <Gamepad2 style={{ width: 15, height: 15 }} />
+            <span>{isCreatingAccount ? "Register as User" : "Login as User"}</span>
+          </button>
+          <button
+            type="button"
+            className={`login-role-btn ${selectedRole === 'admin' ? 'active' : ''}`}
+            onClick={() => handleTriggerAuth('admin')}
+            disabled={isExiting}
+          >
+            <ShieldAlert style={{ width: 15, height: 15 }} />
+            <span>{isCreatingAccount ? "Register as Admin" : "Login as Admin"}</span>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="login-input-group">
+            <label className="login-label">Operator Handle / Steam ID</label>
+            <div className="login-input-wrap">
+              <User className="login-input-icon" />
+              <input
+                type="text"
+                className="login-input"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter handle or SteamID"
+                required
+                disabled={isExiting}
+              />
+            </div>
+          </div>
+
+          <div className="login-input-group">
+            <label className="login-label">Neural Passcode / Auth Token</label>
+            <div className="login-input-wrap">
+              <Lock className="login-input-icon" />
+              <input
+                type="password"
+                className="login-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter passcode"
+                required
+                disabled={isExiting}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className={`login-submit-btn ${isSubmitting ? 'submitting' : ''}`}
+            disabled={isSubmitting || isExiting}
+          >
+            <span>
+              {isSubmitting
+                ? (isCreatingAccount ? 'INITIALIZING PROFILE...' : 'AUTHENTICATING...')
+                : (isCreatingAccount ? 'Register & Initialize ->' : `Login as ${selectedRole === 'admin' ? 'Admin' : 'User'}`)
+              }
+            </span>
+            <ArrowRight style={{ width: 18, height: 18 }} />
+          </button>
+
+          {/* Account Creation Toggle */}
+          <div className="login-toggle-wrap">
+            <button
+              type="button"
+              className="login-toggle-btn"
+              onClick={() => setIsCreatingAccount(!isCreatingAccount)}
+              disabled={isExiting}
+            >
+              {isCreatingAccount
+                ? "Already have an operator clearance? Sign In."
+                : "Don't have an operator clearance? Create Account."}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

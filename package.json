@@ -1,0 +1,21 @@
+{
+  "name": "omniplay-cloud-computing",
+  "version": "2.0.0",
+  "private": true,
+  "description": "OmniPlay Cloud Computing Ecosystem - Monorepo (React Pure-CSS Frontend & FastAPI Backend)",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "start": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview",
+    "lint": "npm --prefix frontend run lint",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "preview:frontend": "npm --prefix frontend run preview",
+    "dev:backend": "python -m uvicorn backend.main:app --reload --port 8000",
+    "backend": "python backend/main.py"
+  }
+}
