@@ -493,6 +493,107 @@ function DashboardShell({
         </main>
       </div>
 
+      {/* 2.5 NATIVE MOBILE BOTTOM NAVIGATION */}
+      <nav className="omni-bottom-nav" aria-label="Mobile Navigation">
+        {isAdmin ? (
+          <>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'library' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('library')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Layers style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Library</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'infrastructure' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('infrastructure')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Cpu style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Nodes</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('analytics')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <BarChart3 style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Analytics</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'remote' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('remote')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <SlidersHorizontal style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Remote</span>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'library' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('library')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Gamepad2 style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Library</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'stats' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('stats')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Trophy style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Stats</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'community' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('community')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Users style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Community</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'remote' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('remote')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <Smartphone style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Remote</span>
+            </button>
+            <button
+              type="button"
+              className={`omni-bottom-nav-item ${activeTab === 'support' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('support')}
+            >
+              <div className="bottom-nav-icon-wrap">
+                <LifeBuoy style={{ width: 20, height: 20 }} />
+              </div>
+              <span className="omni-bottom-nav-label">Support</span>
+            </button>
+          </>
+        )}
+      </nav>
+
       {/* 3. CINEMATIC STEAM CLOUD LAUNCH MODAL */}
       {launchingGame && (
         <div className="omni-launch-overlay">
