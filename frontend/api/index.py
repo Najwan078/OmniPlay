@@ -33,6 +33,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import os
+import urllib.request
+import urllib.parse
+
+# Supabase Cloud Database Configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://ctrraikvfslcsqpvgto.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_publishable_fufm97nVdanX00-mq6W9UA_J8OjI0K7")
+
+def supabase_sync(endpoint: str, method: str = "GET", data: dict = None):
+    """Fault-tolerant Supabase REST sync using standard Python library (0 external dependencies)"""
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return None
+    try:
+        url = f"{SUPABASE_URL}/rest/v1/{endpoint}"
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+        }
+        body = json.dumps(data).encode("utf-8") if data else None
+        req = urllib.request.Request(url, data=body, headers=headers, method=method)
+        with urllib.request.urlopen(req, timeout=4) as res:
+            return json.loads(res.read().decode("utf-8"))
+    except Exception as e:
+        print(f"[Supabase Sync Info] {endpoint} {method}: {e}")
+        return None
+
 # Create API Router with prefix /api
 api_router = APIRouter(prefix="/api")
 
@@ -242,6 +270,8 @@ def health_check():
     return {
         "service": "OmniPlay Cloud Computing Backend",
         "platform": "Vercel Serverless",
+        "database": "Supabase Cloud (PostgreSQL)",
+        "supabase_connected": bool(SUPABASE_URL and SUPABASE_KEY),
         "status": "online",
         "version": "2.0.0",
         "timestamp": time.time()
@@ -344,7 +374,7 @@ def start_rental_session(req: CloudSessionRequest):
     node = NODE_SPECS.get(req.node_id, NODE_SPECS["JK-01"])
     session_id = f"omni-sess-{int(time.time())}-{req.app_id}"
     
-    return {
+    session_payload = {
         "session_id": session_id,
         "status": "ALLOCATED",
         "node": node["name"],
@@ -355,12 +385,28 @@ def start_rental_session(req: CloudSessionRequest):
         "started_at": time.time(),
         "expires_in_seconds": req.duration_hours * 3600
     }
+    
+    # Persist session to Supabase
+    supabase_sync("rentals", method="POST", data={
+        "session_id": session_id,
+        "user_nickname": req.user_id,
+        "game_id": req.game_id,
+        "game_title": f"Steam Game #{req.app_id}",
+        "app_id": req.app_id,
+        "duration_hours": req.duration_hours,
+        "node_id": req.node_id,
+        "total_price": 10000 * req.duration_hours,
+        "status": "ACTIVE"
+    })
+    
+    return session_payload
 
 # 4. Authentication Endpoints
 @api_router.post("/auth/login")
 def login(payload: LoginPayload, response: Response, request: Request):
     clean_nickname = payload.nickname.strip() if payload.nickname else "Player1"
     role = "admin" if payload.role == "admin" else "user"
+    tier = "Root Security / Level 5" if role == "admin" else "Tier 1 Operator"
     token = f"omni_sec_jwt_{role}_{int(time.time())}"
     
     is_https = (
@@ -378,12 +424,19 @@ def login(payload: LoginPayload, response: Response, request: Request):
         max_age=86400
     )
     
+    # Sync user record to Supabase
+    supabase_sync("users", method="POST", data={
+        "nickname": clean_nickname,
+        "role": role,
+        "tier": tier
+    })
+    
     return {
         "success": True,
         "user": {
             "nickname": clean_nickname,
             "role": role,
-            "tier": "Root Security / Level 5" if role == "admin" else "Tier 1 Operator"
+            "tier": tier
         },
         "message": f"Session established for {clean_nickname}"
     }
