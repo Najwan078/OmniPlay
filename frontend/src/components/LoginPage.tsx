@@ -5,6 +5,7 @@ import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff } from 'luci
 import * as THREE from 'three';
 import { useUser } from '../context/UserContext';
 import { authApi } from '../services/api';
+import { supabase } from '../supabase';
 
 // Resilient Error Boundary for WebGL Contexts
 class CanvasErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
@@ -435,6 +436,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
@@ -455,30 +457,49 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
   const handleAuth = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (isSubmitting || isExiting) return;
+    if (isLoading || isSubmitting || isExiting) return;
 
     setErrorMsg('');
+    setIsLoading(true);
 
-    // FORK 1: Admin Mode - Bypass standard Supabase Auth and check hardcoded Admin ID & Password
-    if (isAdminMode) {
-      if (email.trim() === 'admin1' && password === 'admin123') {
-        setErrorMsg('');
-        setNickname('admin1');
-        onLogin('admin');
-        navigate('/admin');
-      } else {
-        setErrorMsg('AUTHORIZATION FAILED: Invalid Admin ID or Passcode.');
-      }
-      return;
-    }
-
-    // FORK 2: User Mode - Proceed with standard Supabase Auth logic
     try {
+      // Premium sci-fi authentication delay for smooth visual feedback
+      await new Promise(r => setTimeout(r, 1000));
+
+      // FORK 1: Admin Mode - Bypass standard Supabase Auth and check hardcoded Admin ID & Password
+      if (isAdminMode) {
+        if (email.trim() === 'admin1' && password === 'admin123') {
+          setErrorMsg('');
+          setNickname('admin1');
+          localStorage.setItem('isAdminLoggedIn', 'true');
+          onLogin('admin');
+          navigate('/admin');
+        } else {
+          setErrorMsg('AUTHORIZATION FAILED: Invalid Admin ID or Passcode.');
+        }
+        return;
+      }
+
+      // FORK 2: User Mode - Proceed with standard Supabase Auth logic
+      localStorage.removeItem('isAdminLoggedIn');
       setIsSubmitting(true);
       const userNickname = email.trim() || 'Player1';
       setNickname(userNickname);
 
-      // Attempt Supabase backend sync
+      // Attempt Supabase client auth if email provided
+      if (email.includes('@') && password) {
+        try {
+          if (isCreatingAccount) {
+            await supabase.auth.signUp({ email: email.trim(), password });
+          } else {
+            await supabase.auth.signInWithPassword({ email: email.trim(), password });
+          }
+        } catch (supabaseErr) {
+          console.warn('Supabase client auth notice:', supabaseErr);
+        }
+      }
+
+      // Backend sync
       try {
         await authApi.login({ nickname: userNickname, password, role: 'user' });
       } catch (err) {
@@ -491,6 +512,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       console.error('Authentication error:', err);
       setErrorMsg(err instanceof Error ? err.message : 'Authentication failed.');
     } finally {
+      setIsLoading(false);
       setIsSubmitting(false);
     }
   };
@@ -540,7 +562,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               setIsAdminMode(false);
               setErrorMsg('');
             }}
-            disabled={isExiting}
+            disabled={isLoading || isSubmitting || isExiting}
           >
             <Gamepad2 style={{ width: 15, height: 15 }} />
             <span>{isCreatingAccount ? "Register as User" : "Login as User"}</span>
@@ -553,7 +575,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               setIsCreatingAccount(false);
               setErrorMsg('');
             }}
-            disabled={isExiting}
+            disabled={isLoading || isSubmitting || isExiting}
           >
             <ShieldAlert style={{ width: 15, height: 15 }} />
             <span>Login as Admin</span>
@@ -585,7 +607,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 }}
                 placeholder={isAdminMode ? "Enter Admin ID" : "Enter Email Address"}
                 required
-                disabled={isSubmitting || isExiting}
+                disabled={isLoading || isSubmitting || isExiting}
               />
             </div>
           </div>
@@ -606,7 +628,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 }}
                 placeholder={isAdminMode ? "Enter Admin Passcode" : "Enter passcode"}
                 required
-                disabled={isSubmitting || isExiting}
+                disabled={isLoading || isSubmitting || isExiting}
               />
               <button
                 type="button"
@@ -614,6 +636,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide passcode" : "Show passcode"}
                 tabIndex={-1}
+                disabled={isLoading || isSubmitting || isExiting}
               >
                 {showPassword ? (
                   <EyeOff style={{ width: 17, height: 17 }} />
@@ -626,11 +649,12 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
           <button
             type="submit"
-            className={`login-submit-btn ${isSubmitting ? 'submitting' : ''}`}
-            disabled={isSubmitting || isExiting}
+            className={`login-submit-btn ${isLoading || isSubmitting ? 'submitting' : ''}`}
+            disabled={isLoading || isSubmitting || isExiting}
           >
+            {isLoading && <div className="omni-spinner omni-spinner-sm" style={{ marginRight: 8 }} />}
             <span>
-              {isSubmitting
+              {isLoading || isSubmitting
                 ? (isCreatingAccount ? 'INITIALIZING PROFILE...' : 'AUTHENTICATING...')
                 : (isAdminMode 
                     ? 'Login as Admin ->' 
@@ -638,7 +662,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                   )
               }
             </span>
-            <ArrowRight style={{ width: 18, height: 18 }} />
+            {!isLoading && <ArrowRight style={{ width: 18, height: 18 }} />}
           </button>
 
           {/* Account Creation Toggle - Hidden when in Admin Mode */}

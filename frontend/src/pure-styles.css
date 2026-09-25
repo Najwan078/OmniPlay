@@ -4975,6 +4975,65 @@ body {
   }
 }
 
+/* Reusable Premium Sci-Fi Loading Spinner (Pure CSS) */
+.omni-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 210, 255, 0.2);
+  border-top-color: #00d2ff;
+  border-radius: 50%;
+  animation: omni-spin 1s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+}
+
+.omni-spinner-sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+}
+
+@keyframes omni-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fullscreen Sci-Fi Overlay Loader */
+.fullscreen-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #00d2ff;
+  font-family: var(--font-display, inherit);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Page / Section Content Loader */
+.page-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+  gap: 16px;
+  color: #00d2ff;
+  font-family: var(--font-display, inherit);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
 /* STAGE 3: Cinematic Full-Screen Fade to Black Overlay */
 .cinematic-fade-overlay {
   position: fixed;

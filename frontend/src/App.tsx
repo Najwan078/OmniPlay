@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Routes, Route, Navigate, useNavigate, useLocation 
 } from 'react-router-dom';
@@ -23,36 +23,84 @@ import ThreeDIcon from './components/ThreeDIcon';
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
 import { useUser } from './context/UserContext';
 import type { UserRole } from './types/auth';
+import { supabase } from './supabase';
 
-/**
- * Shell Layout for Authenticated Dashboard Views
- */
-function DashboardShell({
+// --- Navigation Item Component ---
+function NavItem({ 
+  icon, 
+  label, 
+  active, 
+  onClick, 
+  className 
+}: { 
+  icon: React.ReactNode; 
+  label: string; 
+  active: boolean; 
+  onClick: () => void; 
+  className?: string; 
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`omni-nav-item ${active ? 'active' : ''} ${className || ''}`}
+      type="button"
+    >
+      <div className="omni-nav-icon">{icon}</div>
+      <span className="omni-nav-label">{label}</span>
+    </button>
+  );
+}
+
+// --- Top Navbar Component ---
+interface TopNavbarProps {
+  userName: string;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  onLogout?: () => void;
+  isAdmin: boolean;
+}
+
+function TopNavbar({
+  userName,
   activeTab,
   onTabChange,
   onLogout,
-  launchingGame,
-  launchStep,
-  globalToast,
-  children
-}: {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  onLogout: () => void;
-  launchingGame: { title: string; steamUri?: string } | null;
-  launchStep: number;
-  globalToast: { message: string; icon: React.ReactNode } | null;
-  children: React.ReactNode;
-}) {
-  const authContext = useUser();
-  const nickname = authContext?.nickname || 'Player1';
-  const role = authContext?.user?.role || authContext?.role || 'user';
-  const isAdmin = role === 'admin';
+  isAdmin
+}: TopNavbarProps) {
+  const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleSignOutClick = () => {
+    setIsLoggingOut(true);
+    setTimeout(async () => {
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.warn('Supabase sign out notice:', err);
+      }
+      try {
+        localStorage.removeItem('isAdminLoggedIn');
+      } catch (e) {
+        console.warn(e);
+      }
+      if (onLogout) {
+        await onLogout();
+      }
+      navigate('/login');
+      setIsLoggingOut(false);
+    }, 1500);
+  };
 
   return (
-    <div className="omni-app enter-dashboard">
-      
-      {/* 1. TOP NAVIGATION BAR (Strict Role-Based Menus) */}
+    <>
+      {/* Fullscreen Sci-Fi Sign Out Loader */}
+      {isLoggingOut && (
+        <div className="fullscreen-loader" role="status">
+          <div className="omni-spinner" />
+          <span>TERMINATING NEURAL LINK...</span>
+        </div>
+      )}
+
       <header className="omni-topbar">
         <div className="omni-topbar-left">
           <div className="omni-brand-logo" onClick={() => onTabChange('library')}>
@@ -137,14 +185,16 @@ function DashboardShell({
                 <User style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />
               )}
             </div>
-            <div className="omni-profile-info">
-              <span className="omni-username">{nickname}</span>
+            <div className="omni-profile-info" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span className="omni-username" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {userName}
+              </span>
             </div>
           </div>
 
           <button 
             className="omni-action-btn omni-signout-btn" 
-            onClick={onLogout}
+            onClick={handleSignOutClick}
             title="Terminate Operator Neural Link"
             type="button"
           >
@@ -153,112 +203,222 @@ function DashboardShell({
           </button>
         </div>
       </header>
+    </>
+  );
+}
 
-      {/* 2. APP BODY & ROLE-SPECIFIC SIDEBAR */}
+// --- Sidebar Navigation Component ---
+interface SidebarProps {
+  userName: string;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  isAdmin: boolean;
+}
+
+function Sidebar({
+  userName,
+  activeTab,
+  onTabChange,
+  isAdmin
+}: SidebarProps) {
+  return (
+    <aside className={`omni-sidebar ${isAdmin ? 'admin-sidebar' : ''}`}>
+      <div>
+        <div className="sidebar-role-indicator">
+          {isAdmin ? (
+            <span className="role-tag admin">ADMINISTRATOR CONSOLE</span>
+          ) : (
+            <span className="role-tag customer">OPERATOR CONSOLE</span>
+          )}
+        </div>
+
+        {/* Operator Identity Card in Sidebar */}
+        <div className="sidebar-operator-card">
+          <div className="sidebar-operator-avatar">
+            {isAdmin ? (
+              <ShieldCheck style={{ width: 15, height: 15, color: 'var(--neon-rose)' }} />
+            ) : (
+              <User style={{ width: 15, height: 15, color: 'var(--neon-cyan)' }} />
+            )}
+          </div>
+          <div className="sidebar-operator-meta" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <span className="sidebar-operator-handle" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {userName}
+            </span>
+          </div>
+        </div>
+
+        <div className="omni-nav-list">
+          {isAdmin ? (
+            /* STRICT ADMINISTRATOR SIDEBAR TABS */
+            <>
+              <NavItem 
+                className="admin-sidebar-link"
+                icon={<Layers style={{ width: 18, height: 18 }} />} 
+                label="Game Library" 
+                active={activeTab === 'library'} 
+                onClick={() => onTabChange('library')} 
+              />
+              <NavItem 
+                className="admin-sidebar-link"
+                icon={<Cpu style={{ width: 18, height: 18 }} />} 
+                label="Cloud Nodes" 
+                active={activeTab === 'infrastructure'} 
+                onClick={() => onTabChange('infrastructure')} 
+              />
+              <NavItem 
+                className="admin-sidebar-link"
+                icon={<BarChart3 style={{ width: 18, height: 18 }} />} 
+                label="Analytics" 
+                active={activeTab === 'analytics'} 
+                onClick={() => onTabChange('analytics')} 
+              />
+              <NavItem 
+                className="admin-sidebar-link"
+                icon={<SlidersHorizontal style={{ width: 18, height: 18 }} />} 
+                label="OmniRemote (Admin)" 
+                active={activeTab === 'remote'} 
+                onClick={() => onTabChange('remote')} 
+              />
+            </>
+          ) : (
+            /* STRICT USER SIDEBAR TABS WITH PURE 3D THREE.JS ICONS */
+            <>
+              <NavItem 
+                icon={<ThreeDIcon type="library" size={24} glowColor="rgba(0, 240, 255, 0.5)" />} 
+                label="Game Library" 
+                active={activeTab === 'library'} 
+                onClick={() => onTabChange('library')} 
+              />
+              <NavItem 
+                icon={<ThreeDIcon type="stats" size={24} glowColor="rgba(168, 85, 247, 0.5)" />} 
+                label="My Stats" 
+                active={activeTab === 'stats'} 
+                onClick={() => onTabChange('stats')} 
+              />
+              <NavItem 
+                icon={<ThreeDIcon type="community" size={24} glowColor="rgba(16, 185, 129, 0.5)" />} 
+                label="Community" 
+                active={activeTab === 'community'} 
+                onClick={() => onTabChange('community')} 
+              />
+              <NavItem 
+                icon={<ThreeDIcon type="remote" size={24} glowColor="rgba(59, 130, 246, 0.5)" />} 
+                label="OmniRemote" 
+                active={activeTab === 'remote'} 
+                onClick={() => onTabChange('remote')} 
+              />
+              <NavItem 
+                icon={<ThreeDIcon type="support" size={24} glowColor="rgba(244, 63, 94, 0.5)" />} 
+                label="Help/Support" 
+                active={activeTab === 'support'} 
+                onClick={() => onTabChange('support')} 
+              />
+            </>
+          )}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/**
+ * Shell Layout for Authenticated Dashboard Views
+ */
+function DashboardShell({
+  activeTab,
+  onTabChange,
+  onLogout,
+  launchingGame,
+  launchStep,
+  globalToast,
+  children
+}: {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  onLogout: () => void;
+  launchingGame: { title: string; steamUri?: string } | null;
+  launchStep: number;
+  globalToast: { message: string; icon: React.ReactNode } | null;
+  children: React.ReactNode;
+}) {
+  const authContext = useUser();
+  const role = authContext?.user?.role || authContext?.role || 'user';
+  const isAdmin = role === 'admin';
+
+  const [operatorName, setOperatorName] = useState<string>("Loading...");
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+        setOperatorName('admin1');
+        return;
+      }
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) {
+          setOperatorName(user.email.split('@')[0]); // Get text before @
+        } else if (authContext?.nickname && authContext.nickname !== 'Player1') {
+          setOperatorName(authContext.nickname.includes('@') ? authContext.nickname.split('@')[0] : authContext.nickname);
+        } else {
+          setOperatorName('Guest');
+        }
+      } catch (err) {
+        console.warn('Error fetching Supabase user in DashboardShell:', err);
+        if (authContext?.nickname) {
+          setOperatorName(authContext.nickname.includes('@') ? authContext.nickname.split('@')[0] : authContext.nickname);
+        } else {
+          setOperatorName('Guest');
+        }
+      }
+    };
+    fetchUser();
+  }, [authContext?.nickname]);
+
+  // Menu Click Simulation: Wrap the sidebar navigation logic in a function that sets isPageLoading(true), waits ~600ms via setTimeout, updates the view, and sets isPageLoading(false)
+  const handleMenuClick = (tab: string) => {
+    if (tab === activeTab) return;
+    setIsPageLoading(true);
+    setTimeout(() => {
+      onTabChange(tab);
+      setIsPageLoading(false);
+    }, 600);
+  };
+
+  return (
+    <div className="omni-app enter-dashboard">
+      
+      {/* 1. TOP NAVBAR */}
+      <TopNavbar 
+        userName={operatorName} 
+        activeTab={activeTab} 
+        onTabChange={handleMenuClick} 
+        onLogout={onLogout} 
+        isAdmin={isAdmin} 
+      />
+
+      {/* 2. APP BODY & SIDEBAR */}
       <div className="omni-body">
-        
-        {/* Left Sidebar Navigation - Clutter-Free & 3D Icons */}
-        <aside className={`omni-sidebar ${isAdmin ? 'admin-sidebar' : ''}`}>
-          <div>
-            <div className="sidebar-role-indicator">
-              {isAdmin ? (
-                <span className="role-tag admin">ADMINISTRATOR CONSOLE</span>
-              ) : (
-                <span className="role-tag customer">OPERATOR CONSOLE</span>
-              )}
-            </div>
+        <Sidebar 
+          userName={operatorName} 
+          activeTab={activeTab} 
+          onTabChange={handleMenuClick} 
+          isAdmin={isAdmin} 
+        />
 
-            {/* Operator Identity Card in Sidebar */}
-            <div className="sidebar-operator-card">
-              <div className="sidebar-operator-avatar">
-                {isAdmin ? (
-                  <ShieldCheck style={{ width: 15, height: 15, color: 'var(--neon-rose)' }} />
-                ) : (
-                  <User style={{ width: 15, height: 15, color: 'var(--neon-cyan)' }} />
-                )}
-              </div>
-              <div className="sidebar-operator-meta">
-                <span className="sidebar-operator-handle">{nickname}</span>
-              </div>
-            </div>
-
-            <div className="omni-nav-list">
-              {isAdmin ? (
-                /* STRICT ADMINISTRATOR SIDEBAR TABS */
-                <>
-                  <NavItem 
-                    className="admin-sidebar-link"
-                    icon={<Layers style={{ width: 18, height: 18 }} />} 
-                    label="Game Library" 
-                    active={activeTab === 'library'} 
-                    onClick={() => onTabChange('library')} 
-                  />
-                  <NavItem 
-                    className="admin-sidebar-link"
-                    icon={<Cpu style={{ width: 18, height: 18 }} />} 
-                    label="Cloud Nodes" 
-                    active={activeTab === 'infrastructure'} 
-                    onClick={() => onTabChange('infrastructure')} 
-                  />
-                  <NavItem 
-                    className="admin-sidebar-link"
-                    icon={<BarChart3 style={{ width: 18, height: 18 }} />} 
-                    label="Analytics" 
-                    active={activeTab === 'analytics'} 
-                    onClick={() => onTabChange('analytics')} 
-                  />
-                  <NavItem 
-                    className="admin-sidebar-link"
-                    icon={<SlidersHorizontal style={{ width: 18, height: 18 }} />} 
-                    label="OmniRemote (Admin)" 
-                    active={activeTab === 'remote'} 
-                    onClick={() => onTabChange('remote')} 
-                  />
-                </>
-              ) : (
-                /* STRICT USER SIDEBAR TABS WITH PURE 3D THREE.JS ICONS */
-                <>
-                  <NavItem 
-                    icon={<ThreeDIcon type="library" size={24} glowColor="rgba(0, 240, 255, 0.5)" />} 
-                    label="Game Library" 
-                    active={activeTab === 'library'} 
-                    onClick={() => onTabChange('library')} 
-                  />
-                  <NavItem 
-                    icon={<ThreeDIcon type="stats" size={24} glowColor="rgba(168, 85, 247, 0.5)" />} 
-                    label="My Stats" 
-                    active={activeTab === 'stats'} 
-                    onClick={() => onTabChange('stats')} 
-                  />
-                  <NavItem 
-                    icon={<ThreeDIcon type="community" size={24} glowColor="rgba(16, 185, 129, 0.5)" />} 
-                    label="Community" 
-                    active={activeTab === 'community'} 
-                    onClick={() => onTabChange('community')} 
-                  />
-                  <NavItem 
-                    icon={<ThreeDIcon type="remote" size={24} glowColor="rgba(59, 130, 246, 0.5)" />} 
-                    label="OmniRemote" 
-                    active={activeTab === 'remote'} 
-                    onClick={() => onTabChange('remote')} 
-                  />
-                  <NavItem 
-                    icon={<ThreeDIcon type="support" size={24} glowColor="rgba(244, 63, 94, 0.5)" />} 
-                    label="Help/Support" 
-                    active={activeTab === 'support'} 
-                    onClick={() => onTabChange('support')} 
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Content View with Futuristic Page Transition */}
+        {/* Main Content View with Page Loading Spinner */}
         <main className="omni-main-content">
-          <div key={activeTab} className="futuristic-page-container">
-            {children}
-          </div>
+          {isPageLoading ? (
+            <div className="page-loader-container">
+              <div className="omni-spinner" />
+              <span>SYNCHRONIZING NEURAL NODE...</span>
+            </div>
+          ) : (
+            <div key={activeTab} className="futuristic-page-container">
+              {children}
+            </div>
+          )}
         </main>
       </div>
 
@@ -567,31 +727,5 @@ export default function OmniPlayApp() {
         element={<Navigate to={isAuthenticated && user ? "/library" : "/login"} replace />} 
       />
     </Routes>
-  );
-}
-
-// --- Navigation Item Component ---
-function NavItem({ 
-  icon, 
-  label, 
-  active, 
-  onClick, 
-  className 
-}: { 
-  icon: React.ReactNode; 
-  label: string; 
-  active: boolean; 
-  onClick: () => void; 
-  className?: string; 
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`omni-nav-item ${active ? 'active' : ''} ${className || ''}`}
-      type="button"
-    >
-      <div className="omni-nav-icon">{icon}</div>
-      <span className="omni-nav-label">{label}</span>
-    </button>
   );
 }
