@@ -1,19 +1,33 @@
-/* ==========================================================================
-   GLOBAL VIEWPORT & OVERFLOW SYSTEM
-   ========================================================================== */
+/* 1. Global Box Sizing & Tap Highlight Removal */
 *, *::before, *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Kills the ugly blue tap box on mobile */
 }
 
+/* 2. Absolute Screen Lock */
 html, body {
   width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden !important;
   margin: 0;
   padding: 0;
-  -webkit-text-size-adjust: 100%;
+  background-color: #0a0a0f;
+  overscroll-behavior-y: none; /* Kills the pull-to-refresh bounce effect */
   text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 3. Kill Legacy Android Font Boosting */
+p, h1, h2, h3, h4, h5, h6, span, div {
+  max-height: 999999px; 
+}
+
+/* 4. Universal Media Constraint */
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 #root {
@@ -27,7 +41,8 @@ html, body {
 
 @media (max-width: 768px) {
   body, html, #root {
-    width: 100%; max-width: 100%;
+    width: 100%;
+    max-width: 100vw;
     overflow-x: hidden;
     margin: 0;
     padding: 0;

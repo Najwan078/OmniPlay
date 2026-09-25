@@ -111,6 +111,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
+  padding-top: env(safe-area-inset-top);
   flex-shrink: 0;
   z-index: 50;
   position: relative;
@@ -1037,11 +1038,14 @@ body {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: 58px;
+  font-size: 32px; /* Fallback for very old browsers */
+  font-size: clamp(24px, 5vw + 1rem, 48px);
+  line-height: 1.1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   font-weight: 900;
   font-style: italic;
   letter-spacing: -0.04em;
-  line-height: 1.05;
   color: #ffffff;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 210, 255, 0.25);
   margin-bottom: 12px;
@@ -8974,6 +8978,7 @@ body {
 /* 1. Base Desktop Rules for Mobile-Only Elements (Hidden on Desktop > 768px) */
 .omni-bottom-nav {
   display: none;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
 
 .omni-sidebar-mobile-backdrop {
@@ -9296,9 +9301,10 @@ body {
      ------------------------------------------------------------------------ */
   header.omni-topbar,
   .omni-topbar {
-    height: 56px !important;
-    min-height: 56px !important;
+    height: calc(56px + env(safe-area-inset-top, 0px)) !important;
+    min-height: calc(56px + env(safe-area-inset-top, 0px)) !important;
     padding: 0 12px !important;
+    padding-top: env(safe-area-inset-top) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
@@ -9505,7 +9511,7 @@ body {
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
     background: rgba(8, 11, 20, 0.97) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
@@ -9514,7 +9520,7 @@ body {
     align-items: center !important;
     justify-content: space-around !important;
     padding: 0 4px !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(0, 240, 255, 0.25) !important;
   }
 
@@ -9727,11 +9733,13 @@ body {
 
   .hero-title,
   .hero-banner-content h1 {
-    font-size: clamp(19px, 5.5vw, 22px) !important;
-    line-height: 1.2 !important;
+    font-size: 32px !important; /* Fallback for very old browsers */
+    font-size: clamp(24px, 5vw + 1rem, 48px) !important;
+    line-height: 1.1 !important;
     font-weight: 800 !important;
     margin-bottom: 6px !important;
-    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
   }
 
   .hero-desc,
