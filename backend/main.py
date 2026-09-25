@@ -18,10 +18,15 @@ app = FastAPI(
     description="Core backend for Steam Integration, Dynamic Rental Calculation, Cloud Node Orchestration, and Analytics Export"
 )
 
-# Enable CORS for frontend Vite dev server and production
+# Enable CORS for frontend Vite dev server and production Vercel domains
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://omni-play-frontend-two.vercel.app",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -364,7 +369,7 @@ class LoginPayload(BaseModel):
     role: Optional[str] = "user"
 
 @api_router.post("/auth/login")
-def login(payload: LoginPayload, response: Response):
+def login(payload: LoginPayload, response: Response, request: Request):
     """
     Issue secure HttpOnly session cookie containing simulated JWT token.
     Prevents XSS extraction via JavaScript.
@@ -373,13 +378,19 @@ def login(payload: LoginPayload, response: Response):
     role = "admin" if payload.role == "admin" else "user"
     token = f"omni_sec_jwt_{role}_{int(time.time())}"
     
-    # Set HttpOnly Cookie (secure=False for local development, True for production HTTPS)
+    is_https = (
+        request.url.scheme == "https" 
+        or request.headers.get("x-forwarded-proto") == "https"
+        or "vercel.app" in request.headers.get("origin", "")
+    )
+    
+    # Set HttpOnly Cookie (secure=True & samesite="none" for cross-site production HTTPS)
     response.set_cookie(
         key="omni_access_token",
         value=token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite="none" if is_https else "lax",
+        secure=is_https,
         max_age=86400
     )
     
@@ -394,9 +405,19 @@ def login(payload: LoginPayload, response: Response):
     }
 
 @api_router.post("/auth/logout")
-def logout(response: Response):
+def logout(response: Response, request: Request):
     """Clears the HttpOnly JWT session cookie"""
-    response.delete_cookie(key="omni_access_token", httponly=True, samesite="lax")
+    is_https = (
+        request.url.scheme == "https" 
+        or request.headers.get("x-forwarded-proto") == "https"
+        or "vercel.app" in request.headers.get("origin", "")
+    )
+    response.delete_cookie(
+        key="omni_access_token", 
+        httponly=True, 
+        samesite="none" if is_https else "lax",
+        secure=is_https
+    )
     return {"success": True, "message": "Logged out successfully"}
 
 @api_router.get("/auth/me")
