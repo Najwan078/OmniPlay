@@ -77,10 +77,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </svg>
             </div>
             <h2 style={{ margin: '0 0 8px 0', fontSize: '20px', color: '#f43f5e', letterSpacing: '0.05em' }}>
-              OPERATOR INTERFACE ERROR
+              TERJADI KESALAHAN PADA APLIKASI
             </h2>
             <p style={{ margin: '0 0 20px 0', color: '#94a3b8', fontSize: '14px', lineHeight: '1.5' }}>
-              A rendering exception was intercepted by the neural boundary. System state has been secured.
+              Terjadi sedikit kendala teknis saat memuat tampilan. Silakan klik tombol di bawah untuk memuat ulang.
             </p>
             {this.state.error && (
               <div style={{
@@ -115,7 +115,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 transition: 'all 0.2s ease'
               }}
             >
-              RELOAD NEURAL INTERFACE
+              Muat Ulang Halaman
             </button>
           </div>
         </div>

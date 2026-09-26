@@ -594,13 +594,13 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           <div className="login-brand-logo">
             <Gamepad2 className="login-brand-icon" />
             <span className="login-brand-text">
-              {isCreatingAccount ? "Create Operator Profile" : "OmniPlay"}
+              {isCreatingAccount ? "Daftar Akun Baru" : "OmniPlay"}
             </span>
           </div>
           <p className="login-subtitle">
             {isCreatingAccount
-              ? "Register New Neural Node Clearance • OmniCloud"
-              : "Cloud Gaming Ecosystem • Next-Gen Infrastructure"}
+              ? "Daftar Akun Baru • Layanan Cloud Gaming"
+              : "Platform Cloud Gaming & Cloud Computing"}
           </p>
         </div>
 
@@ -618,7 +618,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             disabled={isLoading || isSubmitting || isExiting}
           >
             <Gamepad2 style={{ width: 15, height: 15 }} />
-            <span>{isCreatingAccount ? "Register as User" : "Login as User"}</span>
+            <span>{isCreatingAccount ? "Daftar User" : "Login User"}</span>
           </button>
           <button
             type="button"
@@ -633,7 +633,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             disabled={isLoading || isSubmitting || isExiting}
           >
             <ShieldAlert style={{ width: 15, height: 15 }} />
-            <span>Login as Admin</span>
+            <span>Login Admin</span>
           </button>
         </div>
 
@@ -648,7 +648,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         <form onSubmit={handleAuth} className="login-form">
           <div className="login-input-group">
             <label className="login-label">
-              {isAdminMode ? "Admin Identifier" : "Operator Handle / Email Address"}
+              {isAdminMode ? "Username Admin" : "Email atau Username"}
             </label>
             <div className="login-input-wrap">
               <User className="login-input-icon" />
@@ -660,7 +660,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                   setEmail(e.target.value);
                   if (errorMsg) setErrorMsg('');
                 }}
-                placeholder={isAdminMode ? "Enter Admin ID" : "Enter Email Address"}
+                placeholder={isAdminMode ? "Masukkan Username Admin" : "Masukkan Email atau Username"}
                 required
                 disabled={isLoading || isSubmitting || isExiting}
               />
@@ -669,7 +669,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
           <div className="login-input-group">
             <label className="login-label">
-              {isAdminMode ? "Admin Passcode / Security Key" : "Neural Passcode / Auth Token"}
+              {isAdminMode ? "Password Admin" : "Password"}
             </label>
             <div className="login-input-wrap" style={{ position: 'relative' }}>
               <Lock className="login-input-icon" />
@@ -681,7 +681,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                   setPassword(e.target.value);
                   if (errorMsg) setErrorMsg('');
                 }}
-                placeholder={isAdminMode ? "Enter Admin Passcode" : "Enter passcode"}
+                placeholder={isAdminMode ? "Masukkan Password Admin" : "Masukkan Password"}
                 required
                 disabled={isLoading || isSubmitting || isExiting}
               />
@@ -689,7 +689,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 type="button"
                 className="login-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide passcode" : "Show passcode"}
+                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 tabIndex={-1}
                 disabled={isLoading || isSubmitting || isExiting}
               >
@@ -710,10 +710,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             {isLoading && <div className="omni-spinner omni-spinner-sm" style={{ marginRight: 8 }} />}
             <span>
               {isLoading || isSubmitting
-                ? (isCreatingAccount ? 'INITIALIZING PROFILE...' : 'AUTHENTICATING...')
+                ? (isCreatingAccount ? 'Mendaftar...' : 'Masuk...')
                 : (isAdminMode 
-                    ? 'Login as Admin ->' 
-                    : (isCreatingAccount ? 'Register & Initialize ->' : 'Login as User ->')
+                    ? 'Masuk sebagai Admin ->' 
+                    : (isCreatingAccount ? 'Daftar Sekarang ->' : 'Masuk sebagai User ->')
                   )
               }
             </span>
@@ -730,8 +730,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 disabled={isSubmitting || isExiting}
               >
                 {isCreatingAccount
-                  ? "Already have an operator clearance? Sign In."
-                  : "Don't have an operator clearance? Create Account."}
+                  ? "Sudah punya akun? Masuk di sini."
+                  : "Belum punya akun? Daftar akun baru."}
               </button>
             </div>
           )}

@@ -79,26 +79,26 @@ export default function AdminOmniRemote() {
         <div>
           <div className="admin-omni-badge">
             <ShieldAlert style={{ width: 14, height: 14 }} />
-            <span>DIAGNOSTIC TELEMETRY • VIRTUAL CONTROLLER PIPELINE</span>
+            <span>DIAGNOSTIK CONTROLLER</span>
           </div>
-          <h1 className="admin-omni-title">OmniRemote (Admin Diagnostics)</h1>
+          <h1 className="admin-omni-title">Diagnostik Controller</h1>
           <p className="admin-omni-sub">
-            Troubleshoot player controller mapping errors, input polling jitter, axis drift, and WebRTC HID packet latency.
+            Uji fungsi tombol, kalibrasi analog stick, dan tes getaran (vibrasi) controller.
           </p>
         </div>
 
         {/* Global Latency KPI */}
         <div className="admin-omni-kpis">
           <div className="omni-kpi-pill">
-            <span className="kpi-k">Input Pipeline:</span>
+            <span className="kpi-k">Latensi Input:</span>
             <span className="kpi-v cyan">0.9 ms RTT</span>
           </div>
           <div className="omni-kpi-pill">
-            <span className="kpi-k">Polling Rate:</span>
+            <span className="kpi-k">Respon Tombol:</span>
             <span className="kpi-v emerald">{pollingRate} Hz (USB-C High Speed)</span>
           </div>
           <div className="omni-kpi-pill">
-            <span className="kpi-k">Packet Jitter:</span>
+            <span className="kpi-k">Kestabilan Sinyal:</span>
             <span className="kpi-v green">0.04 ms</span>
           </div>
         </div>
@@ -111,12 +111,12 @@ export default function AdminOmniRemote() {
         <div className="admin-omni-card">
           <div className="card-top-bar">
             <div>
-              <h2 className="admin-card-title">Live Hardware Input Stream</h2>
-              <p className="admin-card-sub">Real-time raw packets from client gamepad driver</p>
+              <h2 className="admin-card-title">Status Input Controller</h2>
+              <p className="admin-card-sub">Deteksi pergerakan analog dan tombol secara real-time</p>
             </div>
             <span className="active-driver-chip">
               <Zap style={{ width: 12, height: 12, color: 'var(--neon-cyan)' }} />
-              Driver: ViGEmBus Virtual X360
+              Driver: Gamepad Virtual X360
             </span>
           </div>
 
@@ -142,7 +142,7 @@ export default function AdminOmniRemote() {
                 className="stick-test-btn"
                 onClick={() => handleSimulateStick('left')}
               >
-                Test Left Stick Deflection
+                Tes Analog Kiri
               </button>
             </div>
 
@@ -166,7 +166,7 @@ export default function AdminOmniRemote() {
                 className="stick-test-btn"
                 onClick={() => handleSimulateStick('right')}
               >
-                Test Right Stick Deflection
+                Tes Analog Kanan
               </button>
             </div>
           </div>
@@ -174,13 +174,13 @@ export default function AdminOmniRemote() {
           {/* Trigger Depth Bars */}
           <div className="triggers-meter-group">
             <div className="trigger-row">
-              <span className="trig-lbl">Left Trigger (LT): {axisValues.lt} / 255</span>
+              <span className="trig-lbl">Pemicu Kiri (LT): {axisValues.lt} / 255</span>
               <div className="trig-track">
                 <div className="trig-fill" style={{ width: `${(axisValues.lt / 255) * 100}%` }} />
               </div>
             </div>
             <div className="trigger-row">
-              <span className="trig-lbl">Right Trigger (RT): {axisValues.rt} / 255</span>
+              <span className="trig-lbl">Pemicu Kanan (RT): {axisValues.rt} / 255</span>
               <div className="trig-track">
                 <div className="trig-fill" style={{ width: `${(axisValues.rt / 255) * 100}%` }} />
               </div>
@@ -196,7 +196,7 @@ export default function AdminOmniRemote() {
               disabled={isCalibrating}
             >
               <RefreshCw style={{ width: 14, height: 14 }} className={isCalibrating ? 'spin-icon' : ''} />
-              <span>{isCalibrating ? 'RECALIBRATING DRIFT...' : 'AUTO-CALIBRATE DEADZONES'}</span>
+              <span>{isCalibrating ? 'Sedang Kalibrasi...' : 'Kalibrasi Controller'}</span>
             </button>
 
             <button 
@@ -206,7 +206,7 @@ export default function AdminOmniRemote() {
               disabled={isRumbling}
             >
               <Activity style={{ width: 14, height: 14 }} />
-              <span>{isRumbling ? 'HAPTIC MOTOR FIRING...' : 'TEST HAPTIC FEEDBACK (RUMBLE)'}</span>
+              <span>{isRumbling ? 'Menggetarkan...' : 'Tes Getar (Vibrasi)'}</span>
             </button>
           </div>
         </div>
@@ -215,8 +215,8 @@ export default function AdminOmniRemote() {
         <div className="admin-omni-card">
           <div className="card-top-bar">
             <div>
-              <h2 className="admin-card-title">Controller Mapping Matrix</h2>
-              <p className="admin-card-sub">Client HID Button Remappings & Signal Integrity</p>
+              <h2 className="admin-card-title">Daftar Tombol Gamepad</h2>
+              <p className="admin-card-sub">Status tombol game dan koneksi fisik</p>
             </div>
             <span className="protocol-chip">
               <Wifi style={{ width: 12, height: 12, color: 'var(--neon-emerald)' }} />
@@ -245,7 +245,7 @@ export default function AdminOmniRemote() {
                   checked={invertY} 
                   onChange={(e) => setInvertY(e.target.checked)} 
                 />
-                <span>Invert Y-Axis (Flight / Camera Mode)</span>
+                <span>Balik Sumbu Y (Mode Kamera / Pesawat)</span>
               </label>
             </div>
           </div>
@@ -255,9 +255,9 @@ export default function AdminOmniRemote() {
             <table className="mapping-table">
               <thead>
                 <tr>
-                  <th>Physical Input</th>
-                  <th>Target Host API</th>
-                  <th>Raw Packet Trace</th>
+                  <th>Tombol Fisik</th>
+                  <th>Fungsi Sistem (API)</th>
+                  <th>Kode Sinyal</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -283,7 +283,7 @@ export default function AdminOmniRemote() {
           <div className="hid-terminal-stream">
             <div className="hid-term-header">
               <Terminal style={{ width: 12, height: 12 }} />
-              <span>RAW HID PACKET STREAM (INBOUND UDP)</span>
+              <span>ALIRAN SINYAL CONTROLLER (UDP STREAM)</span>
             </div>
             <div className="hid-term-body mono">
               <p className="term-line dim">[00:00.012] RECV: 0x01 0x00 0x7F 0x80 0x00 0x00 (CRC32: PASS)</p>

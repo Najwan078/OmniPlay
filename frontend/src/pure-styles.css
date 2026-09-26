@@ -11886,3 +11886,360 @@ body {
     white-space: nowrap;
   }
 }
+
+
+/* ==========================================================================
+   MOBILE ADMIN OVERHAUL: NO CUTOFFS, NO GLITCHES, CLEAN TOUCH TARGETS
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Prevent header clip and bottom bar occlusion on all admin views */
+  .admin-omni-container,
+  .analytics-page-wrap,
+  .admin-infra-container,
+  .admin-gamelib-container,
+  .user-stats-container,
+  .community-view-container,
+  .user-support-container {
+    padding-top: 18px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    padding-bottom: calc(115px + env(safe-area-inset-bottom, 0px)) !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Eliminate mobile WebKit text duplication & glitch artifact */
+  .analytics-title,
+  .infra-title,
+  .admin-omni-title {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    margin: 0 0 6px 0 !important;
+  }
+
+  .analytics-sub,
+  .infra-sub,
+  .admin-omni-sub {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    color: #94a3b8 !important;
+  }
+
+  /* OmniRemote mobile layout fixes */
+  .admin-omni-header {
+    padding: 16px !important;
+    background: rgba(14, 18, 30, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .admin-omni-kpis {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .omni-kpi-pill {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+  }
+
+  .card-top-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .active-driver-chip {
+    align-self: flex-start !important;
+    font-size: 11px !important;
+    max-width: 100% !important;
+  }
+
+  .sticks-visualizer-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+
+  .stick-box {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+
+  .admin-omni-actions {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+
+  .omni-diag-btn {
+    width: 100% !important;
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+    justify-content: center !important;
+  }
+
+  /* Analytics mobile layout fixes */
+  .analytics-header {
+    padding: 16px !important;
+    background: rgba(14, 18, 30, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    margin-bottom: 16px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .analytics-header-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .analytics-time-pills {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .time-pill {
+    flex: 1 !important;
+    text-align: center !important;
+    padding: 8px !important;
+  }
+
+  .export-dropdown-wrapper {
+    width: 100% !important;
+  }
+
+  .export-trigger-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 10px !important;
+  }
+
+  /* Infrastructure Troubleshooting & Repair Console mobile styles */
+  .infra-troubleshoot-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .repair-action-btn {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    font-size: 12px !important;
+    padding: 10px 12px !important;
+  }
+}
+
+/* ==========================================================================
+   TROUBLESHOOTING & AUTO-REPAIR CONSOLE STYLES (DESKTOP & UNIVERSAL)
+   ========================================================================== */
+.infra-repair-section {
+  margin-bottom: 32px;
+}
+
+.infra-repair-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.infra-troubleshoot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.repair-card {
+  background: rgba(12, 16, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.repair-card:hover {
+  border-color: rgba(0, 210, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.repair-card.cyan::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #00d2ff, transparent);
+}
+
+.repair-card.purple::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #a78bfa, transparent);
+}
+
+.repair-card.emerald::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+}
+
+.repair-card.amber::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+}
+
+.repair-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.repair-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.repair-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repair-card.cyan .repair-icon-box {
+  background: rgba(0, 210, 255, 0.12);
+  color: #00d2ff;
+  border: 1px solid rgba(0, 210, 255, 0.3);
+}
+
+.repair-card.purple .repair-icon-box {
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.repair-card.emerald .repair-icon-box {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.repair-card.amber .repair-icon-box {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.repair-card-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.repair-status-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.repair-status-tag.ok {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.repair-status-tag.warn {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.repair-desc {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.repair-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.repair-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.repair-action-btn:hover:not(:disabled) {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: rgba(0, 210, 255, 0.35);
+  color: #00d2ff;
+  transform: translateX(2px);
+}
+
+.repair-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.repair-toast-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease;
+}

@@ -183,10 +183,10 @@ export default function AnalyticsDashboard() {
         <div className="analytics-header-titles">
           <div className="analytics-badge">
             <ShieldCheck style={{ width: 14, height: 14 }} />
-            <span>REAL-TIME STREAM TELEMETRY & HARDWARE AUDIT</span>
+            <span>STATISTIK & PERFORMA CLOUD</span>
           </div>
-          <h1 className="analytics-title">Performance Analytics</h1>
-          <p className="analytics-sub">Deep telemetry, framerate distributions, usage heatmaps, and cloud edge node performance.</p>
+          <h1 className="analytics-title">Analisis Performa Cloud</h1>
+          <p className="analytics-sub">Data waktu bermain, kestabilan FPS, latensi jaringan, dan status server cloud.</p>
         </div>
 
         <div className="analytics-header-actions">
@@ -260,7 +260,7 @@ export default function AnalyticsDashboard() {
       <div className="analytics-kpi-grid">
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">TOTAL PLAYTIME</span>
+            <span className="kpi-tag">TOTAL WAKTU MAIN</span>
             <Clock style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />
           </div>
           <p className="kpi-value">847 <span className="unit">hrs</span></p>
@@ -269,7 +269,7 @@ export default function AnalyticsDashboard() {
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">AVG STREAM FPS</span>
+            <span className="kpi-tag">RATA-RATA FPS</span>
             <Zap style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
           </div>
           <p className="kpi-value cyan">118 <span className="unit">fps</span></p>
@@ -278,7 +278,7 @@ export default function AnalyticsDashboard() {
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">INPUT LATENCY</span>
+            <span className="kpi-tag">LATENSI INPUT</span>
             <Activity style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
           </div>
           <p className="kpi-value emerald">3.8 <span className="unit">ms</span></p>
@@ -287,7 +287,7 @@ export default function AnalyticsDashboard() {
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">BANDWIDTH USAGE</span>
+            <span className="kpi-tag">PENGGUNAAN INTERNET</span>
             <BarChart3 style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} />
           </div>
           <p className="kpi-value purple">48.5 <span className="unit">Mbps</span></p>
@@ -304,16 +304,16 @@ export default function AnalyticsDashboard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Flame style={{ width: 20, height: 20, color: 'var(--neon-amber)' }} />
               <div>
-                <h3 className="chart-card-title">Peak Cloud Stream Usage Heatmap</h3>
-                <p className="chart-card-sub">Concurrent player stream sessions by day and hour</p>
+                <h3 className="chart-card-title">Grafik Jam Ramai Pemain</h3>
+                <p className="chart-card-sub">Jumlah pemain aktif berdasarkan hari dan jam</p>
               </div>
             </div>
             <div className="heatmap-legend">
-              <span className="heat-cell-sample idle" /> <span>0: Idle</span>
-              <span className="heat-cell-sample low" /> <span>1: Low</span>
-              <span className="heat-cell-sample med" /> <span>2: Med</span>
-              <span className="heat-cell-sample high" /> <span>3: High</span>
-              <span className="heat-cell-sample peak" /> <span>4: Peak</span>
+              <span className="heat-cell-sample idle" /> <span>0: Kosong</span>
+              <span className="heat-cell-sample low" /> <span>1: Rendah</span>
+              <span className="heat-cell-sample med" /> <span>2: Sedang</span>
+              <span className="heat-cell-sample high" /> <span>3: Ramai</span>
+              <span className="heat-cell-sample peak" /> <span>4: Puncak</span>
             </div>
           </div>
 
@@ -365,11 +365,11 @@ export default function AnalyticsDashboard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <PieIcon style={{ width: 20, height: 20, color: 'var(--neon-cyan)' }} />
               <div>
-                <h3 className="chart-card-title">Most Played Games Distribution</h3>
-                <p className="chart-card-sub">Share of total server playtime hours</p>
+                <h3 className="chart-card-title">Distribusi Game Paling Banyak Dimainkan</h3>
+                <p className="chart-card-sub">Persentase jam bermain pada server cloud</p>
               </div>
             </div>
-            <span className="chart-badge-tag">Total: 847 hrs</span>
+            <span className="chart-badge-tag">Total: 847 Jam</span>
           </div>
 
           <div className="pie-chart-content-row">
@@ -447,7 +447,7 @@ export default function AnalyticsDashboard() {
                   847h
                 </text>
                 <text x="100" y="112" textAnchor="middle" fill="#94a3b8" fontSize="10" fontFamily="sans-serif">
-                  TOTAL PLAY
+                  TOTAL MAIN
                 </text>
               </svg>
             </div>
@@ -461,7 +461,7 @@ export default function AnalyticsDashboard() {
                     <span className="pie-game-name">{game.name}</span>
                   </div>
                   <div className="pie-stats-meta">
-                    <span className="pie-hours">{game.hours} hrs</span>
+                    <span className="pie-hours">{game.hours} jam</span>
                     <span className="pie-pct-chip" style={{ color: game.color, borderColor: game.color }}>{game.pct}%</span>
                   </div>
                 </div>
@@ -478,12 +478,12 @@ export default function AnalyticsDashboard() {
         <div className="analytics-chart-card">
           <div className="chart-card-header">
             <div>
-              <h3 className="chart-card-title">Stream Framerate Stability (Last 60 Seconds)</h3>
-              <p className="chart-card-sub">Dynamic adaptive WebRTC stream target: 120 FPS</p>
+              <h3 className="chart-card-title">Kestabilan FPS Streaming (60 Detik Terakhir)</h3>
+              <p className="chart-card-sub">Target streaming stabil: 120 FPS</p>
             </div>
             <div className="chart-legend">
-              <span className="legend-dot target" /> <span>120 FPS Target</span>
-              <span className="legend-dot actual" /> <span>Actual Stream</span>
+              <span className="legend-dot target" /> <span>Target 120 FPS</span>
+              <span className="legend-dot actual" /> <span>FPS Saat Ini</span>
             </div>
           </div>
 
@@ -537,11 +537,11 @@ export default function AnalyticsDashboard() {
         <div className="analytics-chart-card">
           <div className="chart-card-header">
             <div>
-              <h3 className="chart-card-title">Edge Node Infrastructure Latency</h3>
-              <p className="chart-card-sub">Active regional cluster routing & hardware health</p>
+              <h3 className="chart-card-title">Latensi Server Edge Node</h3>
+              <p className="chart-card-sub">Kecepatan respon rute server antar wilayah</p>
             </div>
             <div className="node-active-count">
-              <span className="node-status-dot" /> 3 Nodes Synchronized
+              <span className="node-status-dot" /> 3 Node Terhubung
             </div>
           </div>
 
@@ -592,8 +592,8 @@ export default function AnalyticsDashboard() {
       <div className="insights-panel">
         <div className="insights-panel-header">
           <div>
-            <h3 className="panel-title">Game-Specific Performance Telemetry</h3>
-            <p className="panel-sub">Verified benchmarks across active Steam cloud gaming titles.</p>
+            <h3 className="panel-title">Performa Tiap Game</h3>
+            <p className="panel-sub">Hasil pengujian performa pada game yang sedang berjalan di cloud.</p>
           </div>
         </div>
 

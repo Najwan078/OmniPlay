@@ -121,7 +121,7 @@ function TopNavbar({
       {isLoggingOut && (
         <div className="fullscreen-loader" role="status">
           <div className="omni-spinner" />
-          <span>TERMINATING NEURAL LINK...</span>
+          <span>Keluar...</span>
         </div>
       )}
 
@@ -302,11 +302,11 @@ function TopNavbar({
           <button 
             className="omni-action-btn omni-signout-btn" 
             onClick={handleSignOutClick}
-            title="Terminate Operator Neural Link"
+            title="Keluar / Logout"
             type="button"
           >
             <LogOut style={{ width: 14, height: 14 }} />
-            <span>Sign Out</span>
+            <span>Keluar</span>
           </button>
         </div>
       </header>
@@ -518,7 +518,7 @@ function DashboardShell({
             {isPageLoading ? (
               <div className="page-loader-container">
                 <div className="omni-spinner" />
-                <span>SYNCHRONIZING NEURAL NODE...</span>
+                <span>Loading...</span>
               </div>
             ) : (
               <div key={activeTab} className="futuristic-page-container">
@@ -647,10 +647,10 @@ function DashboardShell({
 
             <h3 className="omni-launch-title">{launchingGame.title}</h3>
             <p className="omni-launch-desc">
-              {launchStep === 0 && "Locating nearest Edge Cloud Node (SG-01 / JK-01)..."}
-              {launchStep === 1 && "Allocating dedicated NVIDIA RTX 4080 Instance..."}
-              {launchStep === 2 && "Synchronizing Steam Cloud Save & Shader Caches..."}
-              {launchStep === 3 && "Establishing 120 FPS Sub-5ms WebRTC Stream..."}
+              {launchStep === 0 && "Menghubungkan ke server cloud..."}
+              {launchStep === 1 && "Menyiapkan GPU Cloud Gaming..."}
+              {launchStep === 2 && "Memuat data & save game..."}
+              {launchStep === 3 && "Mulai bermain game..."}
             </p>
 
             <div className="launch-progress-bar">
