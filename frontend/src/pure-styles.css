@@ -5418,6 +5418,172 @@ body {
   box-shadow: 0 12px 30px rgba(2, 132, 199, 0.5), 0 0 30px rgba(0, 210, 255, 0.45);
 }
 
+/* Cloudflare Turnstile Verification Widget */
+.cf-turnstile-box {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(15, 20, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+}
+
+.cf-turnstile-box:hover {
+  border-color: rgba(243, 128, 32, 0.45);
+  box-shadow: 0 4px 16px rgba(243, 128, 32, 0.12);
+  background: rgba(18, 24, 38, 0.85);
+}
+
+.cf-turnstile-box.verified {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.06);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+}
+
+.cf-turnstile-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cf-checkbox {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cf-checkbox.idle {
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cf-checkbox.idle:hover {
+  border-color: #f38020;
+}
+
+.cf-checkbox.verifying {
+  border: 2px solid rgba(243, 128, 32, 0.3);
+  background: rgba(243, 128, 32, 0.1);
+}
+
+.cf-checkbox.verified {
+  background: #10b981;
+  border: 2px solid #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.cf-check-icon {
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+}
+
+.cf-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(243, 128, 32, 0.3);
+  border-top-color: #f38020;
+  border-radius: 50%;
+  animation: cf-spin 0.8s linear infinite;
+}
+
+@keyframes cf-spin {
+  to { transform: rotate(360deg); }
+}
+
+.cf-label-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cf-main-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f3f4f6;
+  letter-spacing: 0.01em;
+}
+
+.cf-turnstile-box.verified .cf-main-label {
+  color: #34d399;
+}
+
+.cf-sub-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cf-turnstile-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.cf-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cf-logo-svg {
+  width: 24px;
+  height: 16px;
+}
+
+.cf-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  text-align: right;
+}
+
+.cf-brand-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f3f4f6;
+  letter-spacing: 0.02em;
+}
+
+.cf-brand-turnstile {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.cf-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cf-links span {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cf-dot {
+  font-size: 7px;
+  opacity: 0.6;
+}
+
 .login-submit-btn:active {
   transform: translateY(1px);
 }
@@ -5471,6 +5637,18 @@ body {
 
   .login-form {
     gap: 14px;
+  }
+
+  .cf-turnstile-box {
+    padding: 8px 12px;
+  }
+
+  .cf-main-label {
+    font-size: 12px;
+  }
+
+  .cf-sub-label {
+    font-size: 9px;
   }
 
   .login-submit-btn {

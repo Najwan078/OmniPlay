@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo, Component, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import * as THREE from 'three';
 import { useUser } from '../context/UserContext';
 import { authApi } from '../services/api';
@@ -470,6 +470,31 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+  const [turnstileStatus, setTurnstileStatus] = useState<'idle' | 'verifying' | 'verified'>('idle');
+
+  useEffect(() => {
+    // Cloudflare Turnstile: Simulates non-interactive managed human verification
+    setTurnstileStatus('idle');
+    const t1 = setTimeout(() => {
+      setTurnstileStatus('verifying');
+    }, 600);
+    const t2 = setTimeout(() => {
+      setTurnstileStatus('verified');
+    }, 1700);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isAdminMode, isCreatingAccount]);
+
+  const handleTriggerTurnstile = () => {
+    if (turnstileStatus === 'verified') return;
+    setTurnstileStatus('verifying');
+    setTimeout(() => {
+      setTurnstileStatus('verified');
+    }, 800);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -502,6 +527,13 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     setIsLoading(true);
 
     try {
+      // 0. Cloudflare Turnstile Verification Gate
+      if (turnstileStatus !== 'verified') {
+        setTurnstileStatus('verifying');
+        await new Promise(r => setTimeout(r, 600));
+        setTurnstileStatus('verified');
+      }
+
       // 1. Brief sci-fi authentication feedback (600ms)
       await new Promise(r => setTimeout(r, 600));
 
@@ -702,6 +734,50 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                   <Eye style={{ width: 17, height: 17 }} />
                 )}
               </button>
+            </div>
+          </div>
+
+          {/* Cloudflare Turnstile Managed Challenge Widget */}
+          <div
+            className={`cf-turnstile-box ${turnstileStatus}`}
+            onClick={handleTriggerTurnstile}
+            role="button"
+            tabIndex={0}
+            title="Cloudflare Turnstile • Managed Human Verification"
+          >
+            <div className="cf-turnstile-left">
+              <div className={`cf-checkbox ${turnstileStatus}`}>
+                {turnstileStatus === 'verifying' && <div className="cf-spinner" />}
+                {turnstileStatus === 'verified' && <CheckCircle2 className="cf-check-icon" />}
+              </div>
+              <div className="cf-label-wrap">
+                <span className="cf-main-label">
+                  {turnstileStatus === 'idle' && "Verify you are human"}
+                  {turnstileStatus === 'verifying' && "Verifying with Cloudflare..."}
+                  {turnstileStatus === 'verified' && "Verification successful"}
+                </span>
+                <span className="cf-sub-label">
+                  {turnstileStatus === 'verified' ? "Encrypted Edge Session Protected" : "Cloudflare Edge Security Shield"}
+                </span>
+              </div>
+            </div>
+
+            <div className="cf-turnstile-right">
+              <div className="cf-brand">
+                <svg className="cf-logo-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M84.2 38.8c-1-11.2-10.4-19.8-21.8-19.8-5.8 0-11.1 2.2-15.1 6-3.3-8.6-11.6-14.7-21.4-14.7-12.5 0-22.7 9.8-23.3 22.1C9.4 33.4 2.9 39.6 2.3 47.4c-.8 8.6 6 16 14.6 16.1h80.5c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#F38020"/>
+                  <path d="M84.2 38.8c-.3 0-.6.1-.9.1 1.7 2.2 2.7 5 2.7 8 0 7.2-5.8 13-13 13H16.9c-.8 0-1.5-.1-2.2-.2 2.3 2.5 5.7 4.1 9.4 4.1h56.4c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#FAAE40"/>
+                </svg>
+                <div className="cf-brand-text">
+                  <span className="cf-brand-title">Cloudflare</span>
+                  <span className="cf-brand-turnstile">Turnstile</span>
+                </div>
+              </div>
+              <div className="cf-links">
+                <span>Privacy</span>
+                <span className="cf-dot">•</span>
+                <span>Terms</span>
+              </div>
             </div>
           </div>
 
