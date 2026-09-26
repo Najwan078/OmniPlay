@@ -7,6 +7,26 @@ import { useUser } from '../context/UserContext';
 import { authApi } from '../services/api';
 import { supabase } from '../supabase';
 
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement | string,
+        options: {
+          sitekey: string;
+          theme?: 'light' | 'dark' | 'auto';
+          size?: 'normal' | 'compact' | 'flexible';
+          callback?: (token: string) => void;
+          'error-callback'?: (errorCode: string) => void;
+          'expired-callback'?: () => void;
+        }
+      ) => string;
+      reset: (widgetId?: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
+
 // Resilient Error Boundary for WebGL Contexts
 class CanvasErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   state = { hasError: false };
@@ -470,31 +490,80 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
-  const [turnstileStatus, setTurnstileStatus] = useState<'idle' | 'verifying' | 'verified'>('idle');
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const [isTurnstileRendered, setIsTurnstileRendered] = useState(false);
+  const [isTurnstileVerified, setIsTurnstileVerified] = useState(false);
 
   useEffect(() => {
-    // Cloudflare Turnstile: Simulates non-interactive managed human verification
-    setTurnstileStatus('idle');
-    const t1 = setTimeout(() => {
-      setTurnstileStatus('verifying');
-    }, 600);
-    const t2 = setTimeout(() => {
-      setTurnstileStatus('verified');
-    }, 1700);
+    let isMounted = true;
+    let pollInterval: ReturnType<typeof setInterval>;
+
+    const renderTurnstile = () => {
+      if (!window.turnstile || !turnstileContainerRef.current) return false;
+
+      // Clean up previous widget instance if any
+      if (widgetIdRef.current) {
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch {
+          // ignore
+        }
+        widgetIdRef.current = null;
+      }
+
+      turnstileContainerRef.current.innerHTML = '';
+      setIsTurnstileVerified(false);
+
+      try {
+        const id = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: '1x00000000000000000000AA', // Official Cloudflare Always-Pass Test Sitekey
+          theme: 'dark',
+          size: 'flexible',
+          callback: () => {
+            if (!isMounted) return;
+            setIsTurnstileVerified(true);
+            setIsTurnstileRendered(true);
+          },
+          'error-callback': () => {
+            if (!isMounted) return;
+            console.warn('Cloudflare Turnstile challenge error');
+          },
+          'expired-callback': () => {
+            if (!isMounted) return;
+            setIsTurnstileVerified(false);
+          },
+        });
+        widgetIdRef.current = id;
+        setIsTurnstileRendered(true);
+        return true;
+      } catch (err) {
+        console.warn('Turnstile render exception:', err);
+        return false;
+      }
+    };
+
+    if (!renderTurnstile()) {
+      pollInterval = setInterval(() => {
+        if (renderTurnstile()) {
+          clearInterval(pollInterval);
+        }
+      }, 150);
+    }
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      isMounted = false;
+      if (pollInterval) clearInterval(pollInterval);
+      if (widgetIdRef.current && window.turnstile) {
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch {
+          // ignore
+        }
+        widgetIdRef.current = null;
+      }
     };
   }, [isAdminMode, isCreatingAccount]);
-
-  const handleTriggerTurnstile = () => {
-    if (turnstileStatus === 'verified') return;
-    setTurnstileStatus('verifying');
-    setTimeout(() => {
-      setTurnstileStatus('verified');
-    }, 800);
-  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -527,11 +596,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     setIsLoading(true);
 
     try {
-      // 0. Cloudflare Turnstile Verification Gate
-      if (turnstileStatus !== 'verified') {
-        setTurnstileStatus('verifying');
-        await new Promise(r => setTimeout(r, 600));
-        setTurnstileStatus('verified');
+      // 0. Cloudflare Turnstile Verification Gate (Player mode)
+      if (!isTurnstileVerified && !isAdminMode && isTurnstileRendered) {
+        setErrorMsg('Please complete Cloudflare Turnstile verification.');
+        setIsLoading(false);
+        return;
       }
 
       // 1. Brief sci-fi authentication feedback (600ms)
@@ -737,48 +806,34 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             </div>
           </div>
 
-          {/* Cloudflare Turnstile Managed Challenge Widget */}
-          <div
-            className={`cf-turnstile-box ${turnstileStatus}`}
-            onClick={handleTriggerTurnstile}
-            role="button"
-            tabIndex={0}
-            title="Cloudflare Turnstile • Managed Human Verification"
-          >
-            <div className="cf-turnstile-left">
-              <div className={`cf-checkbox ${turnstileStatus}`}>
-                {turnstileStatus === 'verifying' && <div className="cf-spinner" />}
-                {turnstileStatus === 'verified' && <CheckCircle2 className="cf-check-icon" />}
-              </div>
-              <div className="cf-label-wrap">
-                <span className="cf-main-label">
-                  {turnstileStatus === 'idle' && "Verify you are human"}
-                  {turnstileStatus === 'verifying' && "Verifying with Cloudflare..."}
-                  {turnstileStatus === 'verified' && "Verification successful"}
-                </span>
-                <span className="cf-sub-label">
-                  {turnstileStatus === 'verified' ? "Encrypted Edge Session Protected" : "Cloudflare Edge Security Shield"}
-                </span>
-              </div>
-            </div>
-
-            <div className="cf-turnstile-right">
-              <div className="cf-brand">
-                <svg className="cf-logo-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M84.2 38.8c-1-11.2-10.4-19.8-21.8-19.8-5.8 0-11.1 2.2-15.1 6-3.3-8.6-11.6-14.7-21.4-14.7-12.5 0-22.7 9.8-23.3 22.1C9.4 33.4 2.9 39.6 2.3 47.4c-.8 8.6 6 16 14.6 16.1h80.5c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#F38020"/>
-                  <path d="M84.2 38.8c-.3 0-.6.1-.9.1 1.7 2.2 2.7 5 2.7 8 0 7.2-5.8 13-13 13H16.9c-.8 0-1.5-.1-2.2-.2 2.3 2.5 5.7 4.1 9.4 4.1h56.4c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#FAAE40"/>
-                </svg>
-                <div className="cf-brand-text">
-                  <span className="cf-brand-title">Cloudflare</span>
-                  <span className="cf-brand-turnstile">Turnstile</span>
+          {/* Official Cloudflare Turnstile Verification Container */}
+          <div className="cf-turnstile-outer-wrap">
+            <div ref={turnstileContainerRef} className="cf-real-turnstile-slot" />
+            {!isTurnstileRendered && (
+              <div className="cf-turnstile-box verifying">
+                <div className="cf-turnstile-left">
+                  <div className="cf-checkbox verifying">
+                    <div className="cf-spinner" />
+                  </div>
+                  <div className="cf-label-wrap">
+                    <span className="cf-main-label">Connecting to Cloudflare...</span>
+                    <span className="cf-sub-label">Loading Turnstile Edge Challenge</span>
+                  </div>
+                </div>
+                <div className="cf-turnstile-right">
+                  <div className="cf-brand">
+                    <svg className="cf-logo-svg" viewBox="0 0 120 80" fill="none">
+                      <path d="M84.2 38.8c-1-11.2-10.4-19.8-21.8-19.8-5.8 0-11.1 2.2-15.1 6-3.3-8.6-11.6-14.7-21.4-14.7-12.5 0-22.7 9.8-23.3 22.1C9.4 33.4 2.9 39.6 2.3 47.4c-.8 8.6 6 16 14.6 16.1h80.5c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#F38020"/>
+                      <path d="M84.2 38.8c-.3 0-.6.1-.9.1 1.7 2.2 2.7 5 2.7 8 0 7.2-5.8 13-13 13H16.9c-.8 0-1.5-.1-2.2-.2 2.3 2.5 5.7 4.1 9.4 4.1h56.4c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#FAAE40"/>
+                    </svg>
+                    <div className="cf-brand-text">
+                      <span className="cf-brand-title">Cloudflare</span>
+                      <span className="cf-brand-turnstile">Turnstile</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="cf-links">
-                <span>Privacy</span>
-                <span className="cf-dot">•</span>
-                <span>Terms</span>
-              </div>
-            </div>
+            )}
           </div>
 
           <button
