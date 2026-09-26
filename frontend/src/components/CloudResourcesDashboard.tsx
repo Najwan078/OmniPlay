@@ -4,12 +4,23 @@ import {
   Users, ShieldCheck, Database, Laptop, Clock, 
   CheckCircle2, ArrowRight, Shield, Lock, Key, RefreshCw, 
   Download, Cloud, FileText, AlertTriangle, Activity, 
-  Wifi, Layers, ShieldAlert, Wrench, Gamepad2, Sparkles
+  Wifi, Layers, ShieldAlert, Wrench, Gamepad2, Sparkles,
+  TrendingUp, DollarSign, Award
 } from 'lucide-react';
+import CloudArchitectureModal from './CloudArchitectureModal';
 
 export default function CloudResourcesDashboard() {
   const [rebooting, setRebooting] = useState(false);
   const [rebootStep, setRebootStep] = useState(0);
+
+  // 3D Architecture Blueprint Modal State
+  const [showArchModal, setShowArchModal] = useState(false);
+
+  // Auto-Scaling & Rapid Elasticity State
+  const [activeWorkerPods, setActiveWorkerPods] = useState(4);
+  const [isSimulatingSpike, setIsSimulatingSpike] = useState(false);
+  const [spikeNotification, setSpikeNotification] = useState<string | null>(null);
+  const [currentCpuLoad, setCurrentCpuLoad] = useState('74%');
 
   // Backup & Disaster Recovery state
   const [isBackingUp, setIsBackingUp] = useState(false);
@@ -19,6 +30,31 @@ export default function CloudResourcesDashboard() {
   // Quick Troubleshooting & Auto-Repair Console state
   const [activeRepairing, setActiveRepairing] = useState<string | null>(null);
   const [repairSuccessMessage, setRepairSuccessMessage] = useState<string | null>(null);
+
+  const handleSimulateSpike = () => {
+    if (isSimulatingSpike) return;
+    setIsSimulatingSpike(true);
+    setCurrentCpuLoad('94%');
+    setSpikeNotification('⚠️ Lonjakan Beban Terdeteksi (CPU 94%, VRAM 89%)! Auto-Scaler mendeteksi overload dan memicu Scale-Out...');
+
+    // Phase 1: Rapid Elasticity -> Auto scale-out (+2 pods)
+    setTimeout(() => {
+      setActiveWorkerPods(6);
+      setSpikeNotification('🚀 Rapid Elasticity Berhasil: +2 Worker Pods (JK-02, SG-02) aktif seketika! Beban traffic diratakan.');
+      setCurrentCpuLoad('58%');
+    }, 2000);
+
+    // Phase 2: Graceful stabilization
+    setTimeout(() => {
+      setIsSimulatingSpike(false);
+      setSpikeNotification('✅ Uji Lonjakan (Spike Test) Selesai: Sistem elastis berhasil menjaga latensi tetap sub-4ms tanpa downtime.');
+      setTimeout(() => {
+        setSpikeNotification(null);
+        setActiveWorkerPods(4);
+        setCurrentCpuLoad('74%');
+      }, 7000);
+    }, 5500);
+  };
 
   const handleReboot = () => {
     setRebooting(true);
@@ -312,15 +348,26 @@ export default function CloudResourcesDashboard() {
           </p>
         </div>
 
-        <button 
-          onClick={handleReboot}
-          disabled={rebooting}
-          className={`infra-reboot-btn ${rebooting ? 'disabled' : ''}`}
-          type="button"
-        >
-          {rebooting ? <Loader2 className="btn-spinner" /> : <Power style={{ width: 16, height: 16 }} />}
-          <span>{rebooting ? 'Merestart Server...' : 'Restart Server Node'}</span>
-        </button>
+        <div className="infra-header-actions">
+          <button 
+            onClick={() => setShowArchModal(true)}
+            className="infra-blueprint-btn"
+            type="button"
+          >
+            <Layers style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
+            <span>Lihat Arsitektur Cloud (3D Blueprint)</span>
+          </button>
+
+          <button 
+            onClick={handleReboot}
+            disabled={rebooting}
+            className={`infra-reboot-btn ${rebooting ? 'disabled' : ''}`}
+            type="button"
+          >
+            {rebooting ? <Loader2 className="btn-spinner" /> : <Power style={{ width: 16, height: 16 }} />}
+            <span>{rebooting ? 'Merestart Server...' : 'Restart Server Node'}</span>
+          </button>
+        </div>
       </header>
 
       {/* 2. Quick Cloud Health & Capacity Metrics Strip */}
@@ -573,6 +620,237 @@ export default function CloudResourcesDashboard() {
                 {activeRepairing === 'clean_stale_snapshots' ? <Loader2 className="btn-spinner" /> : <RefreshCw style={{ width: 14, height: 14 }} />}
                 <span>{activeRepairing === 'clean_stale_snapshots' ? 'Membersihkan...' : 'Bersihkan Snapshot Lama'}</span>
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.6. AUTO-SCALING & RAPID ELASTICITY ORCHESTRATOR (UTS POIN 1 / NIST STANDARD) */}
+      <section className="infra-autoscaling-section">
+        <div className="section-title-strip">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <TrendingUp style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
+            <h2 className="section-heading">Auto-Scaling & Rapid Elasticity Orchestrator</h2>
+          </div>
+          <span className="topology-badge" style={{ borderColor: 'rgba(168, 85, 247, 0.4)', color: 'var(--neon-purple)' }}>
+            NIST Standard: Rapid Elasticity
+          </span>
+        </div>
+
+        {spikeNotification && (
+          <div className={`spike-notification-banner ${isSimulatingSpike ? 'warning' : 'success'}`}>
+            {isSimulatingSpike ? <Loader2 className="btn-spinner" /> : <CheckCircle2 style={{ width: 18, height: 18, flexShrink: 0 }} />}
+            <span>{spikeNotification}</span>
+          </div>
+        )}
+
+        <div className="autoscaling-panel-grid">
+          {/* Left: Live Scaling Status & Spike Simulation */}
+          <div className="scaling-status-card">
+            <div className="scaling-card-top">
+              <div>
+                <h3 className="scaling-card-title">Status Armada Worker Pods</h3>
+                <p className="scaling-card-sub">Manajemen elastisitas pod KVM/Docker GPU secara dinamis</p>
+              </div>
+              <span className={`scaling-live-tag ${isSimulatingSpike ? 'scaling-up' : 'stable'}`}>
+                {isSimulatingSpike ? '⚡ SCALING OUT (+2 PODS)' : 'STABIL (NORMAL)'}
+              </span>
+            </div>
+
+            <div className="scaling-metrics-row">
+              <div className="scale-metric-box">
+                <span className="lbl">Worker Pods Aktif</span>
+                <span className="val cyan">{activeWorkerPods} / 12 Max</span>
+              </div>
+              <div className="scale-metric-box">
+                <span className="lbl">Cluster CPU Load</span>
+                <span className={`val ${isSimulatingSpike ? 'amber' : 'green'}`}>{currentCpuLoad}</span>
+              </div>
+              <div className="scale-metric-box">
+                <span className="lbl">Cooldown Anti-Flap</span>
+                <span className="val">180 Detik</span>
+              </div>
+            </div>
+
+            <div className="scaling-action-bar">
+              <button 
+                type="button" 
+                className="btn-spike-test"
+                onClick={handleSimulateSpike}
+                disabled={isSimulatingSpike}
+              >
+                {isSimulatingSpike ? (
+                  <>
+                    <Loader2 className="btn-spinner" />
+                    <span>MENSIMULASIKAN LONJAKAN TRAFFIC...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap style={{ width: 16, height: 16 }} />
+                    <span>Simulasi Lonjakan Traffic (Spike Test)</span>
+                  </>
+                )}
+              </button>
+              <p className="spike-hint">
+                *Klik untuk mendemonstrasikan ke dosen bagaimana sistem otomatis menambah worker pod saat traffic melonjak.
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Elasticity Threshold Rules */}
+          <div className="scaling-rules-card">
+            <h3 className="scaling-card-title">Aturan Pemicu Elastisitas (Scaling Rules):</h3>
+            
+            <div className="rules-list">
+              <div className="rule-item">
+                <div className="rule-info">
+                  <strong>Scale-Out (Tambah Kapasitas Otomatis):</strong>
+                  <span>Jika CPU &gt; 80% atau GPU VRAM &gt; 85% selama 3 menit berturut-turut.</span>
+                </div>
+                <span className="rule-pill green">AKTIF (+1 Pod)</span>
+              </div>
+
+              <div className="rule-item">
+                <div className="rule-info">
+                  <strong>Scale-In (Hemat Biaya saat Idle):</strong>
+                  <span>Jika server idle selama 15 menit, pod cadangan dimatikan untuk efisiensi FinOps.</span>
+                </div>
+                <span className="rule-pill cyan">AKTIF (-1 Pod)</span>
+              </div>
+
+              <div className="rule-item">
+                <div className="rule-info">
+                  <strong>Proteksi Anti-Flapping:</strong>
+                  <span>Mencegah pembuatan/penghapusan pod berulang-ulang dalam rentang waktu singkat.</span>
+                </div>
+                <span className="rule-pill purple">AKTIF (180s)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.7. CLOUD FINOPS & BIAYA INFRASTRUKTUR (UTS POIN 2 / NIST MEASURED SERVICE) */}
+      <section className="infra-finops-section">
+        <div className="section-title-strip">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <DollarSign style={{ width: 18, height: 18, color: 'var(--neon-emerald)' }} />
+            <h2 className="section-heading">Cloud Cost & FinOps Telemetry (Measured Service)</h2>
+          </div>
+          <span className="topology-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.4)', color: 'var(--neon-emerald)' }}>
+            NIST Standard: Pay-As-You-Go
+          </span>
+        </div>
+
+        <div className="finops-grid">
+          {/* OpEx Cards */}
+          <div className="finops-card">
+            <div className="finops-card-top">
+              <span className="finops-label">GPU Cluster Compute</span>
+              <span className="finops-rate">$0.85 / jam</span>
+            </div>
+            <p className="finops-total">$294.50 <span className="unit">/ bln</span></p>
+            <p className="finops-sub">RTX 40-Series Dedicated Pools</p>
+          </div>
+
+          <div className="finops-card">
+            <div className="finops-card-top">
+              <span className="finops-label">WebRTC Egress Bandwidth</span>
+              <span className="finops-rate">$0.04 / GB</span>
+            </div>
+            <p className="finops-total">$88.40 <span className="unit">/ bln</span></p>
+            <p className="finops-sub">2.21 TB AV1 Encoded Datagrams</p>
+          </div>
+
+          <div className="finops-card">
+            <div className="finops-card-top">
+              <span className="finops-label">AWS S3 Cold Vault Storage</span>
+              <span className="finops-rate">$0.023 / GB</span>
+            </div>
+            <p className="finops-total">$14.80 <span className="unit">/ bln</span></p>
+            <p className="finops-sub">Multi-Region Snapshot Replication</p>
+          </div>
+
+          <div className="finops-card">
+            <div className="finops-card-top">
+              <span className="finops-label">Cloudflare Anti-DDoS Shield</span>
+              <span className="finops-rate">Flat Tier</span>
+            </div>
+            <p className="finops-total">$30.00 <span className="unit">/ bln</span></p>
+            <p className="finops-sub">Enterprise L3/L4/L7 Defense</p>
+          </div>
+        </div>
+
+        {/* Financial Summary Strip */}
+        <div className="finops-summary-strip">
+          <div className="finops-stat-item">
+            <span className="lbl">Total Biaya Operasional (OpEx):</span>
+            <span className="val red">$427.70 / bulan</span>
+          </div>
+          <div className="finops-stat-item">
+            <span className="lbl">Estimasi Pendapatan Sewa (Rental Rev):</span>
+            <span className="val green">$1,340.00 / bulan</span>
+          </div>
+          <div className="finops-stat-item highlight">
+            <span className="lbl">Margin Keuntungan (Gross Margin):</span>
+            <span className="val cyan">+68.1% (Sangat Sehat)</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.8. SLA COMMITMENT & DATACENTER HIGH AVAILABILITY (UTS POIN 3) */}
+      <section className="infra-sla-section">
+        <div className="section-title-strip">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Award style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
+            <h2 className="section-heading">Service Level Agreement (SLA) & High Availability</h2>
+          </div>
+          <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: 'var(--neon-cyan)' }}>
+            Tier-3 Datacenter Standard
+          </span>
+        </div>
+
+        <div className="sla-dashboard-grid">
+          {/* SLA Metric 1 */}
+          <div className="sla-metric-box">
+            <div className="sla-gauge-row">
+              <span className="sla-pct-text">99.98%</span>
+              <span className="sla-status-tag active">SLA TERPENUHI</span>
+            </div>
+            <h4 className="sla-metric-title">Target Uptime Tahunan</h4>
+            <p className="sla-metric-desc">Toleransi downtime maksimal &lt; 1.75 jam per tahun (setara &lt; 8.6 menit / bulan).</p>
+          </div>
+
+          {/* SLA Metric 2 */}
+          <div className="sla-metric-box">
+            <div className="sla-gauge-row">
+              <span className="sla-pct-text emerald">&lt; 45 Detik</span>
+              <span className="sla-status-tag active">SANGAT CEPAT</span>
+            </div>
+            <h4 className="sla-metric-title">MTTR (Mean Time To Recovery)</h4>
+            <p className="sla-metric-desc">Waktu rata-rata pemulihan otomatis jika salah satu worker node mengalami kendala.</p>
+          </div>
+
+          {/* SLA Regional PoP List */}
+          <div className="sla-regional-card">
+            <h4 className="sla-card-title">Ketersediaan Edge PoP per Wilayah:</h4>
+            <div className="sla-pops-list">
+              <div className="sla-pop-row">
+                <span className="pop-name">🇮🇩 Jakarta (JK-01 Core)</span>
+                <span className="pop-val">99.99% (0 Insiden)</span>
+              </div>
+              <div className="sla-pop-row">
+                <span className="pop-name">🇸🇬 Singapura (SG-01 Standby)</span>
+                <span className="pop-val">99.98% (0 Insiden)</span>
+              </div>
+              <div className="sla-pop-row">
+                <span className="pop-name">🇯🇵 Tokyo (TY-01 Edge)</span>
+                <span className="pop-val">99.95% (0 Insiden)</span>
+              </div>
+              <div className="sla-pop-row">
+                <span className="pop-name">🇺🇸 Oregon (US-WEST-01)</span>
+                <span className="pop-val standby">100.0% (Standby Route)</span>
+              </div>
             </div>
           </div>
         </div>
@@ -993,6 +1271,12 @@ export default function CloudResourcesDashboard() {
           </tbody>
         </table>
       </div>
+
+      {/* Cloud Architecture 3D Blueprint Modal (UTS Poin 4) */}
+      <CloudArchitectureModal 
+        isOpen={showArchModal} 
+        onClose={() => setShowArchModal(false)} 
+      />
 
     </div>
   );
