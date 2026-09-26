@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { 
@@ -149,6 +150,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+  if (typeof document === 'undefined') return null;
 
   const architectureTiers = [
     {
@@ -228,7 +230,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
     }
   ];
 
-  return (
+  return createPortal(
     <div className="arch-modal-overlay" onClick={onClose}>
       <div className="arch-modal-card" onClick={(e) => e.stopPropagation()}>
         
@@ -391,6 +393,8 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
+
