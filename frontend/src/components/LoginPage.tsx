@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo, Component, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import * as THREE from 'three';
 import { useUser } from '../context/UserContext';
@@ -31,9 +31,11 @@ class CanvasErrorBoundary extends Component<{ children: ReactNode }, { hasError:
 function PlanetarySphereAndSatellites({
   mouse,
   isExiting,
+  isMobile,
 }: {
   mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
   isExiting: boolean;
+  isMobile: boolean;
 }) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const innerCoreRef = useRef<THREE.Mesh>(null!);
@@ -47,7 +49,7 @@ function PlanetarySphereAndSatellites({
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
-    const accel = isExiting ? 3.0 : 1.0;
+    const accel = isExiting ? 3.5 : 1.0;
 
     // Central Sphere continuous rotation
     if (meshRef.current) {
@@ -81,24 +83,31 @@ function PlanetarySphereAndSatellites({
       ring2GroupRef.current.rotation.y -= delta * 0.05 * accel;
     }
 
-    // Gentle mouse reaction
+    // Gentle mouse reaction (damped on mobile)
     if (mainGroupRef.current) {
+      const factor = isMobile ? 0.2 : 0.45;
       mainGroupRef.current.rotation.y = THREE.MathUtils.lerp(
         mainGroupRef.current.rotation.y,
-        mouse.current.targetX * 0.45,
+        mouse.current.targetX * factor,
         0.05
       );
       mainGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         mainGroupRef.current.rotation.x,
-        -mouse.current.targetY * 0.35,
+        -mouse.current.targetY * (factor * 0.8),
         0.05
       );
-      mainGroupRef.current.position.y = Math.sin(t * 0.8) * 0.12;
+      mainGroupRef.current.position.y = (isMobile ? 0.25 : 0.1) + Math.sin(t * 0.8) * (isMobile ? 0.06 : 0.12);
     }
   });
 
+  const groupScale = isMobile ? 0.44 : 1.0;
+
   return (
-    <group ref={mainGroupRef} position={[0, 0.1, 0]}>
+    <group 
+      ref={mainGroupRef} 
+      position={[0, isMobile ? 0.25 : 0.1, 0]}
+      scale={[groupScale, groupScale, groupScale]}
+    >
       {/* Central Wireframe Geodesic Sphere */}
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[2.5, 2]} />
@@ -337,19 +346,26 @@ function AmbientStardust() {
 }
 
 // 4. Glowing Perspective Cyber-Grid
-function CyberGrid({ mouse }: { mouse: React.MutableRefObject<{ targetX: number; targetY: number }> }) {
+function CyberGrid({
+  mouse,
+  isMobile,
+}: {
+  mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
+  isMobile: boolean;
+}) {
   const gridRef = useRef<THREE.Group>(null!);
 
   useFrame(() => {
     if (gridRef.current) {
-      gridRef.current.position.x = THREE.MathUtils.lerp(gridRef.current.position.x, mouse.current.targetX * 0.35, 0.04);
-      gridRef.current.rotation.z = THREE.MathUtils.lerp(gridRef.current.rotation.z, -mouse.current.targetX * 0.03, 0.04);
+      const factor = isMobile ? 0.15 : 0.35;
+      gridRef.current.position.x = THREE.MathUtils.lerp(gridRef.current.position.x, mouse.current.targetX * factor, 0.04);
+      gridRef.current.rotation.z = THREE.MathUtils.lerp(gridRef.current.rotation.z, -mouse.current.targetX * 0.02, 0.04);
     }
   });
 
   return (
-    <group ref={gridRef} position={[0, -3.2, 0]}>
-      <gridHelper args={[45, 45, '#00d2ff', '#0f3460']} />
+    <group ref={gridRef} position={[0, isMobile ? -2.6 : -3.2, 0]}>
+      <gridHelper args={[isMobile ? 32 : 45, isMobile ? 32 : 45, '#00d2ff', '#0f3460']} />
     </group>
   );
 }
@@ -358,39 +374,48 @@ function CyberGrid({ mouse }: { mouse: React.MutableRefObject<{ targetX: number;
 function CameraDiveController({
   isExiting,
   mouse,
+  isMobile,
 }: {
   isExiting: boolean;
   mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
+  isMobile: boolean;
 }) {
-  const targetZ = useRef(7.2);
+  const idleZ = isMobile ? 8.6 : 7.2;
+  const targetZ = useRef(idleZ);
+
+  useEffect(() => {
+    if (!isExiting) {
+      targetZ.current = idleZ;
+    }
+  }, [idleZ, isExiting]);
 
   useFrame((state, delta) => {
     if (isExiting) {
       // Damped acceleration straight forward through the sphere core
-      targetZ.current = THREE.MathUtils.lerp(targetZ.current, -6.5, delta * 1.55);
+      targetZ.current = THREE.MathUtils.lerp(targetZ.current, -6.5, delta * (isMobile ? 1.8 : 1.55));
       state.camera.position.z = THREE.MathUtils.lerp(
         state.camera.position.z,
         targetZ.current,
-        delta * 3.4
+        delta * 3.5
       );
-      // Center camera towards sphere singularity [0, 0.1, 0]
       state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, delta * 3.8);
-      state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 0.1, delta * 3.8);
+      state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, isMobile ? 0.25 : 0.1, delta * 3.8);
     } else {
       // Gentle idle mouse parallax
+      const factor = isMobile ? 0.2 : 0.45;
       state.camera.position.x = THREE.MathUtils.lerp(
         state.camera.position.x,
-        mouse.current.targetX * 0.45,
+        mouse.current.targetX * factor,
         delta * 2.5
       );
       state.camera.position.y = THREE.MathUtils.lerp(
         state.camera.position.y,
-        mouse.current.targetY * 0.35,
+        mouse.current.targetY * (factor * 0.8),
         delta * 2.5
       );
-      state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, 7.2, delta * 2.5);
+      state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, idleZ, delta * 2.5);
     }
-    state.camera.lookAt(0, 0.1, 0);
+    state.camera.lookAt(0, isMobile ? 0.25 : 0.1, 0);
   });
 
   return null;
@@ -400,25 +425,30 @@ function CameraDiveController({
 function CinematicSciFiScene({
   mouse,
   isExiting,
+  isMobile,
 }: {
   mouse: React.MutableRefObject<{ targetX: number; targetY: number }>;
   isExiting: boolean;
+  isMobile: boolean;
 }) {
+  const { size, viewport } = useThree();
+  const effectiveMobile = isMobile || size.width <= 768 || viewport.aspect < 1.0;
+
   return (
     <>
       <color attach="background" args={['#05050a']} />
-      <fog attach="fog" args={['#05050a', 5, 24]} />
+      <fog attach="fog" args={['#05050a', 5, 26]} />
 
       <ambientLight intensity={0.4} color="#0a192f" />
       <pointLight position={[8, 8, 8]} intensity={2.2} color="#00d2ff" distance={25} />
       <pointLight position={[-8, -6, -4]} intensity={1.8} color="#0f3460" distance={22} />
       <directionalLight position={[0, 6, 4]} intensity={0.6} color="#38bdf8" />
 
-      <CameraDiveController isExiting={isExiting} mouse={mouse} />
-      <PlanetarySphereAndSatellites mouse={mouse} isExiting={isExiting} />
+      <CameraDiveController isExiting={isExiting} mouse={mouse} isMobile={effectiveMobile} />
+      <PlanetarySphereAndSatellites mouse={mouse} isExiting={isExiting} isMobile={effectiveMobile} />
       <MeteorParticles />
       <AmbientStardust />
-      <CyberGrid mouse={mouse} />
+      <CyberGrid mouse={mouse} isMobile={effectiveMobile} />
     </>
   );
 }
@@ -439,6 +469,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Mouse reaction coordinates normalized to [-1, 1]
   const mouseRef = useRef({ targetX: 0, targetY: 0 });
@@ -463,57 +502,69 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     setIsLoading(true);
 
     try {
-      // Premium sci-fi authentication delay for smooth visual feedback
-      await new Promise(r => setTimeout(r, 1000));
+      // 1. Brief sci-fi authentication feedback (600ms)
+      await new Promise(r => setTimeout(r, 600));
 
-      // FORK 1: Admin Mode - Bypass standard Supabase Auth and check hardcoded Admin ID & Password
+      let roleToLogin: 'user' | 'admin' = 'user';
+
+      // FORK 1: Admin Mode - Validate admin credentials
       if (isAdminMode) {
         if (email.trim() === 'admin1' && password === 'admin123') {
           setErrorMsg('');
           setNickname('admin1');
           localStorage.setItem('isAdminLoggedIn', 'true');
-          onLogin('admin');
-          navigate('/admin');
+          roleToLogin = 'admin';
         } else {
           setErrorMsg('AUTHORIZATION FAILED: Invalid Admin ID or Passcode.');
+          setIsLoading(false);
+          return;
         }
-        return;
-      }
+      } else {
+        // FORK 2: User Mode - Standard user auth logic
+        localStorage.removeItem('isAdminLoggedIn');
+        const userNickname = email.trim() || 'Player1';
+        setNickname(userNickname);
 
-      // FORK 2: User Mode - Proceed with standard Supabase Auth logic
-      localStorage.removeItem('isAdminLoggedIn');
-      setIsSubmitting(true);
-      const userNickname = email.trim() || 'Player1';
-      setNickname(userNickname);
-
-      // Attempt Supabase client auth if email provided
-      if (email.includes('@') && password) {
-        try {
-          if (isCreatingAccount) {
-            await supabase.auth.signUp({ email: email.trim(), password });
-          } else {
-            await supabase.auth.signInWithPassword({ email: email.trim(), password });
+        // Attempt Supabase client auth if email provided
+        if (email.includes('@') && password) {
+          try {
+            if (isCreatingAccount) {
+              await supabase.auth.signUp({ email: email.trim(), password });
+            } else {
+              await supabase.auth.signInWithPassword({ email: email.trim(), password });
+            }
+          } catch (supabaseErr) {
+            console.warn('Supabase client auth notice:', supabaseErr);
           }
-        } catch (supabaseErr) {
-          console.warn('Supabase client auth notice:', supabaseErr);
         }
+
+        // Backend sync
+        try {
+          await authApi.login({ nickname: userNickname, password, role: 'user' });
+        } catch (err) {
+          console.warn('Backend Supabase sync notice:', err);
+        }
+
+        roleToLogin = 'user';
       }
 
-      // Backend sync
-      try {
-        await authApi.login({ nickname: userNickname, password, role: 'user' });
-      } catch (err) {
-        console.warn('Backend Supabase sync notice:', err);
-      }
+      // 2. Authentication successful -> Trigger cinematic exit transition & dive!
+      setIsLoading(false);
+      setIsSubmitting(true);
+      setIsExiting(true);
 
-      onLogin('user');
-      navigate('/library');
+      // 3. Multi-stage cinematic transition: 3D camera dive through planetary sphere + cinematic fade-to-black (2000ms)
+      setTimeout(() => {
+        onLogin(roleToLogin);
+        navigate(roleToLogin === 'admin' ? '/admin' : '/library');
+      }, 2000);
+
     } catch (err: unknown) {
       console.error('Authentication error:', err);
       setErrorMsg(err instanceof Error ? err.message : 'Authentication failed.');
-    } finally {
       setIsLoading(false);
       setIsSubmitting(false);
+      setIsExiting(false);
     }
   };
 
@@ -526,10 +577,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       <div className="login-canvas-wrap">
         <CanvasErrorBoundary>
           <Canvas
-            camera={{ position: [0, 0, 7.2], fov: 55 }}
+            camera={{ position: [0, 0, isMobile ? 8.6 : 7.2], fov: 55 }}
             gl={{ antialias: true, alpha: true }}
           >
-            <CinematicSciFiScene mouse={mouseRef} isExiting={isExiting} />
+            <CinematicSciFiScene mouse={mouseRef} isExiting={isExiting} isMobile={isMobile} />
           </Canvas>
         </CanvasErrorBoundary>
       </div>
@@ -561,6 +612,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             onClick={() => {
               setIsAdminMode(false);
               setErrorMsg('');
+              if (email === 'admin1') setEmail('');
+              if (password === 'admin123') setPassword('');
             }}
             disabled={isLoading || isSubmitting || isExiting}
           >
@@ -574,6 +627,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               setIsAdminMode(true);
               setIsCreatingAccount(false);
               setErrorMsg('');
+              if (!email || email === 'Player1') setEmail('admin1');
+              if (!password) setPassword('admin123');
             }}
             disabled={isLoading || isSubmitting || isExiting}
           >

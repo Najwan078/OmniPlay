@@ -733,7 +733,8 @@ export default function OmniPlayApp() {
     }
     // Redirect to attempted route if available, otherwise default to /library
     const fromPath = (location.state as { from?: { pathname: string } })?.from?.pathname;
-    const destination = fromPath && fromPath !== '/login' ? fromPath : '/library';
+    const defaultDest = userRole === 'admin' ? '/admin' : '/library';
+    const destination = fromPath && fromPath !== '/login' ? fromPath : defaultDest;
     navigate(destination, { replace: true });
 
     setGlobalToast({
