@@ -11389,3 +11389,500 @@ body {
     padding: 14px 20px;
   }
 }
+
+
+/* ==========================================================================
+   ADMIN CLOUD SECURITY, BACKUP & DATA TELEMETRY CENTER (UTS CLOUD COMPUTING)
+   ========================================================================== */
+
+/* 1. Quick Metrics Summary Strip */
+.infra-metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.infra-metric-box {
+  background: rgba(14, 18, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.infra-metric-box:hover {
+  border-color: rgba(0, 210, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.infra-metric-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.infra-metric-icon-wrap.cyan {
+  background: rgba(0, 210, 255, 0.12);
+  color: var(--neon-cyan, #00d2ff);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+}
+
+.infra-metric-icon-wrap.purple {
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.infra-metric-icon-wrap.emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--neon-emerald, #10b981);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.infra-metric-icon-wrap.amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.infra-metric-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.infra-metric-label {
+  font-size: 11px;
+  color: var(--text-muted, #8b929e);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.infra-metric-value {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.infra-metric-sub {
+  font-size: 11px;
+  color: var(--neon-emerald, #10b981);
+  margin-top: 2px;
+}
+
+/* 2. Security Shield Grid */
+.infra-security-section {
+  margin-bottom: 32px;
+}
+
+.infra-security-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.security-pillar-card {
+  background: rgba(12, 15, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+  transition: all 0.25s ease;
+}
+
+.security-pillar-card:hover {
+  border-color: rgba(0, 210, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 210, 255, 0.08);
+}
+
+.security-pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.5), transparent);
+}
+
+.security-pillar-card.active::before {
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.7), transparent);
+}
+
+.security-pillar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.security-pillar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.security-pillar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0, 210, 255, 0.1);
+  color: #00d2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.security-pillar-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.security-badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--neon-emerald, #10b981);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-transform: uppercase;
+}
+
+.security-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.security-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sec-key {
+  color: var(--text-muted, #8b929e);
+}
+
+.sec-val {
+  font-family: var(--font-mono, monospace);
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.sec-val.green {
+  color: var(--neon-emerald, #10b981);
+}
+
+.sec-val.cyan {
+  color: #00d2ff;
+}
+
+/* 3. Backup & Disaster Recovery Center */
+.infra-backup-section {
+  margin-bottom: 32px;
+}
+
+.backup-control-card {
+  background: rgba(14, 18, 30, 0.8);
+  border: 1px solid rgba(0, 210, 255, 0.18);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.backup-control-card::after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.backup-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.backup-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backup-title-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(16, 185, 129, 0.2));
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00d2ff;
+}
+
+.backup-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px;
+}
+
+.backup-desc {
+  font-size: 13px;
+  color: var(--text-muted, #8b929e);
+  margin: 0;
+}
+
+/* Backup Status Metric Chips */
+.backup-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.backup-status-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chip-lbl {
+  font-size: 11px;
+  color: var(--text-muted, #8b929e);
+  text-transform: uppercase;
+}
+
+.chip-val {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chip-val.green {
+  color: var(--neon-emerald, #10b981);
+}
+
+.chip-val.cyan {
+  color: #00d2ff;
+}
+
+/* Backup Action Buttons Row */
+.backup-actions-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-backup-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #0077ff, #00d2ff);
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 119, 255, 0.4);
+  transition: all 0.25s ease;
+}
+
+.btn-backup-trigger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 119, 255, 0.55);
+}
+
+.btn-backup-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-backup-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-backup-download:hover {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: rgba(0, 210, 255, 0.35);
+  color: #00d2ff;
+}
+
+/* Success Banner */
+.backup-banner-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--neon-emerald, #10b981);
+  font-size: 13px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 4. Live Cloud Telemetry & Audit Logs Table */
+.infra-audit-card {
+  background: rgba(14, 18, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.infra-audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.infra-audit-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--text-muted, #8b929e);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.infra-audit-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+}
+
+.infra-audit-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.audit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.audit-badge.green {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--neon-emerald, #10b981);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.audit-badge.cyan {
+  background: rgba(0, 210, 255, 0.15);
+  color: #00d2ff;
+  border: 1px solid rgba(0, 210, 255, 0.3);
+}
+
+.audit-badge.purple {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.audit-badge.amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .infra-metrics-strip {
+    grid-template-columns: 1fr;
+  }
+  .infra-security-grid {
+    grid-template-columns: 1fr;
+  }
+  .backup-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-backup-trigger,
+  .btn-backup-download {
+    width: 100%;
+    justify-content: center;
+  }
+  .infra-audit-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import { 
   Cpu, Zap, HardDrive, Globe, Server, Power, Loader2, 
-  Terminal, Users, ShieldCheck, Database, Laptop, Clock, 
-  CheckCircle2, ArrowRight
+  Users, ShieldCheck, Database, Laptop, Clock, 
+  CheckCircle2, ArrowRight, Shield, Lock, Key, RefreshCw, 
+  Download, Cloud, FileText, AlertTriangle, Activity, 
+  Wifi, Layers, ShieldAlert
 } from 'lucide-react';
 
 export default function CloudResourcesDashboard() {
   const [rebooting, setRebooting] = useState(false);
   const [rebootStep, setRebootStep] = useState(0);
+
+  // Backup & Disaster Recovery state
+  const [isBackingUp, setIsBackingUp] = useState(false);
+  const [lastBackupTime, setLastBackupTime] = useState('2 hours ago (03:00 UTC)');
+  const [backupSuccessMessage, setBackupSuccessMessage] = useState<string | null>(null);
 
   const handleReboot = () => {
     setRebooting(true);
@@ -20,143 +27,255 @@ export default function CloudResourcesDashboard() {
     }, 6000);
   };
 
-  // Server Topology Data
+  const handleTriggerBackup = () => {
+    if (isBackingUp) return;
+    setIsBackingUp(true);
+    setBackupSuccessMessage(null);
+
+    // Simulate multi-region snapshot creation & S3 replication
+    setTimeout(() => {
+      setIsBackingUp(false);
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      setLastBackupTime(`Just now (${timeStr} WIB)`);
+      setBackupSuccessMessage(`Snapshot #OMNI-BKP-${Date.now().toString().slice(-6)} created successfully! Encrypted with AES-256 and replicated across S3 Cold Pool & SG-01 Hot Standby.`);
+      
+      // Auto-clear message after 8 seconds
+      setTimeout(() => {
+        setBackupSuccessMessage(null);
+      }, 8000);
+    }, 2000);
+  };
+
+  const handleDownloadBackup = () => {
+    // Generate real JSON export of current cloud infrastructure, security, and sessions state
+    const backupData = {
+      backup_id: `OMNI-SNAP-${Date.now()}`,
+      cluster: "OmniPlay High-Performance Cloud Fleet",
+      timestamp: new Date().toISOString(),
+      security_matrix: {
+        encryption_in_transit: "TLS 1.3 / AES-256-GCM (Enforced)",
+        stream_protocol: "WebRTC DTLS-SRTP (Sub-2ms Encrypted Datagrams)",
+        authentication: "HttpOnly JWT Cookie Shield (XSS/CSRF Protected)",
+        sandbox_isolation: "Docker/KVM Ephemeral Pods (Zero Local Footprint Per Rental)",
+        firewall: "Cloudflare Enterprise Layer 3/4/7 DDoS Shield (0 Breaches)",
+        anti_cheat_compatibility: "Valve Anti-Cheat (VAC) & Steam Guard Pass-Through Safe"
+      },
+      disaster_recovery: {
+        recovery_time_objective: "< 30 seconds (Automatic Multi-PoP Failover)",
+        recovery_point_objective: "0 seconds (Continuous Write-Ahead Log Stream)",
+        primary_storage: "NVMe SAN Cluster (10.0 TB Pool, 583.7 GB Distributed Cache)",
+        cold_storage_target: "AWS S3 Multi-Region Glacier Vault (ap-southeast-1 & ap-northeast-1)",
+        cross_region_sync: "Active (JK-01 <-> SG-01 <-> TY-01)"
+      },
+      edge_nodes: topologyNodes,
+      active_sessions: activeSessions,
+      storage_allocations: heavySteamStorage,
+      compliance: "Cloud Computing UTS 2026 Audit Ready"
+    };
+
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `omniplay_cluster_backup_${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 200);
+  };
+
+  const handleDownloadPdf = () => {
+    window.open('/api/export?format=pdf', '_blank');
+  };
+
   const topologyNodes = [
     {
-      id: 'SG-01',
-      name: 'Singapore Primary Hub',
-      subnet: 'ap-southeast-1a',
-      gpu: '8x NVIDIA RTX 4090 (24GB)',
-      cpu: 'AMD EPYC 9654 (96C/192T)',
-      storage: '32 TB NVMe SAN',
-      ping: '3.8 ms',
-      load: '76%',
-      status: 'active'
+      id: 'JK-01',
+      name: 'Jakarta Edge PoP',
+      subnet: '10.240.12.0/24',
+      gpu: '4x NVIDIA RTX 4070 Ti (48GB VRAM)',
+      cpu: 'AMD EPYC 7763 (64 Cores / 128 Threads)',
+      storage: '2.4 TB Gen5 NVMe Array',
+      ping: '1.8ms (Local IX)',
+      status: 'active',
+      load: '84%'
     },
     {
-      id: 'JK-01',
-      name: 'Jakarta Edge Cluster',
-      subnet: 'id-jkt-edge',
-      gpu: '4x NVIDIA RTX 4080 (16GB)',
-      cpu: 'AMD EPYC 9554 (64C/128T)',
-      storage: '16 TB NVMe Gen5',
-      ping: '2.1 ms',
-      load: '58%',
-      status: 'active'
+      id: 'SG-01',
+      name: 'Singapore Equinix SG1',
+      subnet: '10.241.16.0/24',
+      gpu: '2x NVIDIA RTX 4080 (32GB VRAM)',
+      cpu: 'Intel Xeon Platinum 8380',
+      storage: '3.8 TB Gen5 NVMe Array',
+      ping: '3.9ms (Cross-Border)',
+      status: 'active',
+      load: '78%'
     },
     {
       id: 'TY-01',
-      name: 'Tokyo Supercluster',
-      subnet: 'ap-northeast-1b',
-      gpu: '4x NVIDIA H100 NVLink (80GB)',
-      cpu: 'Intel Xeon Platinum 8480+',
-      storage: '64 TB All-Flash Lustre',
-      ping: '28.0 ms',
-      load: '42%',
-      status: 'active'
+      name: 'Tokyo Core Node',
+      subnet: '10.242.20.0/24',
+      gpu: '2x NVIDIA RTX 4090 (48GB VRAM)',
+      cpu: 'AMD EPYC 9654 Genoa',
+      storage: '4.2 TB Gen5 NVMe Array',
+      ping: '28.4ms (Trans-Pacific)',
+      status: 'active',
+      load: '62%'
     },
     {
-      id: 'HK-01',
-      name: 'Hong Kong Relay Node',
-      subnet: 'ap-east-1a',
-      gpu: '4x RTX 4090 vGPU',
-      cpu: 'AMD EPYC 9354 (32C/64T)',
-      storage: '16 TB NVMe Tier',
-      ping: '18.5 ms',
-      load: '20%',
-      status: 'standby'
+      id: 'US-WEST-01',
+      name: 'Oregon Silicon Hub',
+      subnet: '10.243.0.0/24',
+      gpu: '4x NVIDIA RTX 4090 (96GB VRAM)',
+      cpu: 'AMD EPYC 9654 Genoa',
+      storage: '8.0 TB Gen5 NVMe Array',
+      ping: '142ms (Standby Route)',
+      status: 'standby',
+      load: '12%'
     }
   ];
 
-  // Storage Allocations for Heavy Steam Games (Saves storage for low-spec clients)
   const heavySteamStorage = [
     {
-      title: 'Baldur\'s Gate 3',
-      appId: 1086940,
-      size: '152.0 GB',
-      format: 'DirectStorage NVMe',
-      clientsBenefiting: '24 Low-Spec Clients',
-      savings: 'Clients save 152GB local disk'
+      title: 'Grand Theft Auto V',
+      appId: 271590,
+      size: '110.4 GB',
+      format: 'Ext4 Block Virtual Volume',
+      clientsBenefiting: '21 Concurrent Users',
+      savings: 'Saved 2.3 TB client storage'
     },
     {
-      title: 'Cyberpunk 2077',
+      title: 'Red Dead Redemption 2',
+      appId: 1174180,
+      size: '119.8 GB',
+      format: 'NVMe Striped Direct-IO',
+      clientsBenefiting: '14 Concurrent Users',
+      savings: 'Saved 1.6 TB client storage'
+    },
+    {
+      title: 'Forza Horizon 5',
+      appId: 1551360,
+      size: '135.2 GB',
+      format: 'Zero-Copy Shared Cache',
+      clientsBenefiting: '18 Concurrent Users',
+      savings: 'Saved 2.4 TB client storage'
+    },
+    {
+      title: 'Cyberpunk 2077: Phantom Liberty',
       appId: 1091500,
-      size: '142.4 GB',
-      format: 'NVLink Fast Cache',
-      clientsBenefiting: '38 Low-Spec Clients',
-      savings: 'Clients save 142GB local disk'
+      size: '88.3 GB',
+      format: 'Pre-Warmed Shader Cache Pool',
+      clientsBenefiting: '29 Concurrent Users',
+      savings: 'Saved 2.5 TB client storage'
     },
     {
       title: 'Black Myth: Wukong',
       appId: 2358720,
-      size: '130.2 GB',
-      format: 'High-Throughput SAN',
-      clientsBenefiting: '19 Low-Spec Clients',
-      savings: 'Clients save 130GB local disk'
-    },
-    {
-      title: 'EA SPORTS FC™ 25',
-      appId: 2669320,
-      size: '98.6 GB',
-      format: 'PCIe 5.0 Tier 1',
-      clientsBenefiting: '42 Low-Spec Clients',
-      savings: 'Clients save 98GB local disk'
-    },
-    {
-      title: 'Elden Ring',
-      appId: 1245620,
-      size: '60.5 GB',
-      format: 'ZFS Instant Snapshot',
-      clientsBenefiting: '15 Low-Spec Clients',
-      savings: 'Clients save 60GB local disk'
+      size: '130.0 GB',
+      format: 'DirectStorage 1.2 Bypass Pool',
+      clientsBenefiting: '35 Concurrent Users',
+      savings: 'Saved 4.5 TB client storage'
     }
   ];
 
-  // Active Sessions with Client PC Specs & Current Playtime
   const activeSessions = [
     {
-      id: 'sess-801',
-      user: 'Player 1 (Active User)',
-      game: 'EA SPORTS FC™ 25',
-      node: 'SG-01',
-      clientSpecs: 'Intel Core i3-7100 • 8GB RAM • Intel HD Graphics 620',
-      playtime: '2h 14m',
-      vram: '16.2 GB',
-      latency: '3.8ms',
+      id: 'SES-9921',
+      user: 'Budi (JKT-South)',
+      game: 'Cyberpunk 2077',
+      node: 'JK-01',
+      clientSpecs: 'Asus VivoBook 14 • Core i3-1005G1 • 4GB RAM • Intel UHD',
+      playtime: '1h 42m',
+      vram: '11.8 GB',
+      latency: '2.1ms',
       stream: '4K @ 120 FPS'
     },
     {
-      id: 'sess-802',
-      user: 'Sarah_99',
-      game: 'Baldur\'s Gate 3',
-      node: 'SG-01',
-      clientSpecs: 'MacBook Air 2017 • 8GB LPDDR3 • Intel HD 6000',
-      playtime: '1h 48m',
-      vram: '14.8 GB',
-      latency: '4.2ms',
-      stream: '1440p @ 60 FPS'
-    },
-    {
-      id: 'sess-803',
-      user: 'Alex_Pro',
-      game: 'Black Myth: Wukong',
+      id: 'SES-9922',
+      user: 'Reyhan (Bandung)',
+      game: 'Forza Horizon 5',
       node: 'JK-01',
-      clientSpecs: 'Lenovo ThinkPad T480 • 8GB • Intel UHD 620',
-      playtime: '0h 52m',
-      vram: '18.9 GB',
-      latency: '2.1ms',
-      stream: '4K @ 60 FPS'
+      clientSpecs: 'Lenovo IdeaPad Slim 3 • Celeron N4020 • 4GB RAM',
+      playtime: '0h 58m',
+      vram: '14.2 GB',
+      latency: '2.4ms',
+      stream: '1440p @ 120 FPS'
     },
     {
-      id: 'sess-804',
-      user: 'David_Gamer',
-      game: 'Cyberpunk 2077',
+      id: 'SES-9923',
+      user: 'Siti (Surabaya)',
+      game: 'Red Dead Redemption 2',
+      node: 'SG-01',
+      clientSpecs: 'MacBook Air M1 (2020) • 8GB RAM • Safari WebRTC',
+      playtime: '2h 15m',
+      vram: '15.1 GB',
+      latency: '4.2ms',
+      stream: '4K @ 120 FPS'
+    },
+    {
+      id: 'SES-9924',
+      user: 'Kevin (Medan)',
+      game: 'Black Myth: Wukong',
       node: 'SG-01',
       clientSpecs: 'Dell Inspiron 3505 • AMD Ryzen 3 3200U • 8GB RAM',
       playtime: '3h 05m',
       vram: '21.5 GB',
       latency: '3.9ms',
       stream: '4K @ 120 FPS'
+    }
+  ];
+
+  const recentCloudAuditLogs = [
+    {
+      time: '20:12:44',
+      type: 'DATA_BACKUP_S3',
+      target: 'S3-AP-SOUTHEAST-1',
+      detail: 'Automated WAL snapshot #BKP-8842 written to S3 Glacier Vault (4.8 GB)',
+      badge: 'SYNCED',
+      badgeColor: 'green'
+    },
+    {
+      time: '20:08:15',
+      type: 'SESSION_PROVISION',
+      target: 'JK-01 (RTX 4070 Ti)',
+      detail: 'Isolated container instance allocated for user Budi (Zero local footprint)',
+      badge: 'ISOLATED',
+      badgeColor: 'cyan'
+    },
+    {
+      time: '19:58:30',
+      type: 'KEY_ROTATION',
+      target: 'CORE-AUTH-SERVICE',
+      detail: 'JWT access token signing key & WebRTC DTLS certificates rotated seamlessly',
+      badge: 'ENCRYPTED',
+      badgeColor: 'purple'
+    },
+    {
+      time: '19:51:15',
+      type: 'CLOUD_SAVE_SYNC',
+      target: 'SG-01 ⟷ JK-01',
+      detail: 'Bidirectional user save state sync verified across edge clusters (RPO=0)',
+      badge: 'REPLICATED',
+      badgeColor: 'green'
+    },
+    {
+      time: '19:42:00',
+      type: 'FIREWALL_PROBE',
+      target: 'EDGE-CLOUDFLARE',
+      detail: 'Rate limit threshold deflected 14 burst requests from unknown scanner IP',
+      badge: 'DEFLECTED',
+      badgeColor: 'amber'
+    },
+    {
+      time: '19:30:10',
+      type: 'SAN_STORAGE_AUDIT',
+      target: 'ALL-EDGE-POPS',
+      detail: '583.7 GB distributed Steam game cache verified across 4 cluster nodes',
+      badge: 'VERIFIED',
+      badgeColor: 'cyan'
     }
   ];
 
@@ -169,9 +288,9 @@ export default function CloudResourcesDashboard() {
             <ShieldCheck style={{ width: 14, height: 14 }} />
             ADMINISTRATOR MODE • CLOUD INFRASTRUCTURE & TOPOLOGY
           </div>
-          <h1 className="infra-title">Cloud Nodes & Fleet Topology</h1>
+          <h1 className="infra-title">Cloud Infrastructure & Security Command Center</h1>
           <p className="infra-sub">
-            Real-time server topology, shared cloud storage allocations for 100GB+ AAA games, and connected client PC hardware telemetry.
+            Real-time server topology, edge security matrix, multi-region database backups, and client hardware telemetry.
           </p>
         </div>
 
@@ -186,12 +305,321 @@ export default function CloudResourcesDashboard() {
         </button>
       </header>
 
-      {/* 2. Visual Server Topology Grid */}
+      {/* 2. Quick Cloud Health & Capacity Metrics Strip */}
+      <div className="infra-metrics-strip">
+        <div className="infra-metric-box">
+          <div className="infra-metric-icon-wrap cyan">
+            <Server style={{ width: 22, height: 22 }} />
+          </div>
+          <div className="infra-metric-info">
+            <span className="infra-metric-label">Compute Fleet</span>
+            <span className="infra-metric-value">4 Edge Nodes</span>
+            <span className="infra-metric-sub">128 vCPU • 512 GB RAM</span>
+          </div>
+        </div>
+
+        <div className="infra-metric-box">
+          <div className="infra-metric-icon-wrap purple">
+            <Zap style={{ width: 22, height: 22 }} />
+          </div>
+          <div className="infra-metric-info">
+            <span className="infra-metric-label">Cluster GPU VRAM</span>
+            <span className="infra-metric-value">72 GB / 96 GB</span>
+            <span className="infra-metric-sub">75% Load • RTX 40-Series</span>
+          </div>
+        </div>
+
+        <div className="infra-metric-box">
+          <div className="infra-metric-icon-wrap emerald">
+            <ShieldCheck style={{ width: 22, height: 22 }} />
+          </div>
+          <div className="infra-metric-info">
+            <span className="infra-metric-label">Security & Firewall</span>
+            <span className="infra-metric-value">AES-256 GCM</span>
+            <span className="infra-metric-sub">TLS 1.3 • 0 Active Threats</span>
+          </div>
+        </div>
+
+        <div className="infra-metric-box">
+          <div className="infra-metric-icon-wrap amber">
+            <Database style={{ width: 22, height: 22 }} />
+          </div>
+          <div className="infra-metric-info">
+            <span className="infra-metric-label">Cloud Backup State</span>
+            <span className="infra-metric-value">S3 Multi-Region</span>
+            <span className="infra-metric-sub">RTO &lt; 30s • RPO = 0s</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. CLOUD DATA SECURITY & THREAT SHIELD (UTS POIN 7) */}
+      <section className="infra-security-section">
+        <div className="section-title-strip">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Shield style={{ width: 18, height: 18, color: 'var(--neon-emerald)' }} />
+            <h2 className="section-heading">Cloud Data Security & Threat Shield Architecture</h2>
+          </div>
+          <span className="topology-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.4)', color: 'var(--neon-emerald)' }}>
+            Enterprise Security Level 5
+          </span>
+        </div>
+
+        <div className="infra-security-grid">
+          {/* Pillar 1 */}
+          <div className="security-pillar-card active">
+            <div className="security-pillar-header">
+              <div className="security-pillar-title-group">
+                <div className="security-pillar-icon" style={{ color: '#10b981', background: 'rgba(16, 185, 129, 0.12)' }}>
+                  <Layers style={{ width: 16, height: 16 }} />
+                </div>
+                <h3 className="security-pillar-title">Zero Local Persistence & Sandbox</h3>
+              </div>
+              <span className="security-badge-live">ENFORCED</span>
+            </div>
+            <div className="security-detail-list">
+              <div className="security-detail-item">
+                <span className="sec-key">Container Engine:</span>
+                <span className="sec-val cyan">Docker/KVM Ephemeral Pods</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Client Privacy:</span>
+                <span className="sec-val green">Auto-Wiped on Session End</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Anti-Cheat Safety:</span>
+                <span className="sec-val">VAC & Steam Guard Safe</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 2 */}
+          <div className="security-pillar-card active">
+            <div className="security-pillar-header">
+              <div className="security-pillar-title-group">
+                <div className="security-pillar-icon" style={{ color: '#00d2ff', background: 'rgba(0, 210, 255, 0.12)' }}>
+                  <Lock style={{ width: 16, height: 16 }} />
+                </div>
+                <h3 className="security-pillar-title">End-to-End Cryptography</h3>
+              </div>
+              <span className="security-badge-live">ENCRYPTED</span>
+            </div>
+            <div className="security-detail-list">
+              <div className="security-detail-item">
+                <span className="sec-key">API Transport:</span>
+                <span className="sec-val cyan">TLS 1.3 / 256-bit SSL</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Stream Protocol:</span>
+                <span className="sec-val green">WebRTC DTLS-SRTP sub-2ms</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Payment Tokens:</span>
+                <span className="sec-val">PCI-DSS Gateway Compliant</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 3 */}
+          <div className="security-pillar-card active">
+            <div className="security-pillar-header">
+              <div className="security-pillar-title-group">
+                <div className="security-pillar-icon" style={{ color: '#a78bfa', background: 'rgba(139, 92, 246, 0.12)' }}>
+                  <Key style={{ width: 16, height: 16 }} />
+                </div>
+                <h3 className="security-pillar-title">Identity & Access Management</h3>
+              </div>
+              <span className="security-badge-live">ACTIVE</span>
+            </div>
+            <div className="security-detail-list">
+              <div className="security-detail-item">
+                <span className="sec-key">Session Cookie:</span>
+                <span className="sec-val green">HttpOnly JWT (XSS Proof)</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">RBAC Isolation:</span>
+                <span className="sec-val cyan">Admin L5 vs Public User</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Token Expiry:</span>
+                <span className="sec-val">24h Auto-Revocation</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 4 */}
+          <div className="security-pillar-card active">
+            <div className="security-pillar-header">
+              <div className="security-pillar-title-group">
+                <div className="security-pillar-icon" style={{ color: '#fbbf24', background: 'rgba(245, 158, 11, 0.12)' }}>
+                  <ShieldAlert style={{ width: 16, height: 16 }} />
+                </div>
+                <h3 className="security-pillar-title">Edge Perimeter & Anti-DDoS</h3>
+              </div>
+              <span className="security-badge-live">SHIELDED</span>
+            </div>
+            <div className="security-detail-list">
+              <div className="security-detail-item">
+                <span className="sec-key">DDoS Defense:</span>
+                <span className="sec-val green">Cloudflare Enterprise L3/L4/L7</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Threats Deflected:</span>
+                <span className="sec-val green">142 Probes (0 Breaches)</span>
+              </div>
+              <div className="security-detail-item">
+                <span className="sec-key">Rate Limit Threshold:</span>
+                <span className="sec-val">100 req/min per IP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. CLOUD BACKUP & DISASTER RECOVERY ORCHESTRATOR (UTS POIN 8) */}
+      <section className="infra-backup-section">
+        <div className="section-title-strip">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Database style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
+            <h2 className="section-heading">Automated Backup & Disaster Recovery Center</h2>
+          </div>
+          <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: '#00d2ff' }}>
+            RTO &lt; 30s • RPO = 0s
+          </span>
+        </div>
+
+        <div className="backup-control-card">
+          <div className="backup-header-row">
+            <div className="backup-title-wrap">
+              <div className="backup-title-icon">
+                <Cloud style={{ width: 22, height: 22 }} />
+              </div>
+              <div>
+                <h3 className="backup-title">Continuous Cloud State & Database Synchronization</h3>
+                <p className="backup-desc">
+                  Multi-region WAL replication between Jakarta Core (JK-01) and Singapore Hot Standby (SG-01) with daily snapshots archived to S3.
+                </p>
+              </div>
+            </div>
+
+            <div className="backup-actions-row">
+              <button 
+                type="button" 
+                className="btn-backup-trigger"
+                onClick={handleTriggerBackup}
+                disabled={isBackingUp}
+              >
+                {isBackingUp ? (
+                  <>
+                    <Loader2 className="btn-spinner" />
+                    <span>CREATING CLOUD SNAPSHOT...</span>
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw style={{ width: 15, height: 15 }} />
+                    <span>TRIGGER MANUAL BACKUP SNAPSHOT</span>
+                  </>
+                )}
+              </button>
+
+              <button 
+                type="button" 
+                className="btn-backup-download"
+                onClick={handleDownloadBackup}
+                title="Download full cluster state in JSON format"
+              >
+                <Download style={{ width: 14, height: 14 }} />
+                <span>DOWNLOAD SYSTEM AUDIT (.JSON)</span>
+              </button>
+
+              <button 
+                type="button" 
+                className="btn-backup-download"
+                onClick={handleDownloadPdf}
+                title="Download official PDF report via backend API"
+              >
+                <FileText style={{ width: 14, height: 14 }} />
+                <span>EXPORT REPORT (.PDF)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Success Banner when backup triggered */}
+          {backupSuccessMessage && (
+            <div className="backup-banner-success">
+              <CheckCircle2 style={{ width: 18, height: 18, flexShrink: 0 }} />
+              <span>{backupSuccessMessage}</span>
+            </div>
+          )}
+
+          {/* Backup Health & Telemetry Metrics Chips */}
+          <div className="backup-metrics-row">
+            <div className="backup-status-chip">
+              <span className="chip-lbl">Last Snapshot Archive</span>
+              <span className="chip-val green">{lastBackupTime}</span>
+            </div>
+            <div className="backup-status-chip">
+              <span className="chip-lbl">Cross-PoP Replication</span>
+              <span className="chip-val cyan">JK-01 ⟷ SG-01 Synchronous</span>
+            </div>
+            <div className="backup-status-chip">
+              <span className="chip-lbl">Target Cold Storage</span>
+              <span className="chip-val">AWS S3 Glacier Multi-Region</span>
+            </div>
+            <div className="backup-status-chip">
+              <span className="chip-lbl">Integrity Verification</span>
+              <span className="chip-val green">SHA-256 Checksum Passed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. LIVE CLOUD DATA & TELEMETRY AUDIT LOGS */}
+      <div className="infra-audit-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Activity style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
+            <div>
+              <h3 className="sessions-title">Real-Time Cloud Infrastructure & Security Audit Logs</h3>
+              <p className="sessions-sub">Live audit trail of cluster events, container provisioning, and backup executions</p>
+            </div>
+          </div>
+          <span className="sessions-badge">Live System Feed</span>
+        </div>
+
+        <table className="infra-audit-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Event Type</th>
+              <th>Target Server / Service</th>
+              <th>Action Description</th>
+              <th>Security State</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recentCloudAuditLogs.map((log, idx) => (
+              <tr key={idx}>
+                <td className="mono" style={{ color: 'var(--neon-cyan)' }}>{log.time}</td>
+                <td className="mono" style={{ fontWeight: 700 }}>{log.type}</td>
+                <td className="mono" style={{ color: '#e2e8f0' }}>{log.target}</td>
+                <td style={{ color: 'var(--text-muted)' }}>{log.detail}</td>
+                <td>
+                  <span className={`audit-badge ${log.badgeColor}`}>
+                    {log.badge}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 6. Visual Server Topology Grid */}
       <div className="topology-section">
         <div className="section-title-strip">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Server style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
-            <h2 className="section-heading">Multi-Region Server Topology</h2>
+            <h2 className="section-heading">Multi-Region Server Topology & Edge PoPs</h2>
           </div>
           <span className="topology-badge">4 Cloud Edge PoPs Operational</span>
         </div>
@@ -244,7 +672,7 @@ export default function CloudResourcesDashboard() {
         </div>
       </div>
 
-      {/* 3. Storage Allocations for Heavy Steam Games (Critical for Low-Spec Clients) */}
+      {/* 7. Storage Allocations for Heavy Steam Games (Critical for Low-Spec Clients) */}
       <div className="storage-allocation-card">
         <div className="storage-card-header">
           <div>
@@ -281,7 +709,7 @@ export default function CloudResourcesDashboard() {
         </div>
       </div>
 
-      {/* 4. Active User Sessions with Client PC Specs & Current Playtime */}
+      {/* 8. Active User Sessions with Client PC Specs & Current Playtime */}
       <div className="infra-sessions-card">
         <div className="sessions-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
