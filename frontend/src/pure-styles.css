@@ -10758,3 +10758,216 @@ body {
     font-size: 14px !important;
   }
 }
+
+/* ==========================================================================
+   ADMIN PAGES MOBILE OVERHAUL
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /* 1. ADMIN GAME LIBRARY */
+  .admin-gamelib-container {
+    padding: 12px 12px calc(88px + env(safe-area-inset-bottom, 0px)) 12px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+
+  .admin-gamelib-title {
+    font-size: 20px !important;
+    word-break: break-word !important;
+    line-height: 1.2 !important;
+  }
+
+  .admin-gamelib-sub {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
+  }
+
+  .admin-badge-pill {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
+  }
+
+  .admin-stats-pills {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+
+  .admin-stat-pill {
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .admin-stat-pill .lbl {
+    font-size: 9px !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .admin-stat-pill .val {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .admin-gamelib-controls {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 14px !important;
+  }
+
+  .admin-search-wrap {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-search-input {
+    width: 100% !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-gamelib-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .admin-game-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-card-media {
+    height: 120px !important;
+  }
+
+  .admin-card-body {
+    padding: 12px !important;
+  }
+
+  .admin-card-title-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+    align-items: flex-start !important;
+  }
+
+  .admin-game-title {
+    font-size: 14px !important;
+    word-break: break-word !important;
+  }
+
+  .admin-metrics-matrix {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .mat-lbl {
+    font-size: 9px !important;
+  }
+
+  .mat-val {
+    font-size: 11px !important;
+  }
+
+  .admin-actions-toolbar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .admin-action-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    font-size: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* 2. CLOUD RESOURCES / INFRASTRUCTURE */
+  .infra-kpi-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .infra-node-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .infra-node-specs {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  /* 3. ANALYTICS */
+  .analytics-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .analytics-kpi-card {
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* 4. ADMIN OMNI REMOTE */
+  .sticks-visualizer-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .tuning-controls-box {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .lobby-feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+}
