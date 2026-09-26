@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
-  Volume2, VolumeX
+  Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock
 } from 'lucide-react';
 
 interface Game {
@@ -52,6 +52,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   const [rentalHours, setRentalHours] = useState(2);
   const [selectedNode, setSelectedNode] = useState('JK-01');
   const [isRentSuccess, setIsRentSuccess] = useState(false);
+
+  // Payment Modal State
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [expandedSection, setExpandedSection] = useState<string>('ewallet');
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Standardized Cloud Node Tiers (Universal across all games)
   const nodes = [
@@ -1229,7 +1236,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       className="btn-confirm-rental"
                       type="button"
                     >
-                      CONFIRM RENTAL & ACTIVATE ({formatIDR(totalPrice)})
+                      CONFIRM RENTAL & PAY ({formatIDR(totalPrice)})
                     </button>
                   )}
                 </div>
@@ -1243,3 +1250,5 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     </div>
   );
 }
+
+
