@@ -481,53 +481,55 @@ function DashboardShell({
   };
 
   return (
-    <div className="omni-app enter-dashboard">
-      
-      {/* Mobile Drawer Overlay Backdrop */}
-      {isSidebarOpen && (
-        <div 
-          className="omni-sidebar-mobile-backdrop"
-          onClick={closeSidebarMobile}
-          aria-hidden="true"
-        />
-      )}
+    <>
+      <div className="omni-app enter-dashboard">
+        
+        {/* Mobile Drawer Overlay Backdrop */}
+        {isSidebarOpen && (
+          <div 
+            className="omni-sidebar-mobile-backdrop"
+            onClick={closeSidebarMobile}
+            aria-hidden="true"
+          />
+        )}
 
-      {/* 1. TOP NAVBAR */}
-      <TopNavbar 
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        activeTab={activeTab} 
-        onTabChange={handleMenuClick} 
-        onLogout={onLogout} 
-        isAdmin={isAdmin} 
-      />
-
-      {/* 2. APP BODY & SIDEBAR */}
-      <div className="omni-body">
-        <Sidebar 
+        {/* 1. TOP NAVBAR */}
+        <TopNavbar 
           isSidebarOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
           activeTab={activeTab} 
           onTabChange={handleMenuClick} 
+          onLogout={onLogout} 
           isAdmin={isAdmin} 
-          onClose={closeSidebarMobile}
         />
 
-        {/* Main Content View with Page Loading Spinner */}
-        <main className="omni-main-content">
-          {isPageLoading ? (
-            <div className="page-loader-container">
-              <div className="omni-spinner" />
-              <span>SYNCHRONIZING NEURAL NODE...</span>
-            </div>
-          ) : (
-            <div key={activeTab} className="futuristic-page-container">
-              {children}
-            </div>
-          )}
-        </main>
+        {/* 2. APP BODY & SIDEBAR */}
+        <div className="omni-body">
+          <Sidebar 
+            isSidebarOpen={isSidebarOpen}
+            activeTab={activeTab} 
+            onTabChange={handleMenuClick} 
+            isAdmin={isAdmin} 
+            onClose={closeSidebarMobile}
+          />
+
+          {/* Main Content View with Page Loading Spinner */}
+          <main className="omni-main-content">
+            {isPageLoading ? (
+              <div className="page-loader-container">
+                <div className="omni-spinner" />
+                <span>SYNCHRONIZING NEURAL NODE...</span>
+              </div>
+            ) : (
+              <div key={activeTab} className="futuristic-page-container">
+                {children}
+              </div>
+            )}
+          </main>
+        </div>
       </div>
 
-      {/* 2.5 NATIVE MOBILE BOTTOM NAVIGATION */}
+      {/* 2.5 NATIVE MOBILE BOTTOM NAVIGATION (Always pinned to bottom of viewport) */}
       <nav className="omni-bottom-nav" aria-label="Mobile Navigation">
         {isAdmin ? (
           <>
@@ -683,7 +685,7 @@ function DashboardShell({
           <span className="omni-toast-message">{globalToast.message}</span>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
