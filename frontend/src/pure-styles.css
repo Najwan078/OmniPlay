@@ -10979,7 +10979,7 @@ body {
 .payment-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99998;
+  z-index: 100005;
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
   display: flex;

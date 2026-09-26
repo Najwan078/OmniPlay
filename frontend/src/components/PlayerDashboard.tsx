@@ -593,6 +593,30 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     }
   };
 
+  const handleExecutePayment = () => {
+    if (!paymentMethod || isProcessingPayment) return;
+    setIsProcessingPayment(true);
+    setPaymentSuccess(false);
+
+    // Step 1: Simulate payment processing (1.5 seconds)
+    setTimeout(() => {
+      setPaymentSuccess(true);
+
+      // Step 2: Show success, close modal, set rent success, and launch game animation (1 second)
+      setTimeout(() => {
+        setIsProcessingPayment(false);
+        setPaymentSuccess(false);
+        setShowPaymentModal(false);
+        setIsRentSuccess(true);
+
+        // Langsung animasi proses masuk game
+        if (selectedGame) {
+          handleStartGame(selectedGame);
+        }
+      }, 1000);
+    }, 1500);
+  };
+
   return (
     <div className="game-library-wrap">
       
@@ -966,7 +990,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           <div className="game-modal-card">
             
             <button 
-              onClick={() => setSelectedGame(null)} 
+              onClick={() => { setSelectedGame(null); setIsRentSuccess(false); setShowPaymentModal(false); }} 
               className="game-modal-close"
               type="button"
               aria-label="Close modal"
@@ -1232,7 +1256,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     </div>
                   ) : (
                     <button 
-                      onClick={() => setIsRentSuccess(true)}
+                      onClick={() => setShowPaymentModal(true)}
                       className="btn-confirm-rental"
                       type="button"
                     >
@@ -1242,6 +1266,275 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 </div>
               </div>
 
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. PAYMENT METHOD & TRANSACTION MODAL */}
+      {showPaymentModal && selectedGame && (
+        <div 
+          className="payment-modal-overlay" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !isProcessingPayment) {
+              setShowPaymentModal(false);
+            }
+          }}
+        >
+          <div className="payment-modal-card">
+            {/* Header */}
+            <div className="payment-modal-header">
+              <button 
+                type="button" 
+                className="payment-back-btn" 
+                onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
+                title="Kembali"
+              >
+                <ChevronLeft style={{ width: 18, height: 18 }} />
+              </button>
+              <h3 className="payment-modal-title">Metode Pembayaran</h3>
+              <button 
+                type="button" 
+                className="payment-back-btn" 
+                onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
+                title="Tutup"
+              >
+                <X style={{ width: 18, height: 18 }} />
+              </button>
+            </div>
+
+            {/* Order Summary Strip */}
+            <div className="payment-order-strip">
+              <div className="payment-order-game">
+                <img 
+                  src={selectedGame.image} 
+                  alt={selectedGame.title} 
+                  className="payment-game-thumb" 
+                />
+                <div style={{ minWidth: 0 }}>
+                  <p className="payment-game-name">{selectedGame.title}</p>
+                  <p className="payment-game-detail">
+                    {currentNode.tier} ({currentNode.gpu}) • {rentalHours} Jam
+                  </p>
+                </div>
+              </div>
+              <div className="payment-order-total">
+                <span className="payment-total-lbl">Total Pembayaran</span>
+                <span className="payment-total-amt">{formatIDR(totalPrice)}</span>
+              </div>
+            </div>
+
+            {/* Payment Methods List */}
+            <div className="payment-methods-list">
+              {/* E-Wallet */}
+              <div className="payment-section">
+                <button
+                  type="button"
+                  className="payment-section-header"
+                  onClick={() => setExpandedSection(expandedSection === "ewallet" ? "" : "ewallet")}
+                >
+                  <div className="payment-section-left">
+                    <Smartphone style={{ width: 18, height: 18, color: "#00d2ff" }} />
+                    <span>E-Wallet / Dompet Digital</span>
+                  </div>
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "ewallet" ? "open" : "")} />
+                </button>
+                {expandedSection === "ewallet" && (
+                  <div className="payment-section-items">
+                    {[
+                      { id: "gopay", name: "GoPay", sub: "Otomatis terhubung & instan", icon: "🟢" },
+                      { id: "dana", name: "DANA", sub: "Saldo DANA & Proteksi Pembeli", icon: "🔵" },
+                      { id: "ovo", name: "OVO", sub: "Verifikasi instan via ponsel", icon: "🟣" },
+                      { id: "shopeepay", name: "ShopeePay", sub: "Cashback koin & SPayLater", icon: "🟠" }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        className={"payment-method-item " + (paymentMethod === item.id ? "selected" : "")}
+                        onClick={() => setPaymentMethod(item.id)}
+                      >
+                        <div className="payment-method-left">
+                          <span className="payment-method-emoji">{item.icon}</span>
+                          <div>
+                            <p className="payment-method-name">{item.name}</p>
+                            <p className="payment-method-sub">{item.sub}</p>
+                          </div>
+                        </div>
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === item.id}
+                          onChange={() => setPaymentMethod(item.id)}
+                          className="payment-radio"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* QRIS */}
+              <div className="payment-section">
+                <button
+                  type="button"
+                  className="payment-section-header"
+                  onClick={() => setExpandedSection(expandedSection === "qris" ? "" : "qris")}
+                >
+                  <div className="payment-section-left">
+                    <Wallet style={{ width: 18, height: 18, color: "#10b981" }} />
+                    <span>QRIS (Scan & Pay)</span>
+                  </div>
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "qris" ? "open" : "")} />
+                </button>
+                {expandedSection === "qris" && (
+                  <div className="payment-section-items">
+                    <div
+                      className={"payment-method-item " + (paymentMethod === "qris" ? "selected" : "")}
+                      onClick={() => setPaymentMethod("qris")}
+                    >
+                      <div className="payment-method-left">
+                        <span className="payment-method-emoji">📷</span>
+                        <div>
+                          <p className="payment-method-name">QRIS Instant Code</p>
+                          <p className="payment-method-sub">BCA, Mandiri, GoPay, OVO, ShopeePay, DANA & Semua M-Banking</p>
+                        </div>
+                      </div>
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        checked={paymentMethod === "qris"}
+                        onChange={() => setPaymentMethod("qris")}
+                        className="payment-radio"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Virtual Account */}
+              <div className="payment-section">
+                <button
+                  type="button"
+                  className="payment-section-header"
+                  onClick={() => setExpandedSection(expandedSection === "va" ? "" : "va")}
+                >
+                  <div className="payment-section-left">
+                    <Building2 style={{ width: 18, height: 18, color: "#8b5cf6" }} />
+                    <span>Virtual Account Bank</span>
+                  </div>
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "va" ? "open" : "")} />
+                </button>
+                {expandedSection === "va" && (
+                  <div className="payment-section-items">
+                    {[
+                      { id: "va_bca", name: "BCA Virtual Account", sub: "Verifikasi instan 24 jam", icon: "🏦" },
+                      { id: "va_mandiri", name: "Mandiri Virtual Account", sub: "Livin by Mandiri & ATM", icon: "🏛️" },
+                      { id: "va_bri", name: "BRI Virtual Account (BRIVA)", sub: "BRImo & Agen BRILink", icon: "🏪" },
+                      { id: "va_bni", name: "BNI Virtual Account", sub: "BNI Mobile Banking & ATM", icon: "🏬" }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        className={"payment-method-item " + (paymentMethod === item.id ? "selected" : "")}
+                        onClick={() => setPaymentMethod(item.id)}
+                      >
+                        <div className="payment-method-left">
+                          <span className="payment-method-emoji">{item.icon}</span>
+                          <div>
+                            <p className="payment-method-name">{item.name}</p>
+                            <p className="payment-method-sub">{item.sub}</p>
+                          </div>
+                        </div>
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === item.id}
+                          onChange={() => setPaymentMethod(item.id)}
+                          className="payment-radio"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Credit / Debit Card */}
+              <div className="payment-section">
+                <button
+                  type="button"
+                  className="payment-section-header"
+                  onClick={() => setExpandedSection(expandedSection === "card" ? "" : "card")}
+                >
+                  <div className="payment-section-left">
+                    <CreditCard style={{ width: 18, height: 18, color: "#f59e0b" }} />
+                    <span>Kartu Kredit / Debit Online</span>
+                  </div>
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "card" ? "open" : "")} />
+                </button>
+                {expandedSection === "card" && (
+                  <div className="payment-section-items">
+                    <div
+                      className={"payment-method-item " + (paymentMethod === "card" ? "selected" : "")}
+                      onClick={() => setPaymentMethod("card")}
+                    >
+                      <div className="payment-method-left">
+                        <span className="payment-method-emoji">💳</span>
+                        <div>
+                          <p className="payment-method-name">Visa / Mastercard / JCB</p>
+                          <p className="payment-method-sub">3D Secure encrypted authentication</p>
+                        </div>
+                      </div>
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        checked={paymentMethod === "card"}
+                        onChange={() => setPaymentMethod("card")}
+                        className="payment-radio"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Processing Overlay (Inside Modal) */}
+            {isProcessingPayment && (
+              <div className="payment-processing-overlay">
+                <div className="payment-processing-content">
+                  {paymentSuccess ? (
+                    <>
+                      <div className="payment-success-icon">✓</div>
+                      <h4 className="payment-processing-title">Pembayaran Berhasil!</h4>
+                      <p className="payment-processing-sub">Memulai Cloud Instance & Meluncurkan Game...</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="payment-spinner"></div>
+                      <h4 className="payment-processing-title">Memproses Pembayaran...</h4>
+                      <p className="payment-processing-sub">
+                        Menghubungkan ke gateway {paymentMethod ? paymentMethod.toUpperCase().replace("_", " ") : "Pembayaran"}...
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Footer / Pay Button */}
+            <div className="payment-modal-footer">
+              <div className="payment-footer-info">
+                <Lock style={{ width: 13, height: 13 }} />
+                <span>Transaksi Terenkripsi 256-bit SSL & Aman</span>
+              </div>
+              <button
+                type="button"
+                className={"payment-pay-btn " + ((!paymentMethod || isProcessingPayment) ? "disabled" : "")}
+                disabled={!paymentMethod || isProcessingPayment}
+                onClick={handleExecutePayment}
+              >
+                {paymentMethod 
+                  ? "BAYAR SEKARANG • " + formatIDR(totalPrice) 
+                  : "PILIH METODE PEMBAYARAN"
+                }
+              </button>
             </div>
           </div>
         </div>
