@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
@@ -985,7 +986,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       </div>
 
       {/* 3. STEAM GAME DETAILS & TIME-RENTAL MODAL (PRD Section 2.1) */}
-      {selectedGame && (
+      {selectedGame && typeof document !== 'undefined' && createPortal(
         <div className="game-modal-overlay">
           <div className="game-modal-card">
             
@@ -1269,10 +1270,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* 4. PAYMENT METHOD & TRANSACTION MODAL */}
-      {showPaymentModal && selectedGame && (
+      {showPaymentModal && selectedGame && typeof document !== 'undefined' && createPortal(
         <div 
           className="payment-modal-overlay" 
           onClick={(e) => {
@@ -1538,7 +1539,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
     </div>
   );

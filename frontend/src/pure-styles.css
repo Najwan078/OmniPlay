@@ -441,7 +441,7 @@ body {
 
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: none;
     filter: blur(0);
   }
 }
@@ -1557,7 +1557,7 @@ body {
 
 .futuristic-page-container {
   animation: futuristic-page-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity, filter;
+  /* will-change removed to prevent breaking fixed modals */
   min-height: 100%;
 }
 
@@ -2025,8 +2025,12 @@ body {
 .game-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 250;
-  background: rgba(5, 6, 10, 0.82);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  background: rgba(5, 6, 10, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   display: flex;
@@ -2034,6 +2038,7 @@ body {
   justify-content: center;
   padding: 24px;
   animation: fadeIn 0.2s var(--ease-smooth);
+  box-sizing: border-box;
 }
 
 .game-modal-card {
