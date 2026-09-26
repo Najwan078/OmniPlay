@@ -35,19 +35,19 @@ export default function CloudResourcesDashboard() {
     if (isSimulatingSpike) return;
     setIsSimulatingSpike(true);
     setCurrentCpuLoad('94%');
-    setSpikeNotification('⚠️ Lonjakan Beban Terdeteksi (CPU 94%, VRAM 89%)! Auto-Scaler mendeteksi overload dan memicu Scale-Out...');
+    setSpikeNotification('⚠️ Heavy Traffic Surge Detected (CPU 94%, VRAM 89%)! Auto-Scaler triggered rapid elasticity...');
 
     // Phase 1: Rapid Elasticity -> Auto scale-out (+2 pods)
     setTimeout(() => {
       setActiveWorkerPods(6);
-      setSpikeNotification('🚀 Rapid Elasticity Berhasil: +2 Worker Pods (JK-02, SG-02) aktif seketika! Beban traffic diratakan.');
+      setSpikeNotification('🚀 Rapid Elasticity Success: +2 Worker Pods (JK-02, SG-02) deployed instantly! Traffic load balanced.');
       setCurrentCpuLoad('58%');
     }, 2000);
 
     // Phase 2: Graceful stabilization
     setTimeout(() => {
       setIsSimulatingSpike(false);
-      setSpikeNotification('✅ Uji Lonjakan (Spike Test) Selesai: Sistem elastis berhasil menjaga latensi tetap sub-4ms tanpa downtime.');
+      setSpikeNotification('✅ Spike Test Complete: Elastic cluster kept latency sub-4ms with zero dropped frames.');
       setTimeout(() => {
         setSpikeNotification(null);
         setActiveWorkerPods(4);
@@ -74,7 +74,7 @@ export default function CloudResourcesDashboard() {
 
     setTimeout(() => {
       setActiveRepairing(null);
-      setRepairSuccessMessage(`✅ Berhasil: ${actionName} selesai! ${detailMsg}`);
+      setRepairSuccessMessage(`✅ Success: ${actionName} finished! ${detailMsg}`);
       setTimeout(() => {
         setRepairSuccessMessage((current) => (current?.includes(actionName) ? null : current));
       }, 7000);
@@ -90,9 +90,9 @@ export default function CloudResourcesDashboard() {
     setTimeout(() => {
       setIsBackingUp(false);
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      setLastBackupTime(`Baru saja (${timeStr} WIB)`);
-      setBackupSuccessMessage(`Snapshot #OMNI-BKP-${Date.now().toString().slice(-6)} berhasil dibuat! Data tersimpan aman dan terenkripsi di S3.`);
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      setLastBackupTime(`Just now (${timeStr})`);
+      setBackupSuccessMessage(`Snapshot #OMNI-BKP-${Date.now().toString().slice(-6)} created! Securely saved and encrypted in S3.`);
       
       // Auto-clear message after 8 seconds
       setTimeout(() => {
@@ -340,11 +340,11 @@ export default function CloudResourcesDashboard() {
         <div>
           <div className="infra-admin-badge">
             <ShieldCheck style={{ width: 14, height: 14 }} />
-            MODE ADMIN • INFRASTRUKTUR & SERVER CLOUD
+            ADMIN MODE • CLOUD FLEET & SERVERS
           </div>
-          <h1 className="infra-title">Pusat Kendali Server & Keamanan Cloud</h1>
+          <h1 className="infra-title">Cloud Server & Security Control Center</h1>
           <p className="infra-sub">
-            Status real-time server, keamanan data, backup database otomatis, dan perbaikan sistem.
+            Real-time server health, data protection, automated backups, and system repairs.
           </p>
         </div>
 
@@ -355,7 +355,7 @@ export default function CloudResourcesDashboard() {
             type="button"
           >
             <Layers style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
-            <span>Lihat Arsitektur Cloud (3D Blueprint)</span>
+            <span>View Cloud Architecture (3D Blueprint)</span>
           </button>
 
           <button 
@@ -365,7 +365,7 @@ export default function CloudResourcesDashboard() {
             type="button"
           >
             {rebooting ? <Loader2 className="btn-spinner" /> : <Power style={{ width: 16, height: 16 }} />}
-            <span>{rebooting ? 'Merestart Server...' : 'Restart Server Node'}</span>
+            <span>{rebooting ? 'Restarting Server...' : 'Restart Server Node'}</span>
           </button>
         </div>
       </header>
@@ -377,8 +377,8 @@ export default function CloudResourcesDashboard() {
             <Server style={{ width: 22, height: 22 }} />
           </div>
           <div className="infra-metric-info">
-            <span className="infra-metric-label">Server Cloud</span>
-            <span className="infra-metric-value">4 Node Aktif</span>
+            <span className="infra-metric-label">Cloud Servers</span>
+            <span className="infra-metric-value">4 Active Nodes</span>
             <span className="infra-metric-sub">128 vCPU • 512 GB RAM</span>
           </div>
         </div>
@@ -388,9 +388,9 @@ export default function CloudResourcesDashboard() {
             <Zap style={{ width: 22, height: 22 }} />
           </div>
           <div className="infra-metric-info">
-            <span className="infra-metric-label">Memory GPU (VRAM)</span>
+            <span className="infra-metric-label">GPU Memory (VRAM)</span>
             <span className="infra-metric-value">72 GB / 96 GB</span>
-            <span className="infra-metric-sub">Beban 75% • RTX 40-Series</span>
+            <span className="infra-metric-sub">75% Load • RTX 40-Series</span>
           </div>
         </div>
 
@@ -399,9 +399,9 @@ export default function CloudResourcesDashboard() {
             <ShieldCheck style={{ width: 22, height: 22 }} />
           </div>
           <div className="infra-metric-info">
-            <span className="infra-metric-label">Keamanan & Firewall</span>
+            <span className="infra-metric-label">Security & Firewall</span>
             <span className="infra-metric-value">AES-256 GCM</span>
-            <span className="infra-metric-sub">TLS 1.3 • 0 Ancaman</span>
+            <span className="infra-metric-sub">TLS 1.3 • 0 Threats</span>
           </div>
         </div>
 
@@ -410,9 +410,9 @@ export default function CloudResourcesDashboard() {
             <Database style={{ width: 22, height: 22 }} />
           </div>
           <div className="infra-metric-info">
-            <span className="infra-metric-label">Status Backup</span>
+            <span className="infra-metric-label">Backup Status</span>
             <span className="infra-metric-value">S3 Multi-Region</span>
-            <span className="infra-metric-sub">Pemulihan &lt; 30 detik</span>
+            <span className="infra-metric-sub">Recovery &lt; 30 seconds</span>
           </div>
         </div>
       </div>
@@ -423,15 +423,15 @@ export default function CloudResourcesDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Wrench style={{ width: 20, height: 20, color: 'var(--neon-cyan)' }} />
             <div>
-              <h2 className="section-heading" style={{ margin: 0 }}>Pusat Perbaikan & Solusi Masalah Sistem</h2>
+              <h2 className="section-heading" style={{ margin: 0 }}>System Health & Quick Repair</h2>
               <p style={{ margin: '4px 0 0 0', fontSize: 13, color: 'var(--text-muted)' }}>
-                Pengaturan cepat untuk mendiagnosis dan memperbaiki error pada server node, game, keamanan, dan backup data.
+                One-click fixes to diagnose and repair cloud nodes, game streaming, security, and data backups.
               </p>
             </div>
           </div>
           <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: 'var(--neon-cyan)' }}>
             <Sparkles style={{ width: 13, height: 13, marginRight: 5, verticalAlign: 'middle' }} />
-            Auto-Repair Engine Aktif
+            Auto-Repair Engine Active
           </span>
         </div>
 
@@ -451,39 +451,39 @@ export default function CloudResourcesDashboard() {
                   <Server style={{ width: 18, height: 18 }} />
                 </div>
                 <div>
-                  <h3 className="repair-card-title">Perbaikan Cloud Nodes</h3>
-                  <p className="repair-desc">Atasi server overload, latency tinggi, atau memory GPU bocor.</p>
+                  <h3 className="repair-card-title">Cloud Nodes Repair</h3>
+                  <p className="repair-desc">Fix server overload, high latency/ping, or GPU memory leaks.</p>
                 </div>
               </div>
-              <span className="repair-status-tag ok">Normal</span>
+              <span className="repair-status-tag ok">Healthy</span>
             </div>
             <div className="repair-buttons-list">
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('node_balance', 'Ratakan Beban & Restart Worker Node', 'Beban server berhasil diratakan ke node SG-01 dan worker JK-01 telah direstart.')}
+                onClick={() => handleRunRepair('node_balance', 'Balance Load & Restart Worker Node', 'Server load balanced to SG-01 and worker JK-01 restarted successfully.')}
               >
                 {activeRepairing === 'node_balance' ? <Loader2 className="btn-spinner" /> : <RefreshCw style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'node_balance' ? 'Memperbaiki...' : 'Ratakan Beban & Restart Worker'}</span>
+                <span>{activeRepairing === 'node_balance' ? 'Rebalancing...' : 'Balance Load & Restart Worker'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('gpu_flush', 'Kosongkan Cache VRAM GPU', 'Cache VRAM 72GB berhasil dibersihkan. Performa rendering GPU kembali optimal.')}
+                onClick={() => handleRunRepair('gpu_flush', 'Flush GPU VRAM Cache', '72GB VRAM cache cleared. GPU rendering performance restored to peak.')}
               >
                 {activeRepairing === 'gpu_flush' ? <Loader2 className="btn-spinner" /> : <Zap style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'gpu_flush' ? 'Mengosongkan...' : 'Kosongkan Cache VRAM GPU'}</span>
+                <span>{activeRepairing === 'gpu_flush' ? 'Flushing...' : 'Flush GPU VRAM Cache'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('network_route', 'Reset Rute Jaringan & DNS', 'Rute WebRTC dioptimalkan ulang. Ping turun ke 1.8ms stabil.')}
+                onClick={() => handleRunRepair('network_route', 'Reset Network Routes & DNS', 'WebRTC routing optimized. Latency reduced to a stable 1.8ms.')}
               >
                 {activeRepairing === 'network_route' ? <Loader2 className="btn-spinner" /> : <Wifi style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'network_route' ? 'Mereset...' : 'Reset Jaringan & Flush DNS'}</span>
+                <span>{activeRepairing === 'network_route' ? 'Resetting...' : 'Reset Network & Flush DNS'}</span>
               </button>
             </div>
           </div>
@@ -496,8 +496,8 @@ export default function CloudResourcesDashboard() {
                   <Gamepad2 style={{ width: 18, height: 18 }} />
                 </div>
                 <div>
-                  <h3 className="repair-card-title">Perbaikan Game & Stream</h3>
-                  <p className="repair-desc">Atasi game crash, shader error/patah-patah, atau sesi rental macet.</p>
+                  <h3 className="repair-card-title">Game & Stream Repair</h3>
+                  <p className="repair-desc">Fix game crashes, shader stuttering, or frozen rental sessions.</p>
                 </div>
               </div>
               <span className="repair-status-tag ok">Optimal</span>
@@ -507,28 +507,28 @@ export default function CloudResourcesDashboard() {
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('shader_recompile', 'Compile Ulang Shader Cache', 'Shader cache Vulkan/DirectX berhasil dibuat ulang. Masalah stuttering teratasi.')}
+                onClick={() => handleRunRepair('shader_recompile', 'Recompile Shader Cache', 'Vulkan/DirectX shader cache rebuilt. Frame stuttering resolved.')}
               >
                 {activeRepairing === 'shader_recompile' ? <Loader2 className="btn-spinner" /> : <Layers style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'shader_recompile' ? 'Memproses...' : 'Perbaiki & Buat Ulang Shader'}</span>
+                <span>{activeRepairing === 'shader_recompile' ? 'Compiling...' : 'Rebuild Shader Cache'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('verify_game_files', 'Verifikasi Integritas File Game', 'Seluruh file game terverifikasi cocok dengan Steam Storage SAN tanpa corrupt.')}
+                onClick={() => handleRunRepair('verify_game_files', 'Verify Game File Integrity', 'All game files verified intact against Steam Storage SAN without corruption.')}
               >
                 {activeRepairing === 'verify_game_files' ? <Loader2 className="btn-spinner" /> : <CheckCircle2 style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'verify_game_files' ? 'Memverifikasi...' : 'Verifikasi File Game'}</span>
+                <span>{activeRepairing === 'verify_game_files' ? 'Verifying...' : 'Verify Game Files'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('kill_stuck_session', 'Hentikan Sesi Rental Macet', 'Sesi cloud yang membeku telah dihentikan paksa dan pod KVM telah dilepas.')}
+                onClick={() => handleRunRepair('kill_stuck_session', 'Terminate Frozen Rental Session', 'Frozen cloud session forcefully closed and KVM pod released.')}
               >
                 {activeRepairing === 'kill_stuck_session' ? <Loader2 className="btn-spinner" /> : <Power style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'kill_stuck_session' ? 'Menghentikan...' : 'Paksa Tutup Sesi Macet'}</span>
+                <span>{activeRepairing === 'kill_stuck_session' ? 'Closing...' : 'Force Close Stuck Session'}</span>
               </button>
             </div>
           </div>
@@ -541,39 +541,39 @@ export default function CloudResourcesDashboard() {
                   <ShieldCheck style={{ width: 18, height: 18 }} />
                 </div>
                 <div>
-                  <h3 className="repair-card-title">Perbaikan Keamanan Data</h3>
-                  <p className="repair-desc">Atasi IP mencurigakan, token kadaluarsa, atau anomali firewall.</p>
+                  <h3 className="repair-card-title">Data Security Shield</h3>
+                  <p className="repair-desc">Clear suspicious IPs, refresh security keys, and reset firewall.</p>
                 </div>
               </div>
-              <span className="repair-status-tag ok">Aman</span>
+              <span className="repair-status-tag ok">Secure</span>
             </div>
             <div className="repair-buttons-list">
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('rotate_keys', 'Rotasi Kunci Enkripsi & Token', 'Kunci sesi AES-256 dan token JWT berhasil diperbarui demi keamanan.')}
+                onClick={() => handleRunRepair('rotate_keys', 'Rotate Encryption Keys & Tokens', 'AES-256 session keys and JWT tokens refreshed for enhanced security.')}
               >
                 {activeRepairing === 'rotate_keys' ? <Loader2 className="btn-spinner" /> : <Key style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'rotate_keys' ? 'Memperbarui...' : 'Perbarui Kunci Enkripsi'}</span>
+                <span>{activeRepairing === 'rotate_keys' ? 'Rotating...' : 'Rotate Encryption Keys'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('firewall_reset', 'Reset Aturan Firewall & IP', 'Daftar blokir IP dibersihkan dan filter perlindungan DDoS diperbarui.')}
+                onClick={() => handleRunRepair('firewall_reset', 'Reset Firewall Rules & IP Filter', 'IP blocklists cleared and DDoS mitigation rules updated.')}
               >
                 {activeRepairing === 'firewall_reset' ? <Loader2 className="btn-spinner" /> : <ShieldAlert style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'firewall_reset' ? 'Mereset...' : 'Reset Aturan Firewall'}</span>
+                <span>{activeRepairing === 'firewall_reset' ? 'Resetting...' : 'Reset Firewall Rules'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('sandbox_rebuild', 'Isolasi Ulang Container Sandbox', 'Container sandbox pengguna disegel ulang. Tidak ada jejak data lokal tersisa.')}
+                onClick={() => handleRunRepair('sandbox_rebuild', 'Reseal Container Sandbox', 'User sandbox containers resealed. Zero residual user data left on node.')}
               >
                 {activeRepairing === 'sandbox_rebuild' ? <Loader2 className="btn-spinner" /> : <Lock style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'sandbox_rebuild' ? 'Mengisolasi...' : 'Isolasi Ulang Container'}</span>
+                <span>{activeRepairing === 'sandbox_rebuild' ? 'Resealing...' : 'Reseal Sandbox Container'}</span>
               </button>
             </div>
           </div>
@@ -586,39 +586,39 @@ export default function CloudResourcesDashboard() {
                   <Database style={{ width: 18, height: 18 }} />
                 </div>
                 <div>
-                  <h3 className="repair-card-title">Perbaikan Backup Data</h3>
-                  <p className="repair-desc">Atasi sinkronisasi tertunda, snapshot error, atau disk storage penuh.</p>
+                  <h3 className="repair-card-title">Data Backup Repair</h3>
+                  <p className="repair-desc">Fix delayed sync, verify snapshots, or free up storage disk.</p>
                 </div>
               </div>
-              <span className="repair-status-tag ok">Sinkron</span>
+              <span className="repair-status-tag ok">Synced</span>
             </div>
             <div className="repair-buttons-list">
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('force_s3_sync', 'Paksa Sinkronisasi S3 Cold Vault', 'Sinkronisasi paksa ke bucket S3 Multi-Region selesai. 100% data tersinkron.')}
+                onClick={() => handleRunRepair('force_s3_sync', 'Force S3 Cold Vault Sync', 'Force sync to Multi-Region S3 bucket completed. 100% data verified.')}
               >
                 {activeRepairing === 'force_s3_sync' ? <Loader2 className="btn-spinner" /> : <Cloud style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'force_s3_sync' ? 'Menyinkronkan...' : 'Paksa Sinkronkan ke S3'}</span>
+                <span>{activeRepairing === 'force_s3_sync' ? 'Syncing...' : 'Force S3 Cold Vault Sync'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('verify_snapshots', 'Periksa & Perbaiki File Snapshot', 'Integritas hash snapshot terverifikasi valid dan siap untuk Disaster Recovery.')}
+                onClick={() => handleRunRepair('verify_snapshots', 'Check Snapshot File Integrity', 'Snapshot hash integrity verified valid and ready for Disaster Recovery.')}
               >
                 {activeRepairing === 'verify_snapshots' ? <Loader2 className="btn-spinner" /> : <CheckCircle2 style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'verify_snapshots' ? 'Memeriksa...' : 'Periksa Integritas Snapshot'}</span>
+                <span>{activeRepairing === 'verify_snapshots' ? 'Checking...' : 'Check Snapshot Integrity'}</span>
               </button>
               <button 
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('clean_stale_snapshots', 'Bersihkan Snapshot Lama', 'Snapshot usang (>30 hari) berhasil dihapus. Kapasitas NVMe bertambah 48 GB.')}
+                onClick={() => handleRunRepair('clean_stale_snapshots', 'Clean Stale Snapshots', 'Outdated snapshots (>30 days) removed. NVMe storage freed by 48 GB.')}
               >
                 {activeRepairing === 'clean_stale_snapshots' ? <Loader2 className="btn-spinner" /> : <RefreshCw style={{ width: 14, height: 14 }} />}
-                <span>{activeRepairing === 'clean_stale_snapshots' ? 'Membersihkan...' : 'Bersihkan Snapshot Lama'}</span>
+                <span>{activeRepairing === 'clean_stale_snapshots' ? 'Cleaning...' : 'Clean Stale Snapshots'}</span>
               </button>
             </div>
           </div>
@@ -649,17 +649,17 @@ export default function CloudResourcesDashboard() {
           <div className="scaling-status-card">
             <div className="scaling-card-top">
               <div>
-                <h3 className="scaling-card-title">Status Armada Worker Pods</h3>
-                <p className="scaling-card-sub">Manajemen elastisitas pod KVM/Docker GPU secara dinamis</p>
+                <h3 className="scaling-card-title">Worker Pod Fleet Status</h3>
+                <p className="scaling-card-sub">Dynamic KVM & Docker GPU container auto-scaling</p>
               </div>
               <span className={`scaling-live-tag ${isSimulatingSpike ? 'scaling-up' : 'stable'}`}>
-                {isSimulatingSpike ? '⚡ SCALING OUT (+2 PODS)' : 'STABIL (NORMAL)'}
+                {isSimulatingSpike ? '⚡ SCALING OUT (+2 PODS)' : 'STABLE (NORMAL)'}
               </span>
             </div>
 
             <div className="scaling-metrics-row">
               <div className="scale-metric-box">
-                <span className="lbl">Worker Pods Aktif</span>
+                <span className="lbl">Active Worker Pods</span>
                 <span className="val cyan">{activeWorkerPods} / 12 Max</span>
               </div>
               <div className="scale-metric-box">
@@ -667,8 +667,8 @@ export default function CloudResourcesDashboard() {
                 <span className={`val ${isSimulatingSpike ? 'amber' : 'green'}`}>{currentCpuLoad}</span>
               </div>
               <div className="scale-metric-box">
-                <span className="lbl">Cooldown Anti-Flap</span>
-                <span className="val">180 Detik</span>
+                <span className="lbl">Anti-Flap Cooldown</span>
+                <span className="val">180 Seconds</span>
               </div>
             </div>
 
@@ -682,48 +682,48 @@ export default function CloudResourcesDashboard() {
                 {isSimulatingSpike ? (
                   <>
                     <Loader2 className="btn-spinner" />
-                    <span>MENSIMULASIKAN LONJAKAN TRAFFIC...</span>
+                    <span>SIMULATING TRAFFIC SPIKE...</span>
                   </>
                 ) : (
                   <>
                     <Zap style={{ width: 16, height: 16 }} />
-                    <span>Simulasi Lonjakan Traffic (Spike Test)</span>
+                    <span>Test Traffic Spike (Auto-Scale)</span>
                   </>
                 )}
               </button>
               <p className="spike-hint">
-                *Klik untuk mendemonstrasikan ke dosen bagaimana sistem otomatis menambah worker pod saat traffic melonjak.
+                *Click to test and demonstrate how the cloud automatically spins up extra worker pods during high traffic.
               </p>
             </div>
           </div>
 
           {/* Right: Elasticity Threshold Rules */}
           <div className="scaling-rules-card">
-            <h3 className="scaling-card-title">Aturan Pemicu Elastisitas (Scaling Rules):</h3>
+            <h3 className="scaling-card-title">Elasticity Trigger Rules:</h3>
             
             <div className="rules-list">
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Scale-Out (Tambah Kapasitas Otomatis):</strong>
-                  <span>Jika CPU &gt; 80% atau GPU VRAM &gt; 85% selama 3 menit berturut-turut.</span>
+                  <strong>Scale-Out (Auto Add Capacity):</strong>
+                  <span>If CPU &gt; 80% or GPU VRAM &gt; 85% for 3 consecutive minutes.</span>
                 </div>
-                <span className="rule-pill green">AKTIF (+1 Pod)</span>
+                <span className="rule-pill green">ACTIVE (+1 Pod)</span>
               </div>
 
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Scale-In (Hemat Biaya saat Idle):</strong>
-                  <span>Jika server idle selama 15 menit, pod cadangan dimatikan untuk efisiensi FinOps.</span>
+                  <strong>Scale-In (Cost Saver when Idle):</strong>
+                  <span>If server is idle for 15 minutes, standby pods shut down to optimize FinOps.</span>
                 </div>
-                <span className="rule-pill cyan">AKTIF (-1 Pod)</span>
+                <span className="rule-pill cyan">ACTIVE (-1 Pod)</span>
               </div>
 
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Proteksi Anti-Flapping:</strong>
-                  <span>Mencegah pembuatan/penghapusan pod berulang-ulang dalam rentang waktu singkat.</span>
+                  <strong>Anti-Flapping Protection:</strong>
+                  <span>Prevents continuous creation/destruction of pods within short time frames.</span>
                 </div>
-                <span className="rule-pill purple">AKTIF (180s)</span>
+                <span className="rule-pill purple">ACTIVE (180s)</span>
               </div>
             </div>
           </div>
@@ -747,9 +747,9 @@ export default function CloudResourcesDashboard() {
           <div className="finops-card">
             <div className="finops-card-top">
               <span className="finops-label">GPU Cluster Compute</span>
-              <span className="finops-rate">$0.85 / jam</span>
+              <span className="finops-rate">$0.85 / hr</span>
             </div>
-            <p className="finops-total">$294.50 <span className="unit">/ bln</span></p>
+            <p className="finops-total">$294.50 <span className="unit">/ mo</span></p>
             <p className="finops-sub">RTX 40-Series Dedicated Pools</p>
           </div>
 
@@ -758,7 +758,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-label">WebRTC Egress Bandwidth</span>
               <span className="finops-rate">$0.04 / GB</span>
             </div>
-            <p className="finops-total">$88.40 <span className="unit">/ bln</span></p>
+            <p className="finops-total">$88.40 <span className="unit">/ mo</span></p>
             <p className="finops-sub">2.21 TB AV1 Encoded Datagrams</p>
           </div>
 
@@ -767,7 +767,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-label">AWS S3 Cold Vault Storage</span>
               <span className="finops-rate">$0.023 / GB</span>
             </div>
-            <p className="finops-total">$14.80 <span className="unit">/ bln</span></p>
+            <p className="finops-total">$14.80 <span className="unit">/ mo</span></p>
             <p className="finops-sub">Multi-Region Snapshot Replication</p>
           </div>
 
@@ -776,7 +776,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-label">Cloudflare Anti-DDoS Shield</span>
               <span className="finops-rate">Flat Tier</span>
             </div>
-            <p className="finops-total">$30.00 <span className="unit">/ bln</span></p>
+            <p className="finops-total">$30.00 <span className="unit">/ mo</span></p>
             <p className="finops-sub">Enterprise L3/L4/L7 Defense</p>
           </div>
         </div>
@@ -784,16 +784,16 @@ export default function CloudResourcesDashboard() {
         {/* Financial Summary Strip */}
         <div className="finops-summary-strip">
           <div className="finops-stat-item">
-            <span className="lbl">Total Biaya Operasional (OpEx):</span>
-            <span className="val red">$427.70 / bulan</span>
+            <span className="lbl">Total Operating Expenses (OpEx):</span>
+            <span className="val red">$427.70 / month</span>
           </div>
           <div className="finops-stat-item">
-            <span className="lbl">Estimasi Pendapatan Sewa (Rental Rev):</span>
-            <span className="val green">$1,340.00 / bulan</span>
+            <span className="lbl">Estimated Rental Revenue:</span>
+            <span className="val green">$1,340.00 / month</span>
           </div>
           <div className="finops-stat-item highlight">
-            <span className="lbl">Margin Keuntungan (Gross Margin):</span>
-            <span className="val cyan">+68.1% (Sangat Sehat)</span>
+            <span className="lbl">Gross Profit Margin:</span>
+            <span className="val cyan">+68.1% (Healthy)</span>
           </div>
         </div>
       </section>
@@ -815,37 +815,37 @@ export default function CloudResourcesDashboard() {
           <div className="sla-metric-box">
             <div className="sla-gauge-row">
               <span className="sla-pct-text">99.98%</span>
-              <span className="sla-status-tag active">SLA TERPENUHI</span>
+              <span className="sla-status-tag active">SLA MET</span>
             </div>
-            <h4 className="sla-metric-title">Target Uptime Tahunan</h4>
-            <p className="sla-metric-desc">Toleransi downtime maksimal &lt; 1.75 jam per tahun (setara &lt; 8.6 menit / bulan).</p>
+            <h4 className="sla-metric-title">Annual Uptime Target</h4>
+            <p className="sla-metric-desc">Maximum allowed downtime &lt; 1.75 hours per year (less than 8.6 min / month).</p>
           </div>
 
           {/* SLA Metric 2 */}
           <div className="sla-metric-box">
             <div className="sla-gauge-row">
-              <span className="sla-pct-text emerald">&lt; 45 Detik</span>
-              <span className="sla-status-tag active">SANGAT CEPAT</span>
+              <span className="sla-pct-text emerald">&lt; 45 Seconds</span>
+              <span className="sla-status-tag active">ULTRA FAST</span>
             </div>
             <h4 className="sla-metric-title">MTTR (Mean Time To Recovery)</h4>
-            <p className="sla-metric-desc">Waktu rata-rata pemulihan otomatis jika salah satu worker node mengalami kendala.</p>
+            <p className="sla-metric-desc">Average automated recovery time if a worker node experiences an issue.</p>
           </div>
 
           {/* SLA Regional PoP List */}
           <div className="sla-regional-card">
-            <h4 className="sla-card-title">Ketersediaan Edge PoP per Wilayah:</h4>
+            <h4 className="sla-card-title">Regional Edge PoP Availability:</h4>
             <div className="sla-pops-list">
               <div className="sla-pop-row">
                 <span className="pop-name">🇮🇩 Jakarta (JK-01 Core)</span>
-                <span className="pop-val">99.99% (0 Insiden)</span>
+                <span className="pop-val">99.99% (0 Incidents)</span>
               </div>
               <div className="sla-pop-row">
-                <span className="pop-name">🇸🇬 Singapura (SG-01 Standby)</span>
-                <span className="pop-val">99.98% (0 Insiden)</span>
+                <span className="pop-name">🇸🇬 Singapore (SG-01 Standby)</span>
+                <span className="pop-val">99.98% (0 Incidents)</span>
               </div>
               <div className="sla-pop-row">
                 <span className="pop-name">🇯🇵 Tokyo (TY-01 Edge)</span>
-                <span className="pop-val">99.95% (0 Insiden)</span>
+                <span className="pop-val">99.95% (0 Incidents)</span>
               </div>
               <div className="sla-pop-row">
                 <span className="pop-name">🇺🇸 Oregon (US-WEST-01)</span>
@@ -998,9 +998,9 @@ export default function CloudResourcesDashboard() {
                 <Cloud style={{ width: 22, height: 22 }} />
               </div>
               <div>
-                <h3 className="backup-title">Sinkronisasi Otomatis Database & Data Cloud</h3>
+                <h3 className="backup-title">Automated Database & Cloud Backup Sync</h3>
                 <p className="backup-desc">
-                  Pencadangan data terus-menerus antara node Jakarta dan Singapore, serta tersimpan aman di S3.
+                  Continuous data replication between Jakarta and Singapore nodes, saved securely in S3.
                 </p>
               </div>
             </div>
@@ -1015,12 +1015,12 @@ export default function CloudResourcesDashboard() {
                 {isBackingUp ? (
                   <>
                     <Loader2 className="btn-spinner" />
-                    <span>Membuat Backup...</span>
+                    <span>Backing Up...</span>
                   </>
                 ) : (
                   <>
                     <RefreshCw style={{ width: 15, height: 15 }} />
-                    <span>Buat Backup Data Sekarang</span>
+                    <span>Create Cloud Backup Now</span>
                   </>
                 )}
               </button>
@@ -1029,20 +1029,20 @@ export default function CloudResourcesDashboard() {
                 type="button" 
                 className="btn-backup-download"
                 onClick={handleDownloadBackup}
-                title="Download data backup format JSON"
+                title="Download backup data as JSON"
               >
                 <Download style={{ width: 14, height: 14 }} />
-                <span>Unduh Data Backup (JSON)</span>
+                <span>Download Backup (JSON)</span>
               </button>
 
               <button 
                 type="button" 
                 className="btn-backup-download"
                 onClick={handleDownloadPdf}
-                title="Download laporan resmi PDF"
+                title="Download official PDF report"
               >
                 <FileText style={{ width: 14, height: 14 }} />
-                <span>Unduh Laporan (PDF)</span>
+                <span>Download Report (PDF)</span>
               </button>
             </div>
           </div>
@@ -1058,20 +1058,20 @@ export default function CloudResourcesDashboard() {
           {/* Backup Health & Telemetry Metrics Chips */}
           <div className="backup-metrics-row">
             <div className="backup-status-chip">
-              <span className="chip-lbl">Backup Terakhir</span>
+              <span className="chip-lbl">Last Backup</span>
               <span className="chip-val green">{lastBackupTime}</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Replikasi Antar Server</span>
-              <span className="chip-val cyan">Jakarta ⟷ Singapore Aktif</span>
+              <span className="chip-lbl">Inter-Node Replication</span>
+              <span className="chip-val cyan">Jakarta ⟷ Singapore Active</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Penyimpanan Aman</span>
+              <span className="chip-lbl">Secure Storage</span>
               <span className="chip-val">AWS S3 Glacier Multi-Region</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Verifikasi Data</span>
-              <span className="chip-val green">Valid (SHA-256 Aman)</span>
+              <span className="chip-lbl">Data Verification</span>
+              <span className="chip-val green">Valid (SHA-256 Verified)</span>
             </div>
           </div>
         </div>
@@ -1083,21 +1083,21 @@ export default function CloudResourcesDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Activity style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
             <div>
-              <h3 className="sessions-title">Catatan Riwayat & Aktivitas Server Real-Time</h3>
-              <p className="sessions-sub">Riwayat aktivitas server, pembuatan container game, dan backup data secara langsung</p>
+              <h3 className="sessions-title">Real-Time Server History & Activity Logs</h3>
+              <p className="sessions-sub">Live log of server operations, container provisioning, and backup executions</p>
             </div>
           </div>
-          <span className="sessions-badge">Status Aktif</span>
+          <span className="sessions-badge">Active Status</span>
         </div>
 
         <table className="infra-audit-table">
           <thead>
             <tr>
-              <th>Waktu</th>
-              <th>Jenis Aktivitas</th>
+              <th>Time</th>
+              <th>Activity Type</th>
               <th>Target Server</th>
-              <th>Deskripsi</th>
-              <th>Status Keamanan</th>
+              <th>Description</th>
+              <th>Security Status</th>
             </tr>
           </thead>
           <tbody>

@@ -138,7 +138,7 @@ function TopNavbar({
       {isLoggingOut && (
         <div className="fullscreen-loader" role="status">
           <div className="omni-spinner" />
-          <span>Keluar...</span>
+          <span>Signing Out...</span>
         </div>
       )}
 
@@ -319,11 +319,11 @@ function TopNavbar({
           <button 
             className="omni-action-btn omni-signout-btn" 
             onClick={handleSignOutClick}
-            title="Keluar / Logout"
+            title="Sign Out / Log Out"
             type="button"
           >
             <LogOut style={{ width: 14, height: 14 }} />
-            <span>Keluar</span>
+            <span>Log Out</span>
           </button>
         </div>
       </header>
@@ -664,10 +664,10 @@ function DashboardShell({
 
             <h3 className="omni-launch-title">{launchingGame.title}</h3>
             <p className="omni-launch-desc">
-              {launchStep === 0 && "Menghubungkan ke server cloud..."}
-              {launchStep === 1 && "Menyiapkan GPU Cloud Gaming..."}
-              {launchStep === 2 && "Memuat data & save game..."}
-              {launchStep === 3 && "Mulai bermain game..."}
+              {launchStep === 0 && "Connecting to cloud server..."}
+              {launchStep === 1 && "Preparing high-speed gaming rig..."}
+              {launchStep === 2 && "Loading game save and profile..."}
+              {launchStep === 3 && "Starting your game..."}
             </p>
 
             <div className="launch-progress-bar">

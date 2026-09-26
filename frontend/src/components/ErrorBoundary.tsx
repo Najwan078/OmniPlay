@@ -77,10 +77,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </svg>
             </div>
             <h2 style={{ margin: '0 0 8px 0', fontSize: '20px', color: '#f43f5e', letterSpacing: '0.05em' }}>
-              TERJADI KESALAHAN PADA APLIKASI
+              SOMETHING WENT WRONG
             </h2>
             <p style={{ margin: '0 0 20px 0', color: '#94a3b8', fontSize: '14px', lineHeight: '1.5' }}>
-              Terjadi sedikit kendala teknis saat memuat tampilan. Silakan klik tombol di bawah untuk memuat ulang.
+              A temporary technical issue occurred while loading this view. Please click the button below to reload the page.
             </p>
             {this.state.error && (
               <div style={{
@@ -115,7 +115,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 transition: 'all 0.2s ease'
               }}
             >
-              Muat Ulang Halaman
+              Reload Page
             </button>
           </div>
         </div>

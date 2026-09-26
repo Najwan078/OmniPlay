@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
@@ -70,7 +70,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       name: 'JK-01 (Jakarta)', 
       gpu: 'RTX 4070 Ti', 
       latency: '2ms', 
-      ratePerHour: 10000 
+      ratePerHour: 0.85 
     },
     { 
       id: 'SG-01', 
@@ -79,7 +79,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       name: 'SG-01 (Singapore)', 
       gpu: 'RTX 4080', 
       latency: '15ms', 
-      ratePerHour: 16000 
+      ratePerHour: 1.25 
     },
     { 
       id: 'TY-01', 
@@ -88,7 +88,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       name: 'TY-01 (Tokyo)', 
       gpu: 'RTX 4090', 
       latency: '60ms', 
-      ratePerHour: 25000 
+      ratePerHour: 1.75 
     },
   ];
 
@@ -395,7 +395,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'RENTAL READY • SG-01',
       nodeBadge: 'Instant Steam Cloud Launch',
       desc: 'Experience unrivaled realism in EA SPORTS FC™ 25 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam deep-link integration.',
-      hourlyRate: 'Rp 15.000',
+      hourlyRate: '$1.25',
       rateUnit: '/ hr',
       ratingScore: '82%',
       ratingSentiment: 'Very Positive',
@@ -415,7 +415,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'RAY TRACING OVERDRIVE • SG-01',
       nodeBadge: 'Path Tracing & DLSS 3.5',
       desc: 'Enter the neon-soaked underworld of Night City. Rent high-end cloud compute with full path tracing, DLSS 3.5 ray reconstruction, and ultra-low input latency.',
-      hourlyRate: 'Rp 18.000',
+      hourlyRate: '$1.50',
       rateUnit: '/ hr',
       ratingScore: '92%',
       ratingSentiment: 'Overwhelmingly Positive',
@@ -435,7 +435,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'COMPETITIVE EDGE • JK-01',
       nodeBadge: 'Instant Steam Cloud Launch • 2ms',
       desc: 'Blend pinpoint gunplay with game-changing tactical agent abilities. Stream direct from Jakarta Edge with sub-2ms network routing, NVIDIA Reflex 360Hz tuning, and Steam Cloud synchronization.',
-      hourlyRate: 'Rp 12.000',
+      hourlyRate: '$0.99',
       rateUnit: '/ hr',
       ratingScore: '94%',
       ratingSentiment: 'Very Positive',
@@ -455,7 +455,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'GLOBAL BLOCKBUSTER • TY-01',
       nodeBadge: 'Unreal Engine 5 Nanite',
       desc: 'Set out as the Destined One to venture into the marvels and perils of ancient Chinese mythology. Powered by cutting-edge Nanite geometry and Lumen lighting on cloud nodes.',
-      hourlyRate: 'Rp 16.000',
+      hourlyRate: '$1.40',
       rateUnit: '/ hr',
       ratingScore: '95%',
       ratingSentiment: 'Overwhelmingly Positive',
@@ -555,9 +555,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       return true;
     })
     .sort((a, b) => {
-      if (activeSort === 'Terpopuler') return b.id - a.id;
-      if (activeSort === 'Rating Bagus') return b.ratingScore - a.ratingScore;
-      if (activeSort === 'Sering Dimainkan') {
+      if (activeSort === 'Most Popular') return b.id - a.id;
+      if (activeSort === 'Highest Rated') return b.ratingScore - a.ratingScore;
+      if (activeSort === 'Most Played') {
         const hA = parseFloat(a.hours) || 0;
         const hB = parseFloat(b.hours) || 0;
         return hB - hA;
@@ -568,9 +568,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   // Calculate dynamic price per PRD formula
   const currentNode = nodes.find(n => n.id === selectedNode) || nodes[0];
   const subtotalPrice = currentNode.ratePerHour * rentalHours;
-  const platformFee = 2500;
+  const platformFee = 0.25;
   const totalPrice = subtotalPrice + platformFee;
-  const formatIDR = (num: number) => `Rp ${num.toLocaleString('id-ID')}`;
+  const formatUSD = (num: number) => `$${num.toFixed(2)}`;
 
   const handleStartGame = (game: Game) => {
     const steamUri = game.appId > 0 ? `steam://rungameid/${game.appId}` : undefined;
@@ -875,34 +875,34 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 <div className="filter-dropdown-menu">
                   <ul className="filter-dropdown-list">
                     <li 
-                      className={`filter-dropdown-item ${activeSort === 'Terpopuler' ? 'selected' : ''}`}
+                      className={`filter-dropdown-item ${activeSort === 'Most Popular' ? 'selected' : ''}`}
                       onClick={() => {
-                        setActiveSort(activeSort === 'Terpopuler' ? null : 'Terpopuler');
+                        setActiveSort(activeSort === 'Most Popular' ? null : 'Most Popular');
                         setIsFilterOpen(false);
                       }}
                     >
-                      <span>Terpopuler</span>
-                      {activeSort === 'Terpopuler' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
+                      <span>Most Popular</span>
+                      {activeSort === 'Most Popular' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
                     </li>
                     <li 
-                      className={`filter-dropdown-item ${activeSort === 'Rating Bagus' ? 'selected' : ''}`}
+                      className={`filter-dropdown-item ${activeSort === 'Highest Rated' ? 'selected' : ''}`}
                       onClick={() => {
-                        setActiveSort(activeSort === 'Rating Bagus' ? null : 'Rating Bagus');
+                        setActiveSort(activeSort === 'Highest Rated' ? null : 'Highest Rated');
                         setIsFilterOpen(false);
                       }}
                     >
-                      <span>Rating Bagus</span>
-                      {activeSort === 'Rating Bagus' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
+                      <span>Highest Rated</span>
+                      {activeSort === 'Highest Rated' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
                     </li>
                     <li 
-                      className={`filter-dropdown-item ${activeSort === 'Sering Dimainkan' ? 'selected' : ''}`}
+                      className={`filter-dropdown-item ${activeSort === 'Most Played' ? 'selected' : ''}`}
                       onClick={() => {
-                        setActiveSort(activeSort === 'Sering Dimainkan' ? null : 'Sering Dimainkan');
+                        setActiveSort(activeSort === 'Most Played' ? null : 'Most Played');
                         setIsFilterOpen(false);
                       }}
                     >
-                      <span>Sering Dimainkan</span>
-                      {activeSort === 'Sering Dimainkan' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
+                      <span>Most Played</span>
+                      {activeSort === 'Most Played' && <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />}
                     </li>
                   </ul>
                 </div>
@@ -1183,7 +1183,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                             </div>
                             <p className="node-sub">{n.gpu} • {n.latency}</p>
                           </div>
-                          <span className="node-price">{formatIDR(n.ratePerHour)}/h</span>
+                          <span className="node-price">{formatUSD(n.ratePerHour)}/h</span>
                         </div>
                       ))}
                     </div>
@@ -1193,7 +1193,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   <div className="rental-field">
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                       <label className="rental-label">2. Rental Duration:</label>
-                      <span className="rental-hours-badge">{rentalHours} Hours</span>
+                      <span className="rental-hours-badge">{rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}</span>
                     </div>
 
                     <input 
@@ -1219,23 +1219,23 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   <div className="rental-pricing-breakdown">
                     <div className="price-row">
                       <span>Cloud Node ({currentNode.tier}: {currentNode.gpu})</span>
-                      <span>{formatIDR(currentNode.ratePerHour)}/h</span>
+                      <span>{formatUSD(currentNode.ratePerHour)}/h</span>
                     </div>
                     <div className="price-row">
                       <span>Rental Duration</span>
                       <span>{rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}</span>
                     </div>
                     <div className="price-row">
-                      <span>Subtotal ({formatIDR(currentNode.ratePerHour)} × {rentalHours}h)</span>
-                      <span>{formatIDR(subtotalPrice)}</span>
+                      <span>Subtotal ({formatUSD(currentNode.ratePerHour)} × {rentalHours}h)</span>
+                      <span>{formatUSD(subtotalPrice)}</span>
                     </div>
                     <div className="price-row">
                       <span>Cloud Orchestration Fee</span>
-                      <span>{formatIDR(platformFee)}</span>
+                      <span>{formatUSD(platformFee)}</span>
                     </div>
                     <div className="price-row total">
                       <span>Total Payable</span>
-                      <span className="total-amount">{formatIDR(totalPrice)}</span>
+                      <span className="total-amount">{formatUSD(totalPrice)}</span>
                     </div>
                   </div>
 
@@ -1261,7 +1261,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       className="btn-confirm-rental"
                       type="button"
                     >
-                      CONFIRM RENTAL & PAY ({formatIDR(totalPrice)})
+                      CONFIRM RENTAL & PAY ({formatUSD(totalPrice)})
                     </button>
                   )}
                 </div>
@@ -1289,16 +1289,16 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 type="button" 
                 className="payment-back-btn" 
                 onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
-                title="Kembali"
+                title="Back"
               >
                 <ChevronLeft style={{ width: 18, height: 18 }} />
               </button>
-              <h3 className="payment-modal-title">Metode Pembayaran</h3>
+              <h3 className="payment-modal-title">Payment Method</h3>
               <button 
                 type="button" 
                 className="payment-back-btn" 
                 onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
-                title="Tutup"
+                title="Close"
               >
                 <X style={{ width: 18, height: 18 }} />
               </button>
@@ -1315,13 +1315,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 <div style={{ minWidth: 0 }}>
                   <p className="payment-game-name">{selectedGame.title}</p>
                   <p className="payment-game-detail">
-                    {currentNode.tier} ({currentNode.gpu}) • {rentalHours} Jam
+                    {currentNode.tier} ({currentNode.gpu}) • {rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}
                   </p>
                 </div>
               </div>
               <div className="payment-order-total">
-                <span className="payment-total-lbl">Total Pembayaran</span>
-                <span className="payment-total-amt">{formatIDR(totalPrice)}</span>
+                <span className="payment-total-lbl">Total Payment</span>
+                <span className="payment-total-amt">{formatUSD(totalPrice)}</span>
               </div>
             </div>
 
@@ -1336,17 +1336,17 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <Smartphone style={{ width: 18, height: 18, color: "#00d2ff" }} />
-                    <span>E-Wallet / Dompet Digital</span>
+                    <span>Digital Wallets</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "ewallet" ? "open" : "")} />
                 </button>
                 {expandedSection === "ewallet" && (
                   <div className="payment-section-items">
                     {[
-                      { id: "gopay", name: "GoPay", sub: "Otomatis terhubung & instan", icon: "🟢" },
-                      { id: "dana", name: "DANA", sub: "Saldo DANA & Proteksi Pembeli", icon: "🔵" },
-                      { id: "ovo", name: "OVO", sub: "Verifikasi instan via ponsel", icon: "🟣" },
-                      { id: "shopeepay", name: "ShopeePay", sub: "Cashback koin & SPayLater", icon: "🟠" }
+                      { id: "paypal", name: "PayPal", sub: "Instant & buyer protected checkout", icon: "🅿️" },
+                      { id: "apple_pay", name: "Apple Pay", sub: "One-click biometric authorization", icon: "🍎" },
+                      { id: "google_pay", name: "Google Pay", sub: "Fast checkout with Google account", icon: "🌐" },
+                      { id: "cash_app", name: "Cash App", sub: "Instant mobile pay & balance", icon: "💵" }
                     ].map(item => (
                       <div
                         key={item.id}
@@ -1373,7 +1373,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 )}
               </div>
 
-              {/* QRIS */}
+              {/* Instant QR Code Pay */}
               <div className="payment-section">
                 <button
                   type="button"
@@ -1382,7 +1382,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <Wallet style={{ width: 18, height: 18, color: "#10b981" }} />
-                    <span>QRIS (Scan & Pay)</span>
+                    <span>Instant QR Pay (Scan & Play)</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "qris" ? "open" : "")} />
                 </button>
@@ -1395,8 +1395,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       <div className="payment-method-left">
                         <span className="payment-method-emoji">📷</span>
                         <div>
-                          <p className="payment-method-name">QRIS Instant Code</p>
-                          <p className="payment-method-sub">BCA, Mandiri, GoPay, OVO, ShopeePay, DANA & Semua M-Banking</p>
+                          <p className="payment-method-name">Instant QR Code</p>
+                          <p className="payment-method-sub">Scan with any mobile banking or payment app</p>
                         </div>
                       </div>
                       <input
@@ -1411,7 +1411,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 )}
               </div>
 
-              {/* Virtual Account */}
+              {/* Bank Transfer / Online Banking */}
               <div className="payment-section">
                 <button
                   type="button"
@@ -1420,17 +1420,17 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <Building2 style={{ width: 18, height: 18, color: "#8b5cf6" }} />
-                    <span>Virtual Account Bank</span>
+                    <span>Online Banking & Direct Transfer</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "va" ? "open" : "")} />
                 </button>
                 {expandedSection === "va" && (
                   <div className="payment-section-items">
                     {[
-                      { id: "va_bca", name: "BCA Virtual Account", sub: "Verifikasi instan 24 jam", icon: "🏦" },
-                      { id: "va_mandiri", name: "Mandiri Virtual Account", sub: "Livin by Mandiri & ATM", icon: "🏛️" },
-                      { id: "va_bri", name: "BRI Virtual Account (BRIVA)", sub: "BRImo & Agen BRILink", icon: "🏪" },
-                      { id: "va_bni", name: "BNI Virtual Account", sub: "BNI Mobile Banking & ATM", icon: "🏬" }
+                      { id: "chase", name: "Chase Online Banking", sub: "Instant bank authorization 24/7", icon: "🏦" },
+                      { id: "bofa", name: "Bank of America", sub: "Direct online transfer", icon: "🏛️" },
+                      { id: "wells_fargo", name: "Wells Fargo", sub: "Fast verified ACH payment", icon: "🏪" },
+                      { id: "citibank", name: "Citibank Direct", sub: "Instant account verification", icon: "🏬" }
                     ].map(item => (
                       <div
                         key={item.id}
@@ -1466,7 +1466,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <CreditCard style={{ width: 18, height: 18, color: "#f59e0b" }} />
-                    <span>Kartu Kredit / Debit Online</span>
+                    <span>Credit / Debit Card</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "card" ? "open" : "")} />
                 </button>
@@ -1479,8 +1479,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       <div className="payment-method-left">
                         <span className="payment-method-emoji">💳</span>
                         <div>
-                          <p className="payment-method-name">Visa / Mastercard / JCB</p>
-                          <p className="payment-method-sub">3D Secure encrypted authentication</p>
+                          <p className="payment-method-name">Visa / Mastercard / Amex</p>
+                          <p className="payment-method-sub">3D Secure 256-bit encrypted authentication</p>
                         </div>
                       </div>
                       <input
@@ -1503,15 +1503,15 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   {paymentSuccess ? (
                     <>
                       <div className="payment-success-icon">✓</div>
-                      <h4 className="payment-processing-title">Pembayaran Berhasil!</h4>
-                      <p className="payment-processing-sub">Memulai Cloud Instance & Meluncurkan Game...</p>
+                      <h4 className="payment-processing-title">Payment Successful!</h4>
+                      <p className="payment-processing-sub">Setting up cloud rig & starting your game...</p>
                     </>
                   ) : (
                     <>
                       <div className="payment-spinner"></div>
-                      <h4 className="payment-processing-title">Memproses Pembayaran...</h4>
+                      <h4 className="payment-processing-title">Processing Payment...</h4>
                       <p className="payment-processing-sub">
-                        Menghubungkan ke gateway {paymentMethod ? paymentMethod.toUpperCase().replace("_", " ") : "Pembayaran"}...
+                        Connecting to {paymentMethod ? paymentMethod.toUpperCase().replace("_", " ") : "Payment"} Gateway...
                       </p>
                     </>
                   )}
@@ -1523,7 +1523,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             <div className="payment-modal-footer">
               <div className="payment-footer-info">
                 <Lock style={{ width: 13, height: 13 }} />
-                <span>Transaksi Terenkripsi 256-bit SSL & Aman</span>
+                <span>256-Bit SSL Encrypted & Secure Checkout</span>
               </div>
               <button
                 type="button"
@@ -1532,8 +1532,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 onClick={handleExecutePayment}
               >
                 {paymentMethod 
-                  ? "BAYAR SEKARANG • " + formatIDR(totalPrice) 
-                  : "PILIH METODE PEMBAYARAN"
+                  ? "PAY NOW • " + formatUSD(totalPrice) 
+                  : "SELECT PAYMENT METHOD"
                 }
               </button>
             </div>

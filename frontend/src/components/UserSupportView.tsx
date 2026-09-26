@@ -49,14 +49,14 @@ const initialChatMessages: ChatMessage[] = [
     id: 1,
     sender: 'system',
     name: 'OmniPlay System',
-    text: 'Selamat datang di Layanan Bantuan Cloud Gaming OmniPlay.',
+    text: 'Welcome to the OmniPlay Cloud Gaming Support Desk.',
     time: '18:00'
   },
   {
     id: 2,
     sender: 'admin',
     name: 'Admin Alex (SG-01)',
-    text: 'Halo! Kami telah menerima laporan Anda. Tim teknis sedang memantau rute jaringan WebRTC agar latensi tetap rendah dan stabil.',
+    text: 'Hello! We received your inquiry. Our technical team is actively monitoring server routes to keep your ping ultra-low and smooth.',
     time: '18:22'
   }
 ];
@@ -93,14 +93,14 @@ export default function UserSupportView() {
         game: selectedGame,
         description,
         status: 'open',
-        timestamp: 'Baru saja',
-        adminNote: 'Diteruskan ke tim admin SG-01 untuk investigasi.'
+        timestamp: 'Just now',
+        adminNote: 'Forwarded to cloud support engineer for quick inspection.'
       };
 
       setTickets([newTicket, ...tickets]);
       setIsSubmitting(false);
       setDescription('');
-      setSubmitSuccess(`Tiket #${newTicketId} berhasil dibuat! Tim teknisi cloud kami telah diberi tahu.`);
+      setSubmitSuccess(`Ticket #${newTicketId} created successfully! Our cloud support team has been notified.`);
       
       // Auto reply from admin in chat
       setTimeout(() => {
@@ -110,8 +110,8 @@ export default function UserSupportView() {
             id: Date.now(),
             sender: 'admin',
             name: 'Admin Queue (Auto-ACK)',
-            text: `Tiket #${newTicketId} mengenai "${selectedGame}" telah tercatat. Kami sedang memeriksa container stream Anda.`,
-            time: 'Baru saja'
+            text: `Ticket #${newTicketId} regarding "${selectedGame}" has been logged. We are checking your stream instance now.`,
+            time: 'Just now'
           }
         ]);
       }, 1500);

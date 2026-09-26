@@ -155,18 +155,18 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
   const architectureTiers = [
     {
       tier: 1,
-      title: 'Tier 1: Client Edge Layer (Perangkat Pengguna)',
+      title: 'Tier 1: Client Edge Layer (Player Devices)',
       shortName: 'Client Edge',
       icon: <Laptop style={{ width: 18, height: 18 }} />,
       color: '#00f0ff',
       badge: 'WebRTC & HID',
       components: [
-        'Browser Klien / WebRTC HTML5 Player (AV1 / H.264)',
-        'Perangkat Low-Spec: Laptop Intel Celeron / HP Android / Tablet',
-        'OmniRemote: Virtual Gamepad & Touch Surface via UDP DataChannel',
-        'Zero Local Storage footprint: Game tidak diunduh ke PC klien'
+        'Client Browser / WebRTC HTML5 Player (AV1 / H.264)',
+        'Budget & Low-Spec Devices: Intel Celeron Laptops / Phones / Tablets',
+        'OmniRemote: Virtual Gamepad & Touch Controls via UDP DataChannel',
+        'Zero Local Storage Footprint: Direct stream with no game downloads'
       ],
-      description: 'Pengguna dapat bermain game AAA (100GB+) menggunakan laptop spek rendah atau smartphone tanpa perlu instalasi game ke perangkat lokal.'
+      description: 'Players can stream and enjoy heavy AAA games (100GB+) on basic budget laptops or mobile phones without installing anything locally.'
     },
     {
       tier: 2,
@@ -177,11 +177,11 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       badge: 'L3/L4/L7 Defense',
       components: [
         'Cloudflare Enterprise DDoS Shield (0 Breaches Deflected)',
-        'Enkripsi TLS 1.3 & AES-256-GCM End-to-End',
-        'Autentikasi Aman: HttpOnly JWT Cookie Shield (XSS/CSRF Proof)',
-        'Rate-Limiting Otomatis: 100 req/menit per IP Address'
+        'End-to-End TLS 1.3 & AES-256-GCM Encryption',
+        'Secure Auth: HttpOnly JWT Cookie Shield (XSS / CSRF Protected)',
+        'Automatic Rate-Limiting: 100 req/min per IP Address'
       ],
-      description: 'Lapisan perlindungan terdepan yang memvalidasi setiap koneksi pengguna dan menangkis ancaman serangan siber sebelum mencapai server.'
+      description: 'First-line security shield that validates player connections and defends against cyber threats before reaching servers.'
     },
     {
       tier: 3,
@@ -191,12 +191,12 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       color: '#a855f7',
       badge: 'Anycast DNS',
       components: [
-        'Geo-DNS Anycast Routing: Menghubungkan ke PoP terdekat (< 5ms RTT)',
-        'Algoritma Least-Connections + GPU VRAM-Aware Balancing',
-        'Health Probes Aktif (Setiap 5 detik cek status worker node)',
-        'Automatic Failover ke Node Singapura (SG-01) jika Jakarta (JK-01) sibuk'
+        'Geo-DNS Anycast Routing: Connects to closest regional PoP (< 5ms RTT)',
+        'Least-Connections + GPU VRAM-Aware Balancing Algorithm',
+        'Active Health Probes (Checks worker node health every 5 seconds)',
+        'Automatic Failover to Singapore Node (SG-01) if Jakarta is full'
       ],
-      description: 'Mengatur pembagian beban koneksi pemain secara seimbang ke server terdekat dengan latensi terendah dan performa terbaik.'
+      description: 'Evenly distributes player traffic to the nearest server with the lowest ping and best performance.'
     },
     {
       tier: 4,
@@ -206,12 +206,12 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       color: '#fbbf24',
       badge: 'Docker & KVM',
       components: [
-        'Armada GPU: NVIDIA RTX 4070 Ti, RTX 4080, RTX 4090 (96GB VRAM Pool)',
+        'GPU Fleet: NVIDIA RTX 4070 Ti, RTX 4080, RTX 4090 (96GB VRAM Pool)',
         'Host CPU: AMD EPYC 7763 & Genoa (128 vCPU Multi-Thread)',
-        'Ephemeral Pod Sandbox: Data pengguna terisolasi & auto-wipe saat sewa selesai',
-        'Auto-Scaler Otomatis: Menambah pod saat beban > 85% & mematikan pod saat idle'
+        'Ephemeral Pod Sandbox: Isolated player data & auto-wipe after rental ends',
+        'Auto-Scaler: Spawns new pods when load > 85% & sleeps idle pods'
       ],
-      description: 'Mesin komputasi utama yang merender grafis game secara real-time dan mengalirkan video stream 120 FPS dengan latensi sub-4ms.'
+      description: 'High-power cloud computers that render games in real-time and stream smooth 120 FPS video with sub-4ms response.'
     },
     {
       tier: 5,
@@ -222,11 +222,11 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       badge: 'NVMe + AWS S3',
       components: [
         'Primary Storage: 10.0 TB NVMe Gen5 SAN Cluster (7,200 MB/s Read)',
-        'Distributed Steam Cache: 583.7 GB data game siap streaming instan',
-        'Replikasi Sinkronus WAL: Jakarta Core (JK-01) ⟷ Singapore Standby (SG-01)',
+        'Distributed Steam Cache: 583.7 GB pre-installed games ready to stream',
+        'Synchronous WAL Replication: Jakarta Core (JK-01) ⟷ Singapore Standby (SG-01)',
         'Cold Vault Backup: AWS S3 Glacier Multi-Region (RTO < 30s, RPO = 0s)'
       ],
-      description: 'Pusat penyimpanan berkecepatan tinggi yang menyimpan file game dan mencadangkan data secara otomatis ke multi-region cloud storage.'
+      description: 'Ultra-fast storage pool that holds game libraries and automatically backs up save files across multiple cloud regions.'
     }
   ];
 
@@ -239,11 +239,11 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
           <div className="arch-modal-title-group">
             <div className="arch-badge">
               <Layers style={{ width: 14, height: 14 }} />
-              BLUEPRINT KOMPUTASI AWAN • STANDAR NIST & ARSITEKTUR CLOUD GAMING
+              CLOUD COMPUTING BLUEPRINT • NIST STANDARD & CLOUD GAMING ARCHITECTURE
             </div>
-            <h2 className="arch-title">Diagram Arsitektur Sistem Cloud OmniPlay</h2>
+            <h2 className="arch-title">OmniPlay Cloud System Architecture Diagram</h2>
             <p className="arch-subtitle">
-              Visualisasi alur komputasi awan 5-Tier dari perangkat pengguna, perimeter keamanan, load balancer, cluster GPU worker, hingga penyimpanan S3.
+              Visual 5-Tier cloud flow from player devices, security shields, and load balancers to GPU render clusters and automated S3 backup.
             </p>
           </div>
 
@@ -251,7 +251,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
             type="button" 
             className="arch-close-btn"
             onClick={onClose}
-            aria-label="Tutup blueprint arsitektur"
+            aria-label="Close architecture blueprint"
           >
             <X style={{ width: 20, height: 20 }} />
           </button>
@@ -278,7 +278,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
               </span>
               <h3 className="arch-core-name">OmniPlay Multi-Region Cloud Fabric</h3>
               <p className="arch-core-meta">
-                Arsitektur terdistribusi terhubung melalui Anycast WebRTC sub-4ms antara JK-01 (Jakarta), SG-01 (Singapura), dan TY-01 (Tokyo).
+                Distributed architecture connected via Anycast WebRTC sub-4ms between JK-01 (Jakarta), SG-01 (Singapore), and TY-01 (Tokyo).
               </p>
               <div className="arch-core-tags">
                 <span>NIST Cloud Model: IaaS / PaaS Hybrid</span>
@@ -340,30 +340,30 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
 
           {/* Bottom Flow Pipeline Strip */}
           <div className="arch-flow-strip">
-            <h4 className="flow-title">Alur Data Aliran Cloud Gaming (End-to-End Pipeline):</h4>
+            <h4 className="flow-title">Cloud Gaming Data Flow (End-to-End Pipeline):</h4>
             <div className="flow-steps-row">
               <div className="flow-step-box">
                 <span className="step-num">1</span>
-                <strong>Input Klien</strong>
+                <strong>Client Input</strong>
                 <span>Gamepad / Mouse (UDP)</span>
               </div>
               <ArrowDown className="flow-arrow" />
               <div className="flow-step-box">
                 <span className="step-num">2</span>
                 <strong>Cloudflare Shield</strong>
-                <span>DDoS Filter & TLS 1.3</span>
+                <span>DDoS Defense & TLS 1.3</span>
               </div>
               <ArrowDown className="flow-arrow" />
               <div className="flow-step-box">
                 <span className="step-num">3</span>
                 <strong>Load Balancer</strong>
-                <span>Pilih PoP Terdekat (JK/SG)</span>
+                <span>Route Nearest PoP (JK / SG)</span>
               </div>
               <ArrowDown className="flow-arrow" />
               <div className="flow-step-box">
                 <span className="step-num">4</span>
                 <strong>GPU Worker Pod</strong>
-                <span>Render Game 120 FPS</span>
+                <span>120 FPS Real-time Render</span>
               </div>
               <ArrowDown className="flow-arrow" />
               <div className="flow-step-box">
@@ -380,7 +380,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
         <div className="arch-modal-footer">
           <div className="footer-compliance-text">
             <ShieldCheck style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
-            <span>Dokumentasi Arsitektur Siap Audit untuk Tugas / Ujian Komputasi Awan (UTS 2026)</span>
+            <span>Audit-Ready Architecture Documentation for Cloud Computing Assignment (UTS 2026)</span>
           </div>
 
           <button 
@@ -388,7 +388,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
             className="arch-btn-done"
             onClick={onClose}
           >
-            Tutup Blueprint
+            Close Blueprint
           </button>
         </div>
 
