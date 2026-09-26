@@ -5,6 +5,7 @@ import { registerAuthCallbacks, authApi } from '../services/api';
 interface UserContextType {
   user: User | null;
   nickname: string;
+  bio: string;
   role: UserRole;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -12,6 +13,7 @@ interface UserContextType {
   logout: () => Promise<void>;
   clearAuthState: () => void;
   setNickname: (name: string) => void;
+  setBio: (bio: string) => void;
   setRole: (role: UserRole) => void;
   setIsAuthenticated: (auth: boolean) => void;
 }
@@ -22,10 +24,19 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   // Non-sensitive UI state (nickname) persisted for convenience
   const [nickname, setNicknameState] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem('omni_operator_nickname');
-      return saved && saved.trim() ? saved.trim() : '';
+      const saved = localStorage.getItem('omniplay_nickname') || localStorage.getItem('omni_operator_nickname');
+      return saved && saved.trim() ? saved.trim() : 'Player1';
     } catch {
-      return '';
+      return 'Player1';
+    }
+  });
+
+  const [bio, setBioState] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('omniplay_bio');
+      return saved && saved.trim() ? saved.trim() : 'Ready to stream.';
+    } catch {
+      return 'Ready to stream.';
     }
   });
 
@@ -81,11 +92,24 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setNicknameState(clean);
     try {
       localStorage.setItem('omni_operator_nickname', clean);
+      localStorage.setItem('omniplay_nickname', clean);
+      window.dispatchEvent(new Event('omni:user_profile_updated'));
     } catch (e) {
       console.warn('Failed to save nickname to localStorage:', e);
     }
     if (user) {
       setUser({ ...user, nickname: clean });
+    }
+  };
+
+  const setBio = (newBio: string) => {
+    const clean = newBio !== undefined ? newBio : 'Ready to stream.';
+    setBioState(clean);
+    try {
+      localStorage.setItem('omniplay_bio', clean);
+      window.dispatchEvent(new Event('omni:user_profile_updated'));
+    } catch (e) {
+      console.warn('Failed to save bio to localStorage:', e);
     }
   };
 
@@ -129,6 +153,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     <UserContext.Provider value={{
       user,
       nickname,
+      bio,
       role,
       isAuthenticated,
       isLoading,
@@ -136,6 +161,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       logout,
       clearAuthState,
       setNickname,
+      setBio,
       setRole,
       setIsAuthenticated
     }}>

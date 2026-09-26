@@ -70,14 +70,27 @@ function TopNavbar({
   isAdmin
 }: TopNavbarProps) {
   const navigate = useNavigate();
+  const { nickname: userNickname, setNickname: setUserNickname, bio: userBio, setBio: setUserBio } = useUser();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Profile Edit Modal States (saved to localStorage)
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [nickname, setNickname] = useState(() => localStorage.getItem('omniplay_nickname') || 'Operator');
-  const [bio, setBio] = useState(() => localStorage.getItem('omniplay_bio') || 'Ready to stream.');
+  const [nickname, setNickname] = useState(() => userNickname || localStorage.getItem('omniplay_nickname') || 'Player1');
+  const [bio, setBio] = useState(() => userBio || localStorage.getItem('omniplay_bio') || 'Ready to stream.');
   const [tempNickname, setTempNickname] = useState(nickname);
   const [tempBio, setTempBio] = useState(bio);
+
+  useEffect(() => {
+    if (userNickname) {
+      setNickname(userNickname);
+    }
+  }, [userNickname]);
+
+  useEffect(() => {
+    if (userBio) {
+      setBio(userBio);
+    }
+  }, [userBio]);
 
   const handleOpenProfileModal = () => {
     setTempNickname(nickname);
@@ -86,11 +99,15 @@ function TopNavbar({
   };
 
   const handleSaveProfile = () => {
-    const finalNick = tempNickname.trim() || 'Operator';
+    const finalNick = tempNickname.trim() || 'Player1';
     setNickname(finalNick);
     setBio(tempBio);
+    setUserNickname(finalNick);
+    setUserBio(tempBio);
     localStorage.setItem('omniplay_nickname', finalNick);
+    localStorage.setItem('omni_operator_nickname', finalNick);
     localStorage.setItem('omniplay_bio', tempBio);
+    window.dispatchEvent(new Event('omni:user_profile_updated'));
     setIsProfileModalOpen(false);
   };
 

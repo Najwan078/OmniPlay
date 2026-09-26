@@ -524,6 +524,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         localStorage.removeItem('isAdminLoggedIn');
         const userNickname = email.trim() || 'Player1';
         setNickname(userNickname);
+        localStorage.setItem('omniplay_nickname', userNickname);
+        localStorage.setItem('omni_operator_nickname', userNickname);
+        window.dispatchEvent(new Event('omni:user_profile_updated'));
 
         // Attempt Supabase client auth if email provided
         if (email.includes('@') && password) {

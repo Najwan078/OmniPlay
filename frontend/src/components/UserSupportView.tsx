@@ -3,6 +3,7 @@ import {
   LifeBuoy, Send, AlertCircle, CheckCircle2, Clock, 
   MessageSquare, HelpCircle, Shield, Wifi, RefreshCw, ChevronRight
 } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
 interface Ticket {
   id: string;
@@ -48,19 +49,22 @@ const initialChatMessages: ChatMessage[] = [
     id: 1,
     sender: 'system',
     name: 'OmniPlay System',
-    text: 'Welcome to Cloud Support. Connected to Edge Node SG-01 Live Dispatch.',
+    text: 'Selamat datang di Layanan Bantuan Cloud Gaming OmniPlay.',
     time: '18:00'
   },
   {
     id: 2,
     sender: 'admin',
     name: 'Admin Alex (SG-01)',
-    text: 'Hello Player 1! We received your ticket regarding EA FC 25 ping fluctuations. We are currently rerouting your WebRTC stream through our direct Singapore fiber backbone.',
+    text: 'Halo! Kami telah menerima laporan Anda. Tim teknis sedang memantau rute jaringan WebRTC agar latensi tetap rendah dan stabil.',
     time: '18:22'
   }
 ];
 
 export default function UserSupportView() {
+  const { nickname: userNickname } = useUser();
+  const activeName = userNickname || localStorage.getItem('omniplay_nickname') || 'Player1';
+
   const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [category, setCategory] = useState('High Latency / Ping Spike');
   const [selectedGame, setSelectedGame] = useState('EA SPORTS FC™ 25');
@@ -89,14 +93,14 @@ export default function UserSupportView() {
         game: selectedGame,
         description,
         status: 'open',
-        timestamp: 'Just now',
-        adminNote: 'Dispatched to SG-01 Admin fleet for investigation.'
+        timestamp: 'Baru saja',
+        adminNote: 'Diteruskan ke tim admin SG-01 untuk investigasi.'
       };
 
       setTickets([newTicket, ...tickets]);
       setIsSubmitting(false);
       setDescription('');
-      setSubmitSuccess(`Ticket #${newTicketId} created successfully! Our cloud engineers have been alerted.`);
+      setSubmitSuccess(`Tiket #${newTicketId} berhasil dibuat! Tim teknisi cloud kami telah diberi tahu.`);
       
       // Auto reply from admin in chat
       setTimeout(() => {
@@ -106,8 +110,8 @@ export default function UserSupportView() {
             id: Date.now(),
             sender: 'admin',
             name: 'Admin Queue (Auto-ACK)',
-            text: `We have logged Ticket #${newTicketId} regarding "${selectedGame}". We are running diagnostic telemetry on your active stream container.`,
-            time: 'Just now'
+            text: `Tiket #${newTicketId} mengenai "${selectedGame}" telah tercatat. Kami sedang memeriksa container stream Anda.`,
+            time: 'Baru saja'
           }
         ]);
       }, 1500);
@@ -123,7 +127,7 @@ export default function UserSupportView() {
     const userMsg: ChatMessage = {
       id: Date.now(),
       sender: 'user',
-      name: 'Player 1',
+      name: activeName,
       text: inputChat,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
