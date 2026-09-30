@@ -94,6 +94,57 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
 
   const games: Game[] = [
     { 
+      id: 101, 
+      appId: 2581700, 
+      title: 'MotoGP 24', 
+      genre: 'Racing', 
+      status: 'Ready', 
+      active: true, 
+      played: 'Today', 
+      hours: '18 hrs', 
+      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/header.jpg', 
+      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/library_hero.jpg',
+      synopsis: 'Unleash your passion for the official 2024 MotoGP™ season. Experience the dynamic Riders Market, full weather variability, and realistic physics across all official tracks and riders with instant Steam Cloud connection.',
+      reviewSentiment: 'Very Positive (86%)',
+      ratingScore: 86,
+      steamTags: ['Racing', 'Bikes', 'Simulation', 'Motorbike', 'Multiplayer'],
+      videoUrl: null
+    },
+    { 
+      id: 102, 
+      appId: 3405690, 
+      title: 'EA FC 26', 
+      genre: 'Sports', 
+      status: 'Playing Now', 
+      active: true, 
+      played: 'Today', 
+      hours: '64 hrs', 
+      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3405690/header.jpg', 
+      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg',
+      synopsis: 'The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting-edge volumetric animations, enhanced tactical IQ, and connected cross-platform Ultimate Team with direct Steam Cloud launch.',
+      reviewSentiment: 'Very Positive (85%)',
+      ratingScore: 85,
+      steamTags: ['Football', 'Sports', 'Simulation', 'Soccer', 'Multiplayer'],
+      videoUrl: '/videos/eafc25.mp4'
+    },
+    { 
+      id: 103, 
+      appId: 460930, 
+      title: "Tom Clancy's Ghost Recon Wildlands", 
+      genre: 'Shooter', 
+      status: 'Ready', 
+      active: true, 
+      played: 'Yesterday', 
+      hours: '95 hrs', 
+      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/header.jpg', 
+      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/library_hero.jpg',
+      synopsis: 'Create a team with up to 3 friends in Tom Clancy’s Ghost Recon® Wildlands and enjoy the ultimate military shooter experience set in a massive, responsive open world.',
+      reviewSentiment: 'Very Positive (82%)',
+      ratingScore: 82,
+      steamTags: ['Open World', 'Co-op', 'Action', 'Shooter', 'Tactical', 'Military'],
+      videoUrl: null
+    },
+    { 
       id: 2, 
       appId: 2669320, 
       title: 'EA FC 25', 
@@ -577,19 +628,22 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     if (onLaunchGame) {
       onLaunchGame(game.title, steamUri);
     }
-    // Attempt safe deep link navigation
+    // Direct Steam connection: trigger native Steam client protocol immediately
     if (steamUri) {
+      try {
+        window.location.assign(steamUri);
+      } catch (e) {
+        console.log('Steam direct protocol dispatch notice:', steamUri, e);
+      }
       try {
         const link = document.createElement('a');
         link.href = steamUri;
-        link.target = '_blank';
-        link.rel = 'noreferrer';
         link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
-        setTimeout(() => link.remove(), 200);
+        setTimeout(() => link.remove(), 400);
       } catch (e) {
-        console.log('Steam deep-link triggered:', steamUri, e);
+        console.log('Steam deep-link fallback notice:', steamUri, e);
       }
     }
   };
@@ -941,6 +995,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       el.src = '/windrose.jpg';
                       return;
                     }
+                    if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
+                      el.src = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg';
+                      return;
+                    }
                     if (!el.src.includes('header.jpg')) {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     } else {
@@ -1076,15 +1134,53 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 </div>
 
                 {/* Direct Launch Action Bar */}
-                <div className="steam-actions-bar">
+                <div className="steam-actions-bar" style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 14 }}>
                   <button 
                     onClick={() => handleStartGame(selectedGame)} 
                     className="btn-steam-direct"
                     type="button"
+                    style={{
+                      background: 'linear-gradient(135deg, #1d4ed8 0%, #0284c7 50%, #00d2ff 100%)',
+                      boxShadow: '0 4px 18px rgba(0, 210, 255, 0.35)',
+                      cursor: 'pointer',
+                      padding: '12px 18px',
+                      borderRadius: 10,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 10,
+                      fontWeight: 700,
+                      fontSize: 13,
+                      letterSpacing: '0.04em'
+                    }}
                   >
                     <Play style={{ width: 18, height: 18, fill: '#ffffff' }} />
-                    <span>START NOW (STEAM DEEP-LINK)</span>
+                    <span>LAUNCH DIRECTLY IN STEAM (steam://rungameid/{selectedGame.appId})</span>
                   </button>
+
+                  <a 
+                    href={`https://store.steampowered.com/app/${selectedGame.appId}/`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      padding: '10px 16px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      borderRadius: 8,
+                      color: 'var(--text-secondary)',
+                      textDecoration: 'none',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <ExternalLink style={{ width: 15, height: 15, color: 'var(--neon-cyan)' }} />
+                    <span>Open Game Page on Steam Store Website</span>
+                  </a>
                 </div>
 
                 {/* Extended Details Block: Cloud Rig Performance Profile */}

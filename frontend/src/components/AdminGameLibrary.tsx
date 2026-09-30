@@ -23,6 +23,51 @@ interface AdminGame {
 
 const initialAdminGames: AdminGame[] = [
   {
+    id: 101,
+    appId: 2581700,
+    title: 'MotoGP 24',
+    genre: 'Racing / Motorsport',
+    status: 'online',
+    activeSessions: 14,
+    assignedNode: 'SG-01 (RTX 4080)',
+    vramUsage: '14.8 GB',
+    serverPing: '3.5 ms',
+    frameDrop: '0.01%',
+    shaderStatus: 'Verified',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/header.jpg',
+    errorLog: '[18:50:20] Milestone Physics Engine: 120 FPS frame-pacing synchronized. Steam Cloud Active.'
+  },
+  {
+    id: 102,
+    appId: 3405690,
+    title: 'EA FC 26',
+    genre: 'Sports / Competitive',
+    status: 'online',
+    activeSessions: 32,
+    assignedNode: 'SG-01 (RTX 4090)',
+    vramUsage: '17.1 GB',
+    serverPing: '3.6 ms',
+    frameDrop: '0.00%',
+    shaderStatus: 'Verified',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3405690/header.jpg',
+    errorLog: '[18:52:11] EA Anti-Cheat kernel driver: Clean handshake. Dedicated UDP stream active.'
+  },
+  {
+    id: 103,
+    appId: 460930,
+    title: "Tom Clancy's Ghost Recon Wildlands",
+    genre: 'Shooter / Tactical Co-op',
+    status: 'online',
+    activeSessions: 19,
+    assignedNode: 'JK-01 (RTX 4080)',
+    vramUsage: '15.6 GB',
+    serverPing: '2.9 ms',
+    frameDrop: '0.02%',
+    shaderStatus: 'Verified',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/header.jpg',
+    errorLog: '[18:55:40] Ubisoft AnvilNext 2.0 streaming pipeline: 4K 120Hz VSync locked.'
+  },
+  {
     id: 1,
     appId: 2669320,
     title: 'EA SPORTS FC™ 25',
@@ -390,6 +435,8 @@ export default function AdminGameLibrary({ onToast }: AdminGameLibraryProps) {
                       el.src = '/meccha_chameleon.jpg';
                     } else if (game.appId === 9999992 || game.title.includes('Windrose')) {
                       el.src = '/windrose.jpg';
+                    } else if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
+                      el.src = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg';
                     } else {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     }

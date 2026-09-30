@@ -66,6 +66,48 @@ api_router = APIRouter(prefix="/api")
 
 # --- In-Memory Steam Catalog Database ---
 STEAM_CATALOG = {
+    2581700: {
+        "app_id": 2581700,
+        "title": "MotoGP 24",
+        "genre": "Racing",
+        "synopsis": "Unleash your passion for the official 2024 MotoGP™ season. Experience the dynamic Riders Market and realistic physics.",
+        "review_summary": "Very Positive (86% positive)",
+        "rating_score": 86,
+        "developer": "Milestone S.r.l.",
+        "publisher": "Milestone S.r.l.",
+        "tags": ["Racing", "Bikes", "Simulation", "Motorbike", "Multiplayer"],
+        "steam_store_url": "https://store.steampowered.com/app/2581700/",
+        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/header.jpg",
+        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/library_hero.jpg"
+    },
+    3405690: {
+        "app_id": 3405690,
+        "title": "EA FC 26",
+        "genre": "Sports",
+        "synopsis": "The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting-edge volumetric animations and connected cross-platform play.",
+        "review_summary": "Very Positive (85% positive)",
+        "rating_score": 85,
+        "developer": "EA Canada",
+        "publisher": "Electronic Arts",
+        "tags": ["Football", "Sports", "Simulation", "Soccer", "Multiplayer"],
+        "steam_store_url": "https://store.steampowered.com/app/3405690/",
+        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg",
+        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg"
+    },
+    460930: {
+        "app_id": 460930,
+        "title": "Tom Clancy's Ghost Recon Wildlands",
+        "genre": "Shooter",
+        "synopsis": "Create a team with up to 3 friends in Tom Clancy’s Ghost Recon® Wildlands and enjoy the ultimate military shooter experience in a massive open world.",
+        "review_summary": "Very Positive (82% positive)",
+        "rating_score": 82,
+        "developer": "Ubisoft Paris",
+        "publisher": "Ubisoft",
+        "tags": ["Open World", "Co-op", "Action", "Shooter", "Tactical", "Military"],
+        "steam_store_url": "https://store.steampowered.com/app/460930/",
+        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/header.jpg",
+        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/library_hero.jpg"
+    },
     2669320: {
         "app_id": 2669320,
         "title": "EA SPORTS FC 25",

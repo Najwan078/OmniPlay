@@ -664,11 +664,34 @@ function DashboardShell({
 
             <h3 className="omni-launch-title">{launchingGame.title}</h3>
             <p className="omni-launch-desc">
-              {launchStep === 0 && "Connecting to cloud server..."}
+              {launchStep === 0 && "Connecting to Steam & cloud server..."}
               {launchStep === 1 && "Preparing high-speed gaming rig..."}
               {launchStep === 2 && "Loading game save and profile..."}
-              {launchStep === 3 && "Starting your game..."}
+              {launchStep === 3 && "Starting your game in Steam..."}
             </p>
+
+            {launchingGame.steamUri && (
+              <div style={{ marginTop: 8, marginBottom: 12 }}>
+                <a 
+                  href={launchingGame.steamUri}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '6px 14px',
+                    borderRadius: 6,
+                    background: 'rgba(0, 210, 255, 0.12)',
+                    border: '1px solid rgba(0, 210, 255, 0.35)',
+                    color: 'var(--neon-cyan)',
+                    fontSize: 12,
+                    textDecoration: 'none',
+                    fontWeight: 600
+                  }}
+                >
+                  <span>🎮 Steam Deep-Link: {launchingGame.steamUri}</span>
+                </a>
+              </div>
+            )}
 
             <div className="launch-progress-bar">
               <div 
@@ -772,6 +795,14 @@ export default function OmniPlayApp() {
 
   const handleLaunchGame = (gameTitle: string, steamUri?: string) => {
     setLaunchingGame({ title: gameTitle, steamUri });
+    // Trigger direct connection to local Steam client immediately
+    if (steamUri) {
+      try {
+        window.location.assign(steamUri);
+      } catch (e) {
+        console.warn('Steam protocol direct invocation notice:', e);
+      }
+    }
     setLaunchStep(0);
     setTimeout(() => setLaunchStep(1), 1200);
     setTimeout(() => setLaunchStep(2), 2800);

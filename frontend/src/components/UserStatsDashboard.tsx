@@ -50,6 +50,39 @@ interface CatalogGame {
 
 const CATALOG_GAMES: CatalogGame[] = [
   {
+    title: 'MotoGP 24',
+    appId: 2581700,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2581700/header.jpg',
+    genre: 'Racing',
+    trophies: [
+      { title: 'MotoGP World Champion', rarity: 'Top 6.2%', icon: '🏆' },
+      { title: 'Pole Position Specialist', rarity: 'Top 11.4%', icon: '⏱️' },
+      { title: 'Apex Predator of the Track', rarity: 'Top 7.9%', icon: '🏍️' },
+    ]
+  },
+  {
+    title: 'EA FC 26',
+    appId: 3405690,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg',
+    genre: 'Sports',
+    trophies: [
+      { title: 'Division Rivals Elite', rarity: 'Top 5.3%', icon: '⚽' },
+      { title: 'Champions Playoff Conqueror', rarity: 'Top 9.1%', icon: '🥇' },
+      { title: 'HyperMotion Volumetric Master', rarity: 'Top 14.0%', icon: '⚡' },
+    ]
+  },
+  {
+    title: "Tom Clancy's Ghost Recon Wildlands",
+    appId: 460930,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/460930/header.jpg',
+    genre: 'Shooter',
+    trophies: [
+      { title: 'Santa Blanca Cartel Fall', rarity: 'Top 8.7%', icon: '💀' },
+      { title: 'Tier 1 Ghost Operator', rarity: 'Top 4.5%', icon: '🎖️' },
+      { title: 'Master Sniper of Bolivia', rarity: 'Top 12.3%', icon: '🎯' },
+    ]
+  },
+  {
     title: 'EA SPORTS FC™ 25',
     appId: 2669320,
     image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg',
