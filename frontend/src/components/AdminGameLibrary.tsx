@@ -184,7 +184,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.6 ms',
     frameDrop: '0.02%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1623730/library_600x900.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1623730/header.jpg',
     errorLog: '[18:51:10] Dedicated server world instance save synchronized.'
   },
   {
@@ -199,7 +199,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '4.0 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1085660/library_600x900.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1085660/header.jpg',
     errorLog: '[18:52:00] Bungie BattleEye integration: Clean state.'
   },
   {
@@ -214,7 +214,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '27.4 ms',
     frameDrop: '0.05%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_600x900.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg',
     errorLog: '[18:53:20] Next-Gen DirectX 12 Ultimate pipeline active.'
   },
   {
@@ -229,7 +229,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '2.3 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/library_600x900.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/header.jpg',
     errorLog: '[18:54:05] Ultra-low input latency pipeline verified at 120 FPS.'
   },
   {
@@ -259,7 +259,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '2.0 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/641990/library_600x900.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/641990/header.jpg',
     errorLog: '[18:56:00] Multiplayer prison session state synchronized.'
   },
   {
@@ -304,7 +304,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.5 ms',
     frameDrop: '0.02%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1249550/header.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/686810/header.jpg',
     errorLog: '[19:02:00] Dedicated squad match server handshake confirmed. BattleEye active.'
   },
   {
@@ -349,7 +349,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.3 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2561060/header.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg',
     errorLog: '[19:05:00] ForzaTech engine 8K pipeline validated. Open world streaming nominal.'
   },
   {
@@ -364,7 +364,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.8 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2369170/header.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg',
     errorLog: '[19:06:00] Insomniac Engine traversal renderer: Stable at 4K 60FPS.'
   },
   {
@@ -394,7 +394,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '2.5 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2805120/header.jpg',
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2338770/header.jpg',
     errorLog: '[19:08:00] ProPlay AI motion data synced. MyCAREER cloud save checkpointed.'
   }
 ];
