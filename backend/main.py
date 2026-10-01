@@ -63,7 +63,7 @@ STEAM_CATALOG = {
         "tags": ["Football", "Sports", "Simulation", "Soccer", "Multiplayer"],
         "steam_store_url": "https://store.steampowered.com/app/3405690/",
         "header_image": "/eafc26_beranda.jpg",
-        "banner_image": "/eafc26_detail.jpg"
+        "banner_image": "/eafc26hd_details.jpeg"
     },
     460930: {
         "app_id": 460930,

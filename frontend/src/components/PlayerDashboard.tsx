@@ -120,7 +120,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       played: 'Today', 
       hours: '64 hrs', 
       image: '/eafc26_beranda.jpg', 
-      banner: '/eafc26_detail.jpg',
+      banner: '/eafc26hd_details.jpeg',
       synopsis: 'The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting-edge volumetric animations, enhanced tactical IQ, and connected cross-platform Ultimate Team with direct Steam Cloud launch.',
       reviewSentiment: 'Very Positive (85%)',
       ratingScore: 85,
@@ -612,7 +612,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       ratingSentiment: 'Very Positive',
       nodeSpec: 'RTX 4090',
       nodeSub: '4K 120FPS',
-      banner: '/eafc26_detail.jpg',
+      banner: '/eafc26hd_details.jpeg',
       themeColor: 'var(--neon-emerald)',
       glowColor: 'rgba(0, 240, 255, 0.4)',
       videoUrl: '/videos/eafc25.mp4'
@@ -1229,7 +1229,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   } else if (selectedGame.appId === 9999992 || selectedGame.title.includes('Windrose')) {
                     el.src = '/windrose.jpg';
                   } else if (selectedGame.appId === 3405690 || selectedGame.title.includes('EA FC 26')) {
-                    el.src = '/eafc26_detail.jpg';
+                    el.src = '/eafc26hd_details.jpeg';
                   } else {
                     el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${selectedGame.appId}/header.jpg`;
                   }
