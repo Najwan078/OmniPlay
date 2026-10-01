@@ -49,7 +49,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.6 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3405690/header.jpg',
+    image: '/eafc26_beranda.jpg',
     errorLog: '[18:52:11] EA Anti-Cheat kernel driver: Clean handshake. Dedicated UDP stream active.'
   },
   {
@@ -436,7 +436,7 @@ export default function AdminGameLibrary({ onToast }: AdminGameLibraryProps) {
                     } else if (game.appId === 9999992 || game.title.includes('Windrose')) {
                       el.src = '/windrose.jpg';
                     } else if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
-                      el.src = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg';
+                      el.src = '/eafc26_beranda.jpg';
                     } else {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     }

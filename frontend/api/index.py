@@ -91,8 +91,8 @@ STEAM_CATALOG = {
         "publisher": "Electronic Arts",
         "tags": ["Football", "Sports", "Simulation", "Soccer", "Multiplayer"],
         "steam_store_url": "https://store.steampowered.com/app/3405690/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg"
+        "header_image": "/eafc26_beranda.jpg",
+        "banner_image": "/eafc26_detail.jpg"
     },
     460930: {
         "app_id": 460930,

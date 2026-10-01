@@ -119,8 +119,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       active: true, 
       played: 'Today', 
       hours: '64 hrs', 
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3405690/header.jpg', 
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg',
+      image: '/eafc26_beranda.jpg', 
+      banner: '/eafc26_detail.jpg',
       synopsis: 'The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting-edge volumetric animations, enhanced tactical IQ, and connected cross-platform Ultimate Team with direct Steam Cloud launch.',
       reviewSentiment: 'Very Positive (85%)',
       ratingScore: 85,
@@ -438,21 +438,21 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   // Featured Carousel Showcase Titles
   const featuredGames = [
     {
-      id: 2,
-      appId: 2669320,
-      title: 'EA SPORTS FC™ 25',
-      gameTitle: 'EA FC 25',
+      id: 102,
+      appId: 3405690,
+      title: 'EA SPORTS FC™ 26',
+      gameTitle: 'EA FC 26',
       genre: 'Sports & Simulation',
-      badge: 'RENTAL READY • SG-01',
+      badge: 'OFFICIAL 2026 EDITION • SG-01',
       nodeBadge: 'Instant Steam Cloud Launch',
-      desc: 'Experience unrivaled realism in EA SPORTS FC™ 25 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam deep-link integration.',
+      desc: 'Experience unrivaled realism in EA SPORTS FC™ 26 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam deep-link integration.',
       hourlyRate: '$1.25',
       rateUnit: '/ hr',
-      ratingScore: '82%',
+      ratingScore: '85%',
       ratingSentiment: 'Very Positive',
       nodeSpec: 'RTX 4090',
       nodeSub: '4K 120FPS',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_hero.jpg',
+      banner: '/eafc26_detail.jpg',
       themeColor: 'var(--neon-emerald)',
       glowColor: 'rgba(0, 240, 255, 0.4)',
       videoUrl: '/videos/eafc25.mp4'
@@ -996,7 +996,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       return;
                     }
                     if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
-                      el.src = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg';
+                      el.src = '/eafc26_beranda.jpg';
                       return;
                     }
                     if (!el.src.includes('header.jpg')) {
@@ -1068,6 +1068,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     el.src = '/meccha_chameleon.jpg';
                   } else if (selectedGame.appId === 9999992 || selectedGame.title.includes('Windrose')) {
                     el.src = '/windrose.jpg';
+                  } else if (selectedGame.appId === 3405690 || selectedGame.title.includes('EA FC 26')) {
+                    el.src = '/eafc26_detail.jpg';
                   } else {
                     el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${selectedGame.appId}/header.jpg`;
                   }

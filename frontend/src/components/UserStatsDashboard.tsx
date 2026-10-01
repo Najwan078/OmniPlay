@@ -63,7 +63,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'EA FC 26',
     appId: 3405690,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg',
+    image: '/eafc26_beranda.jpg',
     genre: 'Sports',
     trophies: [
       { title: 'Division Rivals Elite', rarity: 'Top 5.3%', icon: '⚽' },
@@ -508,7 +508,16 @@ export default function UserStatsDashboard() {
               const progressPct = Math.round((game.achievements.unlocked / game.achievements.total) * 100);
               return (
                 <div key={game.title} className="user-game-row">
-                  <img src={game.image} alt={game.title} className="user-game-thumb" />
+                  <img 
+                    src={game.image} 
+                    alt={game.title} 
+                    className="user-game-thumb" 
+                    onError={(e) => {
+                      if (game.appId === 3405690 || (game.title && game.title.includes('EA FC 26'))) {
+                        e.currentTarget.src = '/eafc26_beranda.jpg';
+                      }
+                    }}
+                  />
                   
                   <div className="user-game-details">
                     <div className="user-game-title-row">
