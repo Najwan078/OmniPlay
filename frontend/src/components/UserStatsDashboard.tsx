@@ -202,6 +202,116 @@ const CATALOG_GAMES: CatalogGame[] = [
       { title: 'Spread Managed Democracy', rarity: 'Top 9.8%', icon: '🎖️' },
       { title: 'Super Earth Hero', rarity: 'Top 12.0%', icon: '🦅' },
     ]
+  },
+  {
+    title: 'Counter-Strike 2',
+    appId: 730,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
+    genre: 'Competitive FPS',
+    trophies: [
+      { title: 'Global Elite Ranked', rarity: 'Top 0.7%', icon: '🎯' },
+      { title: 'Ace Round (5-Kill Streak)', rarity: 'Top 4.1%', icon: '💥' },
+      { title: 'Flawless Defuse Hero', rarity: 'Top 11.5%', icon: '💣' },
+    ]
+  },
+  {
+    title: 'Ace Combat 8: Wings of Theve',
+    appId: 9000001,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/header.jpg',
+    genre: 'Flight / Action',
+    trophies: [
+      { title: 'Wings of Theve Champion', rarity: 'Top 6.8%', icon: '✈️' },
+      { title: 'Ace of Aces (S-Rank All)', rarity: 'Top 3.2%', icon: '⭐' },
+      { title: 'Hypersonic Dogfight King', rarity: 'Top 9.1%', icon: '🚀' },
+    ]
+  },
+  {
+    title: 'Gears of War: E-Day',
+    appId: 9000002,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/header.jpg',
+    genre: 'Cover Shooter',
+    trophies: [
+      { title: 'E-Day Survivor', rarity: 'Top 7.4%', icon: '⚔️' },
+      { title: 'Delta Squad Legend', rarity: 'Top 5.6%', icon: '🦸' },
+      { title: 'Imulsion Free Sera', rarity: 'Top 13.2%', icon: '💀' },
+    ]
+  },
+  {
+    title: 'WARDOGS',
+    appId: 9000003,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1249550/header.jpg',
+    genre: 'Tactical Shooter',
+    trophies: [
+      { title: 'Top Dog (MVP 50 Rounds)', rarity: 'Top 5.9%', icon: '🐺' },
+      { title: 'Mercenary Commander', rarity: 'Top 8.3%', icon: '🎖️' },
+      { title: 'Ghost Zone Cleared', rarity: 'Top 11.0%', icon: '🔫' },
+    ]
+  },
+  {
+    title: 'Dota 2',
+    appId: 570,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/570/header.jpg',
+    genre: 'MOBA',
+    trophies: [
+      { title: 'Divine Rank Achieved', rarity: 'Top 1.2%', icon: '🏆' },
+      { title: '1,000 Victory March', rarity: 'Top 6.7%', icon: '⚡' },
+      { title: 'Ultra Kill Master', rarity: 'Top 10.4%', icon: '💎' },
+    ]
+  },
+  {
+    title: 'Control: Resonant',
+    appId: 9000004,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg',
+    genre: 'Action / Supernatural',
+    trophies: [
+      { title: 'Director of the FBC', rarity: 'Top 8.5%', icon: '🌀' },
+      { title: 'Resonance Contained', rarity: 'Top 5.1%', icon: '🔮' },
+      { title: 'Paranatural Investigator', rarity: 'Top 13.7%', icon: '👁️' },
+    ]
+  },
+  {
+    title: 'Forza Horizon 6',
+    appId: 9000005,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2561060/header.jpg',
+    genre: 'Racing',
+    trophies: [
+      { title: 'Horizon Champion', rarity: 'Top 4.9%', icon: '🏁' },
+      { title: 'Japan Circuit Legend', rarity: 'Top 7.2%', icon: '🚗' },
+      { title: '8K Road Mastery', rarity: 'Top 11.8%', icon: '🥇' },
+    ]
+  },
+  {
+    title: "Marvel's Spider-Man 2",
+    appId: 2369170,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2369170/header.jpg',
+    genre: 'Action / Adventure',
+    trophies: [
+      { title: 'Symbiote Slayer', rarity: 'Top 6.3%', icon: '🕷️' },
+      { title: 'NYC Fully Swung', rarity: 'Top 4.0%', icon: '🏙️' },
+      { title: 'Dual Spider Legacy', rarity: 'Top 9.5%', icon: '⚡' },
+    ]
+  },
+  {
+    title: 'Resident Evil: Requiem',
+    appId: 9000006,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg',
+    genre: 'Survival Horror',
+    trophies: [
+      { title: 'Requiem Survivor (S+)', rarity: 'Top 3.4%', icon: '🧟' },
+      { title: 'Bioweapon Neutralized', rarity: 'Top 7.8%', icon: '🧬' },
+      { title: 'Knife Only Speedrun', rarity: 'Top 2.1%', icon: '🔪' },
+    ]
+  },
+  {
+    title: 'NBA 2K27',
+    appId: 9000007,
+    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2805120/header.jpg',
+    genre: 'Sports / Basketball',
+    trophies: [
+      { title: 'MyCAREER MVP Season', rarity: 'Top 5.7%', icon: '🏀' },
+      { title: 'MyTEAM Galaxy Opal', rarity: 'Top 8.2%', icon: '💜' },
+      { title: '99 Overall Achieved', rarity: 'Top 3.6%', icon: '👑' },
+    ]
   }
 ];
 
