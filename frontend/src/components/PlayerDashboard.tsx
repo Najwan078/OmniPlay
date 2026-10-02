@@ -120,21 +120,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     },
     { 
       id: 'US-01', 
-      tier: 'Tier 2', 
-      region: 'Americas',
-      location: 'Virginia', 
-      name: 'US East (US-01 Virginia)', 
-      flag: '🇺🇸',
-      gpu: 'RTX 4080 Super', 
-      latency: '12ms', 
-      ratePerHour: 1.30 
-    },
-    { 
-      id: 'US-02', 
       tier: 'Tier 3', 
       region: 'Americas',
       location: 'Silicon Valley', 
-      name: 'US West (US-02 California)', 
+      name: 'California Ultra (US-01)', 
       flag: '🇺🇸',
       gpu: 'RTX 4090', 
       latency: '10ms', 
@@ -142,24 +131,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     },
     { 
       id: 'EU-01', 
-      tier: 'Tier 2', 
-      region: 'Europe',
-      location: 'Frankfurt', 
-      name: 'Frankfurt Central (EU-01)', 
-      flag: '🇩🇪',
-      gpu: 'RTX 4080 Super', 
-      latency: '14ms', 
-      ratePerHour: 1.30 
-    },
-    { 
-      id: 'UK-01', 
       tier: 'Tier 3', 
       region: 'Europe',
       location: 'London', 
-      name: 'London West (UK-01)', 
+      name: 'London Ultra (EU-01)', 
       flag: '🇬🇧',
       gpu: 'RTX 4090', 
-      latency: '16ms', 
+      latency: '15ms', 
       ratePerHour: 1.75 
     },
   ];
