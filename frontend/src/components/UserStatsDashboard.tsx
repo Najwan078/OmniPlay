@@ -239,7 +239,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'WARDOGS',
     appId: 9000003,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1249550/header.jpg',
+    image: '/wardogsberandahd.png',
     genre: 'Tactical Shooter',
     trophies: [
       { title: 'Top Dog (MVP 50 Rounds)', rarity: 'Top 5.9%', icon: '🐺' },

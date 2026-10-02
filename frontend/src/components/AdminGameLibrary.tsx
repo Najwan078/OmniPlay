@@ -304,7 +304,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.5 ms',
     frameDrop: '0.02%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/686810/header.jpg',
+    image: '/wardogsberandahd.png',
     errorLog: '[19:02:00] Dedicated squad match server handshake confirmed. BattleEye active.'
   },
   {
@@ -572,6 +572,10 @@ export default function AdminGameLibrary({ onToast }: AdminGameLibraryProps) {
                       el.src = '/windrose.jpg';
                     } else if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
                       el.src = '/eafc26_beranda.jpg';
+                    } else if (game.appId === 9000002 || game.title.includes('Gears of War')) {
+                      el.src = '/gearofwarberandahd.jpeg';
+                    } else if (game.appId === 9000003 || game.title.includes('WARDOGS')) {
+                      el.src = '/wardogsberandahd.png';
                     } else {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     }

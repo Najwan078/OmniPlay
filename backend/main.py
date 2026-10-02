@@ -286,8 +286,8 @@ STEAM_CATALOG = {
         "publisher": "Focus Entertainment",
         "tags": ["Tactical", "Military", "Shooter", "Multiplayer", "Strategy"],
         "steam_store_url": "https://store.steampowered.com/app/9000003/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1249550/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1249550/library_hero.jpg"
+        "header_image": "/wardogsberandahd.png",
+        "banner_image": "/wardogsdetailhd.png"
     },
     570: {
         "app_id": 570,

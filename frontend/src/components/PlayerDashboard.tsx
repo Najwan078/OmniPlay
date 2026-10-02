@@ -489,8 +489,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '3 days ago',
       hours: '44 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/686810/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/686810/library_hero.jpg',
+      image: '/wardogsberandahd.png',
+      banner: '/wardogsdetailhd.png',
       synopsis: 'An intense squad-based tactical shooter set in near-future conflict zones. Build your squad of elite mercenaries, manage resources under fire, and survive brutal asymmetric warfare across global hot zones.',
       reviewSentiment: 'Mostly Positive (81%)',
       ratingScore: 81,
@@ -1159,6 +1159,14 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       el.src = '/eafc26_beranda.jpg';
                       return;
                     }
+                    if (game.appId === 9000002 || game.title.includes('Gears of War')) {
+                      el.src = '/gearofwarberandahd.jpeg';
+                      return;
+                    }
+                    if (game.appId === 9000003 || game.title.includes('WARDOGS')) {
+                      el.src = '/wardogsberandahd.png';
+                      return;
+                    }
                     if (!el.src.includes('header.jpg')) {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     } else {
@@ -1232,6 +1240,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     el.src = '/eafc26hd_details.jpeg';
                   } else if (selectedGame.appId === 9000002 || selectedGame.title.includes('Gears of War')) {
                     el.src = '/gearofwardetailhd.jpeg';
+                  } else if (selectedGame.appId === 9000003 || selectedGame.title.includes('WARDOGS')) {
+                    el.src = '/wardogsdetailhd.png';
                   } else {
                     el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${selectedGame.appId}/header.jpg`;
                   }
