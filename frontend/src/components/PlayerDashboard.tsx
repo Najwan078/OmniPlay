@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
-  Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock
+  Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock, Globe, Coins
 } from 'lucide-react';
 
 interface Game {
@@ -49,6 +49,28 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     };
   }, [isFilterOpen]);
 
+  // Multi-Currency & Global Regional State
+  type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'JPY' | 'IDR';
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('USD');
+  const [selectedRegion, setSelectedRegion] = useState<'ALL' | 'APAC' | 'Americas' | 'Europe'>('ALL');
+
+  const CURRENCIES: Record<CurrencyCode, { symbol: string; rate: number; decimals: number; label: string; flag: string }> = {
+    USD: { symbol: '$', rate: 1.0, decimals: 2, label: 'USD', flag: '🇺🇸' },
+    EUR: { symbol: '€', rate: 0.92, decimals: 2, label: 'EUR', flag: '🇪🇺' },
+    GBP: { symbol: '£', rate: 0.79, decimals: 2, label: 'GBP', flag: '🇬🇧' },
+    JPY: { symbol: '¥', rate: 152, decimals: 0, label: 'JPY', flag: '🇯🇵' },
+    IDR: { symbol: 'Rp ', rate: 15800, decimals: 0, label: 'IDR', flag: '🇮🇩' },
+  };
+
+  const formatPrice = (usdAmount: number, code: CurrencyCode = selectedCurrency) => {
+    const config = CURRENCIES[code] || CURRENCIES.USD;
+    const value = usdAmount * config.rate;
+    if (config.decimals === 0) {
+      return `${config.symbol}${Math.round(value).toLocaleString('id-ID')}`;
+    }
+    return `${config.symbol}${value.toFixed(config.decimals)}`;
+  };
+
   // Rent-to-Play Universal State
   const [rentalHours, setRentalHours] = useState(2);
   const [selectedNode, setSelectedNode] = useState('JK-01');
@@ -56,18 +78,20 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
 
   // Payment Modal State
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
-  const [expandedSection, setExpandedSection] = useState<string>('ewallet');
+  const [paymentMethod, setPaymentMethod] = useState<string>('card');
+  const [expandedSection, setExpandedSection] = useState<string>('card');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Standardized Cloud Node Tiers (Universal across all games)
+  // Standardized Worldwide Cloud Node Tiers (Worldwide Edge Network)
   const nodes = [
     { 
       id: 'JK-01', 
       tier: 'Tier 1', 
+      region: 'APAC',
       location: 'Jakarta', 
-      name: 'JK-01 (Jakarta)', 
+      name: 'Jakarta Edge (JK-01)', 
+      flag: '🇮🇩',
       gpu: 'RTX 4070 Ti', 
       latency: '2ms', 
       ratePerHour: 0.85 
@@ -75,8 +99,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     { 
       id: 'SG-01', 
       tier: 'Tier 2', 
+      region: 'APAC',
       location: 'Singapore', 
-      name: 'SG-01 (Singapore)', 
+      name: 'Singapore Premium (SG-01)', 
+      flag: '🇸🇬',
       gpu: 'RTX 4080', 
       latency: '15ms', 
       ratePerHour: 1.25 
@@ -84,13 +110,61 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     { 
       id: 'TY-01', 
       tier: 'Tier 3', 
+      region: 'APAC',
       location: 'Tokyo', 
-      name: 'TY-01 (Tokyo)', 
+      name: 'Tokyo Ultra (TY-01)', 
+      flag: '🇯🇵',
       gpu: 'RTX 4090', 
-      latency: '60ms', 
+      latency: '22ms', 
+      ratePerHour: 1.75 
+    },
+    { 
+      id: 'US-01', 
+      tier: 'Tier 2', 
+      region: 'Americas',
+      location: 'Virginia', 
+      name: 'US East (US-01 Virginia)', 
+      flag: '🇺🇸',
+      gpu: 'RTX 4080 Super', 
+      latency: '12ms', 
+      ratePerHour: 1.30 
+    },
+    { 
+      id: 'US-02', 
+      tier: 'Tier 3', 
+      region: 'Americas',
+      location: 'Silicon Valley', 
+      name: 'US West (US-02 California)', 
+      flag: '🇺🇸',
+      gpu: 'RTX 4090', 
+      latency: '10ms', 
+      ratePerHour: 1.75 
+    },
+    { 
+      id: 'EU-01', 
+      tier: 'Tier 2', 
+      region: 'Europe',
+      location: 'Frankfurt', 
+      name: 'Frankfurt Central (EU-01)', 
+      flag: '🇩🇪',
+      gpu: 'RTX 4080 Super', 
+      latency: '14ms', 
+      ratePerHour: 1.30 
+    },
+    { 
+      id: 'UK-01', 
+      tier: 'Tier 3', 
+      region: 'Europe',
+      location: 'London', 
+      name: 'London West (UK-01)', 
+      flag: '🇬🇧',
+      gpu: 'RTX 4090', 
+      latency: '16ms', 
       ratePerHour: 1.75 
     },
   ];
+
+  const filteredNodes = nodes.filter(n => selectedRegion === 'ALL' || n.region === selectedRegion);
 
   const games: Game[] = [
     { 
@@ -781,7 +855,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   const subtotalPrice = currentNode.ratePerHour * rentalHours;
   const platformFee = 0.25;
   const totalPrice = subtotalPrice + platformFee;
-  const formatUSD = (num: number) => `$${num.toFixed(2)}`;
+  const formatUSD = (num: number) => formatPrice(num);
 
   const handleStartGame = (game: Game) => {
     const steamUri = game.appId > 0 ? `steam://rungameid/${game.appId}` : undefined;
@@ -1467,9 +1541,40 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
 
                   {/* 1. Cloud Node Selection */}
                   <div className="rental-field">
-                    <label className="rental-label">1. Choose Edge Node:</label>
+                    <div className="rental-header-row">
+                      <label className="rental-label" style={{ margin: 0 }}>1. Choose Edge Node:</label>
+                      <div className="currency-selector-pills">
+                        {(['USD', 'EUR', 'GBP', 'JPY', 'IDR'] as CurrencyCode[]).map((cur) => (
+                          <button
+                            key={cur}
+                            type="button"
+                            className={`currency-pill ${selectedCurrency === cur ? 'active' : ''}`}
+                            onClick={() => setSelectedCurrency(cur)}
+                            title={`Switch currency to ${cur}`}
+                          >
+                            <span>{CURRENCIES[cur].flag}</span>
+                            <span>{cur}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Worldwide Region Filter Tabs */}
+                    <div className="region-filter-bar">
+                      {(['ALL', 'APAC', 'Americas', 'Europe'] as const).map((reg) => (
+                        <button
+                          key={reg}
+                          type="button"
+                          className={`region-pill ${selectedRegion === reg ? 'active' : ''}`}
+                          onClick={() => setSelectedRegion(reg)}
+                        >
+                          {reg === 'ALL' ? '🌍 All Regions' : reg === 'APAC' ? '🌏 APAC' : reg === 'Americas' ? '🌎 Americas' : '🌍 Europe'}
+                        </button>
+                      ))}
+                    </div>
+
                     <div className="node-select-list">
-                      {nodes.map(n => (
+                      {filteredNodes.map(n => (
                         <div 
                           key={n.id}
                           onClick={() => setSelectedNode(n.id)}
@@ -1477,12 +1582,20 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                         >
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                              <span style={{ fontSize: 13 }}>{n.flag}</span>
                               <span className="node-tier-tag">{n.tier}</span>
                               <p className="node-name">{n.name}</p>
                             </div>
-                            <p className="node-sub">{n.gpu} • {n.latency}</p>
+                            <p className="node-sub">
+                              {n.gpu} • <span className="node-latency-pill"><span className="latency-dot"></span>{n.latency}</span>
+                            </p>
                           </div>
-                          <span className="node-price">{formatUSD(n.ratePerHour)}/h</span>
+                          <div style={{ textAlign: 'right' }}>
+                            <span className="node-price">{formatPrice(n.ratePerHour)}/h</span>
+                            {selectedCurrency !== 'USD' && (
+                              <p style={{ fontSize: 10, color: 'var(--text-muted)', margin: 0 }}>~${n.ratePerHour.toFixed(2)} USD</p>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -1518,23 +1631,30 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   <div className="rental-pricing-breakdown">
                     <div className="price-row">
                       <span>Cloud Node ({currentNode.tier}: {currentNode.gpu})</span>
-                      <span>{formatUSD(currentNode.ratePerHour)}/h</span>
+                      <span>{formatPrice(currentNode.ratePerHour)}/h</span>
                     </div>
                     <div className="price-row">
                       <span>Rental Duration</span>
                       <span>{rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}</span>
                     </div>
                     <div className="price-row">
-                      <span>Subtotal ({formatUSD(currentNode.ratePerHour)} × {rentalHours}h)</span>
-                      <span>{formatUSD(subtotalPrice)}</span>
+                      <span>Subtotal ({formatPrice(currentNode.ratePerHour)} × {rentalHours}h)</span>
+                      <span>{formatPrice(subtotalPrice)}</span>
                     </div>
                     <div className="price-row">
                       <span>Cloud Orchestration Fee</span>
-                      <span>{formatUSD(platformFee)}</span>
+                      <span>{formatPrice(platformFee)}</span>
                     </div>
                     <div className="price-row total">
                       <span>Total Payable</span>
-                      <span className="total-amount">{formatUSD(totalPrice)}</span>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="total-amount">{formatPrice(totalPrice)}</span>
+                        {selectedCurrency !== 'USD' && (
+                          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                            (${totalPrice.toFixed(2)} USD)
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -1626,26 +1746,26 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
 
             {/* Payment Methods List */}
             <div className="payment-methods-list">
-              {/* E-Wallet */}
+              {/* Credit / Debit Card & Express Checkout (Worldwide) */}
               <div className="payment-section">
                 <button
                   type="button"
                   className="payment-section-header"
-                  onClick={() => setExpandedSection(expandedSection === "ewallet" ? "" : "ewallet")}
+                  onClick={() => setExpandedSection(expandedSection === "card" ? "" : "card")}
                 >
                   <div className="payment-section-left">
-                    <Smartphone style={{ width: 18, height: 18, color: "#00d2ff" }} />
-                    <span>Digital Wallets</span>
+                    <CreditCard style={{ width: 18, height: 18, color: "#f59e0b" }} />
+                    <span>Credit / Debit Cards & Express (Global)</span>
                   </div>
-                  <ChevronDown className={"payment-chevron " + (expandedSection === "ewallet" ? "open" : "")} />
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "card" ? "open" : "")} />
                 </button>
-                {expandedSection === "ewallet" && (
+                {expandedSection === "card" && (
                   <div className="payment-section-items">
                     {[
-                      { id: "paypal", name: "PayPal", sub: "Instant & buyer protected checkout", icon: "🅿️" },
-                      { id: "apple_pay", name: "Apple Pay", sub: "One-click biometric authorization", icon: "🍎" },
-                      { id: "google_pay", name: "Google Pay", sub: "Fast checkout with Google account", icon: "🌐" },
-                      { id: "cash_app", name: "Cash App", sub: "Instant mobile pay & balance", icon: "💵" }
+                      { id: "card", name: "Credit / Debit Card (Visa, MC, Amex, JCB)", sub: "Global 3D-Secure 256-bit encrypted checkout", icon: "💳" },
+                      { id: "paypal", name: "PayPal Express Checkout", sub: "Worldwide instant buyer protected checkout", icon: "🅿️" },
+                      { id: "apple_pay", name: "Apple Pay", sub: "One-click biometric FaceID/TouchID pay", icon: "🍎" },
+                      { id: "google_pay", name: "Google Pay", sub: "Fast 1-tap checkout with Google account", icon: "🌐" }
                     ].map(item => (
                       <div
                         key={item.id}
@@ -1672,7 +1792,52 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 )}
               </div>
 
-              {/* Instant QR Code Pay */}
+              {/* Crypto & Web3 Gateway */}
+              <div className="payment-section">
+                <button
+                  type="button"
+                  className="payment-section-header"
+                  onClick={() => setExpandedSection(expandedSection === "crypto" ? "" : "crypto")}
+                >
+                  <div className="payment-section-left">
+                    <Coins style={{ width: 18, height: 18, color: "#10b981" }} />
+                    <span>Crypto & Web3 (Zero Cross-Border Fee)</span>
+                  </div>
+                  <ChevronDown className={"payment-chevron " + (expandedSection === "crypto" ? "open" : "")} />
+                </button>
+                {expandedSection === "crypto" && (
+                  <div className="payment-section-items">
+                    {[
+                      { id: "usdt", name: "USDT (Tether TRC20 / Polygon)", sub: "Instant stablecoin transfer with minimal gas fee", icon: "🪙" },
+                      { id: "usdc", name: "USDC (Solana / Ethereum)", sub: "1:1 USD backed regulated digital dollar", icon: "💵" },
+                      { id: "crypto_web3", name: "Bitcoin / Ethereum (Web3)", sub: "Decentralized direct wallet payment", icon: "₿" }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        className={"payment-method-item " + (paymentMethod === item.id ? "selected" : "")}
+                        onClick={() => setPaymentMethod(item.id)}
+                      >
+                        <div className="payment-method-left">
+                          <span className="payment-method-emoji">{item.icon}</span>
+                          <div>
+                            <p className="payment-method-name">{item.name}</p>
+                            <p className="payment-method-sub">{item.sub}</p>
+                          </div>
+                        </div>
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === item.id}
+                          onChange={() => setPaymentMethod(item.id)}
+                          className="payment-radio"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Instant QR Code & Local Mobile Wallets */}
               <div className="payment-section">
                 <button
                   type="button"
@@ -1680,32 +1845,39 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   onClick={() => setExpandedSection(expandedSection === "qris" ? "" : "qris")}
                 >
                   <div className="payment-section-left">
-                    <Wallet style={{ width: 18, height: 18, color: "#10b981" }} />
-                    <span>Instant QR Pay (Scan & Play)</span>
+                    <Wallet style={{ width: 18, height: 18, color: "#00d2ff" }} />
+                    <span>Instant QR & Regional Mobile Wallets</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "qris" ? "open" : "")} />
                 </button>
                 {expandedSection === "qris" && (
                   <div className="payment-section-items">
-                    <div
-                      className={"payment-method-item " + (paymentMethod === "qris" ? "selected" : "")}
-                      onClick={() => setPaymentMethod("qris")}
-                    >
-                      <div className="payment-method-left">
-                        <span className="payment-method-emoji">📷</span>
-                        <div>
-                          <p className="payment-method-name">Instant QR Code</p>
-                          <p className="payment-method-sub">Scan with any mobile banking or payment app</p>
+                    {[
+                      { id: "qris", name: "Universal Instant QR (QRIS, Pix, PromptPay)", sub: "Scan & play immediately from any banking app", icon: "📷" },
+                      { id: "cash_app", name: "Cash App / Revolut Pay", sub: "Fast US, UK & EU peer-to-peer checkout", icon: "💸" },
+                      { id: "gopay_dana", name: "GoPay / OVO / Dana / ShopeePay", sub: "Southeast Asia instant mobile balance", icon: "📱" }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        className={"payment-method-item " + (paymentMethod === item.id ? "selected" : "")}
+                        onClick={() => setPaymentMethod(item.id)}
+                      >
+                        <div className="payment-method-left">
+                          <span className="payment-method-emoji">{item.icon}</span>
+                          <div>
+                            <p className="payment-method-name">{item.name}</p>
+                            <p className="payment-method-sub">{item.sub}</p>
+                          </div>
                         </div>
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === item.id}
+                          onChange={() => setPaymentMethod(item.id)}
+                          className="payment-radio"
+                        />
                       </div>
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === "qris"}
-                        onChange={() => setPaymentMethod("qris")}
-                        className="payment-radio"
-                      />
-                    </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -1719,17 +1891,15 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <Building2 style={{ width: 18, height: 18, color: "#8b5cf6" }} />
-                    <span>Online Banking & Direct Transfer</span>
+                    <span>Direct Online Banking & Wire Transfers</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "va" ? "open" : "")} />
                 </button>
                 {expandedSection === "va" && (
                   <div className="payment-section-items">
                     {[
-                      { id: "chase", name: "Chase Online Banking", sub: "Instant bank authorization 24/7", icon: "🏦" },
-                      { id: "bofa", name: "Bank of America", sub: "Direct online transfer", icon: "🏛️" },
-                      { id: "wells_fargo", name: "Wells Fargo", sub: "Fast verified ACH payment", icon: "🏪" },
-                      { id: "citibank", name: "Citibank Direct", sub: "Instant account verification", icon: "🏬" }
+                      { id: "global_ach", name: "Global ACH & Wire (Chase, BofA, HSBC, Barclays)", sub: "Direct bank verification & automated clearing", icon: "🏦" },
+                      { id: "id_va", name: "Indonesian Virtual Account (BCA, Mandiri, BRI, BNI)", sub: "Instant 24/7 automated transfer confirmation", icon: "🏛️" }
                     ].map(item => (
                       <div
                         key={item.id}
@@ -1752,44 +1922,6 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                         />
                       </div>
                     ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Credit / Debit Card */}
-              <div className="payment-section">
-                <button
-                  type="button"
-                  className="payment-section-header"
-                  onClick={() => setExpandedSection(expandedSection === "card" ? "" : "card")}
-                >
-                  <div className="payment-section-left">
-                    <CreditCard style={{ width: 18, height: 18, color: "#f59e0b" }} />
-                    <span>Credit / Debit Card</span>
-                  </div>
-                  <ChevronDown className={"payment-chevron " + (expandedSection === "card" ? "open" : "")} />
-                </button>
-                {expandedSection === "card" && (
-                  <div className="payment-section-items">
-                    <div
-                      className={"payment-method-item " + (paymentMethod === "card" ? "selected" : "")}
-                      onClick={() => setPaymentMethod("card")}
-                    >
-                      <div className="payment-method-left">
-                        <span className="payment-method-emoji">💳</span>
-                        <div>
-                          <p className="payment-method-name">Visa / Mastercard / Amex</p>
-                          <p className="payment-method-sub">3D Secure 256-bit encrypted authentication</p>
-                        </div>
-                      </div>
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === "card"}
-                        onChange={() => setPaymentMethod("card")}
-                        className="payment-radio"
-                      />
-                    </div>
                   </div>
                 )}
               </div>

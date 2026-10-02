@@ -376,9 +376,13 @@ STEAM_CATALOG = {
 }
 
 NODE_SPECS = {
-    "JK-01": {"name": "Jakarta Edge (JK-01)", "tier": "Tier 1", "gpu": "RTX 4070 Ti", "latency": "2ms", "rate_per_hr": 10000, "multiplier": 1.0},
-    "SG-01": {"name": "Singapore Premium (SG-01)", "tier": "Tier 2", "gpu": "RTX 4080", "latency": "15ms", "rate_per_hr": 16000, "multiplier": 1.0},
-    "TY-01": {"name": "Tokyo Ultra (TY-01)", "tier": "Tier 3", "gpu": "RTX 4090", "latency": "60ms", "rate_per_hr": 25000, "multiplier": 1.0}
+    "JK-01": {"name": "Jakarta Edge (JK-01)", "tier": "Tier 1", "region": "APAC", "gpu": "RTX 4070 Ti", "latency": "2ms", "rate_per_hr": 13500, "rate_usd": 0.85, "multiplier": 1.0},
+    "SG-01": {"name": "Singapore Premium (SG-01)", "tier": "Tier 2", "region": "APAC", "gpu": "RTX 4080", "latency": "15ms", "rate_per_hr": 20000, "rate_usd": 1.25, "multiplier": 1.0},
+    "TY-01": {"name": "Tokyo Ultra (TY-01)", "tier": "Tier 3", "region": "APAC", "gpu": "RTX 4090", "latency": "22ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
+    "US-01": {"name": "Virginia (US-01 East)", "tier": "Tier 2", "region": "Americas", "gpu": "RTX 4080 Super", "latency": "12ms", "rate_per_hr": 21000, "rate_usd": 1.30, "multiplier": 1.0},
+    "US-02": {"name": "California (US-02 West)", "tier": "Tier 3", "region": "Americas", "gpu": "RTX 4090", "latency": "10ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
+    "EU-01": {"name": "Frankfurt (EU-01 Central)", "tier": "Tier 2", "region": "Europe", "gpu": "RTX 4080 Super", "latency": "14ms", "rate_per_hr": 21000, "rate_usd": 1.30, "multiplier": 1.0},
+    "UK-01": {"name": "London (UK-01 West)", "tier": "Tier 3", "region": "Europe", "gpu": "RTX 4090", "latency": "16ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0}
 }
 
 # --- Pydantic Models ---
