@@ -120,7 +120,7 @@ export default function CloudResourcesDashboard() {
         recovery_point_objective: "0 seconds (Continuous Write-Ahead Log Stream)",
         primary_storage: "NVMe SAN Cluster (10.0 TB Pool, 583.7 GB Distributed Cache)",
         cold_storage_target: "AWS S3 Multi-Region Glacier Vault (ap-southeast-1 & ap-northeast-1)",
-        cross_region_sync: "Active (JK-01 <-> SG-01 <-> TY-01)"
+        cross_region_sync: "Active Global Mesh (JK-01 <-> SG-01 <-> TY-01 <-> US-01 <-> EU-01 <-> EU-02)"
       },
       edge_nodes: topologyNodes,
       active_sessions: activeSessions,
@@ -175,20 +175,42 @@ export default function CloudResourcesDashboard() {
       gpu: '2x NVIDIA RTX 4090 (48GB VRAM)',
       cpu: 'AMD EPYC 9654 Genoa',
       storage: '4.2 TB Gen5 NVMe Array',
-      ping: '28.4ms (Trans-Pacific)',
+      ping: '22.4ms (Trans-Pacific)',
       status: 'active',
       load: '62%'
     },
     {
-      id: 'US-WEST-01',
-      name: 'Oregon Silicon Hub',
+      id: 'US-01',
+      name: 'California Silicon Hub',
       subnet: '10.243.0.0/24',
       gpu: '4x NVIDIA RTX 4090 (96GB VRAM)',
       cpu: 'AMD EPYC 9654 Genoa',
       storage: '8.0 TB Gen5 NVMe Array',
-      ping: '142ms (Standby Route)',
-      status: 'standby',
-      load: '12%'
+      ping: '9.8ms (US-West Direct)',
+      status: 'active',
+      load: '71%'
+    },
+    {
+      id: 'EU-01',
+      name: 'London Equinix LD8',
+      subnet: '10.244.10.0/24',
+      gpu: '4x NVIDIA RTX 4090 (96GB VRAM)',
+      cpu: 'Intel Xeon Platinum 8480+',
+      storage: '6.0 TB Gen5 NVMe Array',
+      ping: '14.5ms (LINX Exchange)',
+      status: 'active',
+      load: '65%'
+    },
+    {
+      id: 'EU-02',
+      name: 'Frankfurt DE-CIX Telehouse',
+      subnet: '10.245.32.0/24',
+      gpu: '2x NVIDIA RTX 4080 Super (32GB VRAM)',
+      cpu: 'AMD EPYC 7763 (64 Cores / 128 Threads)',
+      storage: '4.0 TB Gen5 NVMe Array',
+      ping: '12.2ms (DE-CIX Peering)',
+      status: 'active',
+      load: '59%'
     }
   ];
 
@@ -747,10 +769,10 @@ export default function CloudResourcesDashboard() {
           <div className="finops-card">
             <div className="finops-card-top">
               <span className="finops-label">GPU Cluster Compute</span>
-              <span className="finops-rate">$0.85 / hr</span>
+              <span className="finops-rate">$0.85 – $1.75 / hr</span>
             </div>
-            <p className="finops-total">$294.50 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">RTX 40-Series Dedicated Pools</p>
+            <p className="finops-total">$398.50 <span className="unit">/ mo</span></p>
+            <p className="finops-sub">6 Global Edge Pools (RTX 40-Series)</p>
           </div>
 
           <div className="finops-card">
@@ -758,17 +780,17 @@ export default function CloudResourcesDashboard() {
               <span className="finops-label">WebRTC Egress Bandwidth</span>
               <span className="finops-rate">$0.04 / GB</span>
             </div>
-            <p className="finops-total">$88.40 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">2.21 TB AV1 Encoded Datagrams</p>
+            <p className="finops-total">$118.20 <span className="unit">/ mo</span></p>
+            <p className="finops-sub">3.25 TB AV1 Stream (DE-CIX, LINX, IXP)</p>
           </div>
 
           <div className="finops-card">
             <div className="finops-card-top">
-              <span className="finops-label">AWS S3 Cold Vault Storage</span>
+              <span className="finops-label">Global Storage & Snapshot</span>
               <span className="finops-rate">$0.023 / GB</span>
             </div>
-            <p className="finops-total">$14.80 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">Multi-Region Snapshot Replication</p>
+            <p className="finops-total">$24.60 <span className="unit">/ mo</span></p>
+            <p className="finops-sub">Frankfurt, London, US & Asia Mesh Vault</p>
           </div>
 
           <div className="finops-card">
@@ -777,7 +799,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-rate">Flat Tier</span>
             </div>
             <p className="finops-total">$30.00 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">Enterprise L3/L4/L7 Defense</p>
+            <p className="finops-sub">Enterprise L3/L4/L7 Anycast Defense</p>
           </div>
         </div>
 
@@ -785,15 +807,15 @@ export default function CloudResourcesDashboard() {
         <div className="finops-summary-strip">
           <div className="finops-stat-item">
             <span className="lbl">Total Operating Expenses (OpEx):</span>
-            <span className="val red">$427.70 / month</span>
+            <span className="val red">$571.30 / month</span>
           </div>
           <div className="finops-stat-item">
             <span className="lbl">Estimated Rental Revenue:</span>
-            <span className="val green">$1,340.00 / month</span>
+            <span className="val green">$1,890.00 / month</span>
           </div>
           <div className="finops-stat-item highlight">
             <span className="lbl">Gross Profit Margin:</span>
-            <span className="val cyan">+68.1% (Healthy)</span>
+            <span className="val cyan">+69.8% (Healthy Global Unit Economics)</span>
           </div>
         </div>
       </section>
@@ -848,8 +870,16 @@ export default function CloudResourcesDashboard() {
                 <span className="pop-val">99.95% (0 Incidents)</span>
               </div>
               <div className="sla-pop-row">
-                <span className="pop-name">🇺🇸 Oregon (US-WEST-01)</span>
-                <span className="pop-val standby">100.0% (Standby Route)</span>
+                <span className="pop-name">🇺🇸 California (US-01 Silicon Valley)</span>
+                <span className="pop-val">99.99% (0 Incidents)</span>
+              </div>
+              <div className="sla-pop-row">
+                <span className="pop-name">🇬🇧 London (EU-01 Core Hub)</span>
+                <span className="pop-val">99.97% (0 Incidents)</span>
+              </div>
+              <div className="sla-pop-row">
+                <span className="pop-name">🇩🇪 Frankfurt (EU-02 DE-CIX Central)</span>
+                <span className="pop-val">99.98% (0 Incidents)</span>
               </div>
             </div>
           </div>

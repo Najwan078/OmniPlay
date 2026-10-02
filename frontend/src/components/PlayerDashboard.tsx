@@ -140,6 +140,17 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       latency: '15ms', 
       ratePerHour: 1.75 
     },
+    { 
+      id: 'EU-02', 
+      tier: 'Tier 2', 
+      region: 'Europe',
+      location: 'Frankfurt', 
+      name: 'Frankfurt Central (EU-02)', 
+      flag: '🇩🇪',
+      gpu: 'RTX 4080 Super', 
+      latency: '12ms', 
+      ratePerHour: 1.30 
+    },
   ];
 
   const filteredNodes = nodes.filter(n => selectedRegion === 'ALL' || n.region === selectedRegion);

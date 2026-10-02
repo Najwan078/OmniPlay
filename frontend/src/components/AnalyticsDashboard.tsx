@@ -59,9 +59,12 @@ export default function AnalyticsDashboard() {
             { game: "Baldur's Gate 3", share: "8%", hours: 68 }
           ],
           nodes: [
-            { id: "SG-01", latency: "3.8ms", gpu: "RTX 4090", uptime: "99.99%" },
-            { id: "JK-01", latency: "2.1ms", gpu: "RTX 4080", uptime: "99.98%" },
-            { id: "TY-01", latency: "28ms", gpu: "H100 NVLink", uptime: "99.95%" }
+            { id: "JK-01", latency: "2.1ms", gpu: "RTX 4070 Ti", uptime: "99.99%", region: "APAC" },
+            { id: "SG-01", latency: "3.8ms", gpu: "RTX 4080", uptime: "99.98%", region: "APAC" },
+            { id: "TY-01", latency: "22ms", gpu: "RTX 4090", uptime: "99.95%", region: "APAC" },
+            { id: "US-01", latency: "9.8ms", gpu: "RTX 4090", uptime: "99.99%", region: "Americas" },
+            { id: "EU-01", latency: "14.5ms", gpu: "RTX 4090", uptime: "99.97%", region: "Europe" },
+            { id: "EU-02", latency: "12.2ms", gpu: "RTX 4080 Super", uptime: "99.98%", region: "Europe" }
           ],
           exportedAt: new Date().toISOString()
         }, null, 2));
@@ -541,26 +544,15 @@ export default function AnalyticsDashboard() {
               <p className="chart-card-sub">Kecepatan respon rute server antar wilayah</p>
             </div>
             <div className="node-active-count">
-              <span className="node-status-dot" /> 3 Node Terhubung
+              <span className="node-status-dot" /> 6 Node Global Terhubung
             </div>
           </div>
 
           <div className="node-latency-list">
             <div className="node-latency-row">
               <div className="node-row-info">
-                <span className="node-flag">🇸🇬 SG-01 (Singapore)</span>
-                <span className="node-sub">RTX 4090 • NVLink 4.0</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill sg" style={{ width: '22%' }} />
-              </div>
-              <span className="node-ms-val">3.8 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
                 <span className="node-flag">🇮🇩 JK-01 (Jakarta)</span>
-                <span className="node-sub">RTX 4080 • Direct Fiber</span>
+                <span className="node-sub">RTX 4070 Ti • Direct Fiber</span>
               </div>
               <div className="node-bar-track">
                 <div className="node-bar-fill jk" style={{ width: '14%' }} />
@@ -570,13 +562,57 @@ export default function AnalyticsDashboard() {
 
             <div className="node-latency-row">
               <div className="node-row-info">
-                <span className="node-flag">🇯🇵 TY-01 (Tokyo)</span>
-                <span className="node-sub">H100 NVLink • Supercloud</span>
+                <span className="node-flag">🇸🇬 SG-01 (Singapore)</span>
+                <span className="node-sub">RTX 4080 • Equinix Direct</span>
               </div>
               <div className="node-bar-track">
-                <div className="node-bar-fill ty" style={{ width: '65%' }} />
+                <div className="node-bar-fill sg" style={{ width: '20%' }} />
               </div>
-              <span className="node-ms-val">28.0 ms</span>
+              <span className="node-ms-val">3.8 ms</span>
+            </div>
+
+            <div className="node-latency-row">
+              <div className="node-row-info">
+                <span className="node-flag">🇺🇸 US-01 (California)</span>
+                <span className="node-sub">RTX 4090 • Silicon Hub</span>
+              </div>
+              <div className="node-bar-track">
+                <div className="node-bar-fill us" style={{ width: '30%', background: 'linear-gradient(90deg, #3b82f6, #00f0ff)' }} />
+              </div>
+              <span className="node-ms-val">9.8 ms</span>
+            </div>
+
+            <div className="node-latency-row">
+              <div className="node-row-info">
+                <span className="node-flag">🇩🇪 EU-02 (Frankfurt)</span>
+                <span className="node-sub">RTX 4080 Super • DE-CIX Telehouse</span>
+              </div>
+              <div className="node-bar-track">
+                <div className="node-bar-fill fra" style={{ width: '38%', background: 'linear-gradient(90deg, #10b981, #00f0ff)' }} />
+              </div>
+              <span className="node-ms-val">12.2 ms</span>
+            </div>
+
+            <div className="node-latency-row">
+              <div className="node-row-info">
+                <span className="node-flag">🇬🇧 EU-01 (London)</span>
+                <span className="node-sub">RTX 4090 • LINX Direct</span>
+              </div>
+              <div className="node-bar-track">
+                <div className="node-bar-fill ld" style={{ width: '42%', background: 'linear-gradient(90deg, #8b5cf6, #3b82f6)' }} />
+              </div>
+              <span className="node-ms-val">14.5 ms</span>
+            </div>
+
+            <div className="node-latency-row">
+              <div className="node-row-info">
+                <span className="node-flag">🇯🇵 TY-01 (Tokyo)</span>
+                <span className="node-sub">RTX 4090 • Trans-Pacific</span>
+              </div>
+              <div className="node-bar-track">
+                <div className="node-bar-fill ty" style={{ width: '55%' }} />
+              </div>
+              <span className="node-ms-val">22.0 ms</span>
             </div>
           </div>
 

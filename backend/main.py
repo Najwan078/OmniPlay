@@ -380,7 +380,8 @@ NODE_SPECS = {
     "SG-01": {"name": "Singapore Premium (SG-01)", "tier": "Tier 2", "region": "APAC", "gpu": "RTX 4080", "latency": "15ms", "rate_per_hr": 20000, "rate_usd": 1.25, "multiplier": 1.0},
     "TY-01": {"name": "Tokyo Ultra (TY-01)", "tier": "Tier 3", "region": "APAC", "gpu": "RTX 4090", "latency": "22ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
     "US-01": {"name": "California Ultra (US-01)", "tier": "Tier 3", "region": "Americas", "gpu": "RTX 4090", "latency": "10ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
-    "EU-01": {"name": "London Ultra (EU-01)", "tier": "Tier 3", "region": "Europe", "gpu": "RTX 4090", "latency": "15ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0}
+    "EU-01": {"name": "London Ultra (EU-01)", "tier": "Tier 3", "region": "Europe", "gpu": "RTX 4090", "latency": "15ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
+    "EU-02": {"name": "Frankfurt Central (EU-02)", "tier": "Tier 2", "region": "Europe", "gpu": "RTX 4080 Super", "latency": "12ms", "rate_per_hr": 21000, "rate_usd": 1.30, "multiplier": 1.0}
 }
 
 # --- Pydantic Models ---
