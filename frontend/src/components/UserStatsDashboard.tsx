@@ -228,7 +228,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'Gears of War: E-Day',
     appId: 9000002,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/header.jpg',
+    image: '/gearofwarberandahd.jpeg',
     genre: 'Cover Shooter',
     trophies: [
       { title: 'E-Day Survivor', rarity: 'Top 7.4%', icon: '⚔️' },

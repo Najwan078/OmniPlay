@@ -473,8 +473,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: 'Yesterday',
       hours: '19 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/library_hero.jpg',
+      image: '/gearofwarberandahd.jpeg',
+      banner: '/gearofwardetailhd.jpeg',
       synopsis: 'The harrowing origin story of E-Day — the day the Locust first emerged from underground and changed humanity forever. Play as young Marcus Fenix and Dom Santiago in this gripping prequel built on Unreal Engine 5.',
       reviewSentiment: 'Very Positive (91%)',
       ratingScore: 91,
@@ -1230,6 +1230,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     el.src = '/windrose.jpg';
                   } else if (selectedGame.appId === 3405690 || selectedGame.title.includes('EA FC 26')) {
                     el.src = '/eafc26hd_details.jpeg';
+                  } else if (selectedGame.appId === 9000002 || selectedGame.title.includes('Gears of War')) {
+                    el.src = '/gearofwardetailhd.jpeg';
                   } else {
                     el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${selectedGame.appId}/header.jpg`;
                   }

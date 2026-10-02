@@ -272,8 +272,8 @@ STEAM_CATALOG = {
         "publisher": "Xbox Game Studios",
         "tags": ["Cover Shooter", "Action", "Sci-Fi", "Co-op", "Story Rich"],
         "steam_store_url": "https://store.steampowered.com/app/9000002/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/library_hero.jpg"
+        "header_image": "/gearofwarberandahd.jpeg",
+        "banner_image": "/gearofwardetailhd.jpeg"
     },
     9000003: {
         "app_id": 9000003,

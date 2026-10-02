@@ -289,7 +289,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '2.7 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/393380/header.jpg',
+    image: '/gearofwarberandahd.jpeg',
     errorLog: '[19:01:10] UE5 Lumen & Nanite pipeline active. Cover system sub-tick synced.'
   },
   {
