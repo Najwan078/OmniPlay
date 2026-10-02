@@ -274,7 +274,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '4.0 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/header.jpg',
+    image: '/acecombat8beranda.png',
     errorLog: '[19:00:00] Flight physics engine locked at 120 FPS. Cinematic cloud renderer stable.'
   },
   {
@@ -334,7 +334,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '29.2 ms',
     frameDrop: '0.03%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg',
+    image: '/controlresonantberanda.png',
     errorLog: '[19:04:10] Northlight Engine 2 ray tracing pipeline: Full RT Overdrive active.'
   },
   {
@@ -349,7 +349,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.3 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg',
+    image: '/forzahorizon6beranda.png',
     errorLog: '[19:05:00] ForzaTech engine 8K pipeline validated. Open world streaming nominal.'
   },
   {
@@ -364,7 +364,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '3.8 ms',
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg',
+    image: '/marvelspiderman2beranda.png',
     errorLog: '[19:06:00] Insomniac Engine traversal renderer: Stable at 4K 60FPS.'
   },
   {
@@ -379,7 +379,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '18.7 ms',
     frameDrop: '1.04%',
     shaderStatus: 'Compiling',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg',
+    image: '/residentevilrequiemberanda.png',
     errorLog: '[19:07:30] WARN: RE Engine shader cache warmup in progress. Latency elevated temporarily.'
   },
   {
@@ -394,7 +394,7 @@ const initialAdminGames: AdminGame[] = [
     serverPing: '2.5 ms',
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2338770/header.jpg',
+    image: '/nba2k27beranda.png',
     errorLog: '[19:08:00] ProPlay AI motion data synced. MyCAREER cloud save checkpointed.'
   }
 ];
@@ -572,10 +572,22 @@ export default function AdminGameLibrary({ onToast }: AdminGameLibraryProps) {
                       el.src = '/windrose.jpg';
                     } else if (game.appId === 3405690 || game.title.includes('EA FC 26')) {
                       el.src = '/eafc26_beranda.jpg';
+                    } else if (game.appId === 9000001 || game.title.includes('Ace Combat')) {
+                      el.src = '/acecombat8beranda.png';
                     } else if (game.appId === 9000002 || game.title.includes('Gears of War')) {
                       el.src = '/gearofwarberandahd.jpeg';
                     } else if (game.appId === 9000003 || game.title.includes('WARDOGS')) {
                       el.src = '/wardogsberandahd.png';
+                    } else if (game.appId === 9000004 || game.title.includes('Control')) {
+                      el.src = '/controlresonantberanda.png';
+                    } else if (game.appId === 9000005 || game.title.includes('Forza Horizon 6')) {
+                      el.src = '/forzahorizon6beranda.png';
+                    } else if (game.appId === 2369170 || game.title.includes("Spider-Man 2")) {
+                      el.src = '/marvelspiderman2beranda.png';
+                    } else if (game.appId === 9000006 || game.title.includes('Resident Evil')) {
+                      el.src = '/residentevilrequiemberanda.png';
+                    } else if (game.appId === 9000007 || game.title.includes('NBA 2K27')) {
+                      el.src = '/nba2k27beranda.png';
                     } else {
                       el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appId}/header.jpg`;
                     }

@@ -457,8 +457,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '2 days ago',
       hours: '28 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/library_hero.jpg',
+      image: '/acecombat8beranda.png',
+      banner: '/acecombat8detail.png',
       synopsis: 'Soar into the next era of aerial combat in Ace Combat 8: Wings of Theve. Experience hypersonic dogfights over breathtaking skyscapes with next-gen flight physics and fully orchestrated cinematic storytelling.',
       reviewSentiment: 'Very Positive (90%)',
       ratingScore: 90,
@@ -521,8 +521,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '4 days ago',
       hours: '36 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/library_hero.jpg',
+      image: '/controlresonantberanda.png',
+      banner: '/controlresonantdetail.png',
       synopsis: 'Return to the Oldest House in this direct sequel to the award-winning Control. Jesse Faden faces a new supernatural resonance threat that rewrites reality itself, powered by Northlight Engine 2 with full ray tracing.',
       reviewSentiment: 'Overwhelmingly Positive (94%)',
       ratingScore: 94,
@@ -537,8 +537,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: 'Yesterday',
       hours: '87 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_hero.jpg',
+      image: '/forzahorizon6beranda.png',
+      banner: '/forzahorizon6detail.png',
       synopsis: 'The Horizon Festival roars across the stunning landscapes of Japan. Race through neon-soaked cities, mountain passes, and coastal highways in hundreds of the world\'s finest cars with 8K visual fidelity.',
       reviewSentiment: 'Overwhelmingly Positive (95%)',
       ratingScore: 95,
@@ -553,8 +553,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '2 days ago',
       hours: '52 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/library_hero.jpg',
+      image: '/marvelspiderman2beranda.png',
+      banner: '/marvelspiderman2detail.png',
       synopsis: 'Swing through Marvel\'s New York as both Peter Parker and Miles Morales against Kraven the Hunter and the alien symbiote in this exhilarating action-adventure sequel with seamless world traversal.',
       reviewSentiment: 'Very Positive (90%)',
       ratingScore: 90,
@@ -569,8 +569,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '5 days ago',
       hours: '24 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/library_hero.jpg',
+      image: '/residentevilrequiemberanda.png',
+      banner: '/residentevilrequiemdetail.png',
       synopsis: 'A new chapter of survival horror unfolds in Resident Evil: Requiem. Face a terrifying new bioweapon outbreak with evolved stealth mechanics, adaptive enemy AI, and the most immersive photorealistic environments in the franchise.',
       reviewSentiment: 'Very Positive (89%)',
       ratingScore: 89,
@@ -585,8 +585,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       status: 'Ready',
       played: '3 days ago',
       hours: '63 hrs',
-      image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2338770/header.jpg',
-      banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2338770/library_hero.jpg',
+      image: '/nba2k27beranda.png',
+      banner: '/nba2k27detail.png',
       synopsis: 'The most authentic NBA experience ever. NBA 2K27 delivers next-level player motion with ProPlay AI, an immersive MyCAREER story mode, and the ultimate MyTEAM card-collecting competition.',
       reviewSentiment: 'Mostly Positive (78%)',
       ratingScore: 78,
@@ -1159,12 +1159,36 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       el.src = '/eafc26_beranda.jpg';
                       return;
                     }
+                    if (game.appId === 9000001 || game.title.includes('Ace Combat')) {
+                      el.src = '/acecombat8beranda.png';
+                      return;
+                    }
                     if (game.appId === 9000002 || game.title.includes('Gears of War')) {
                       el.src = '/gearofwarberandahd.jpeg';
                       return;
                     }
                     if (game.appId === 9000003 || game.title.includes('WARDOGS')) {
                       el.src = '/wardogsberandahd.png';
+                      return;
+                    }
+                    if (game.appId === 9000004 || game.title.includes('Control')) {
+                      el.src = '/controlresonantberanda.png';
+                      return;
+                    }
+                    if (game.appId === 9000005 || game.title.includes('Forza Horizon 6')) {
+                      el.src = '/forzahorizon6beranda.png';
+                      return;
+                    }
+                    if (game.appId === 2369170 || game.title.includes("Spider-Man 2")) {
+                      el.src = '/marvelspiderman2beranda.png';
+                      return;
+                    }
+                    if (game.appId === 9000006 || game.title.includes('Resident Evil')) {
+                      el.src = '/residentevilrequiemberanda.png';
+                      return;
+                    }
+                    if (game.appId === 9000007 || game.title.includes('NBA 2K27')) {
+                      el.src = '/nba2k27beranda.png';
                       return;
                     }
                     if (!el.src.includes('header.jpg')) {
@@ -1238,10 +1262,22 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     el.src = '/windrose.jpg';
                   } else if (selectedGame.appId === 3405690 || selectedGame.title.includes('EA FC 26')) {
                     el.src = '/eafc26hd_details.jpeg';
+                  } else if (selectedGame.appId === 9000001 || selectedGame.title.includes('Ace Combat')) {
+                    el.src = '/acecombat8detail.png';
                   } else if (selectedGame.appId === 9000002 || selectedGame.title.includes('Gears of War')) {
                     el.src = '/gearofwardetailhd.jpeg';
                   } else if (selectedGame.appId === 9000003 || selectedGame.title.includes('WARDOGS')) {
                     el.src = '/wardogsdetailhd.png';
+                  } else if (selectedGame.appId === 9000004 || selectedGame.title.includes('Control')) {
+                    el.src = '/controlresonantdetail.png';
+                  } else if (selectedGame.appId === 9000005 || selectedGame.title.includes('Forza Horizon 6')) {
+                    el.src = '/forzahorizon6detail.png';
+                  } else if (selectedGame.appId === 2369170 || selectedGame.title.includes("Spider-Man 2")) {
+                    el.src = '/marvelspiderman2detail.png';
+                  } else if (selectedGame.appId === 9000006 || selectedGame.title.includes('Resident Evil')) {
+                    el.src = '/residentevilrequiemdetail.png';
+                  } else if (selectedGame.appId === 9000007 || selectedGame.title.includes('NBA 2K27')) {
+                    el.src = '/nba2k27detail.png';
                   } else {
                     el.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${selectedGame.appId}/header.jpg`;
                   }

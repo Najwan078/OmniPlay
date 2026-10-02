@@ -258,8 +258,8 @@ STEAM_CATALOG = {
         "publisher": "Bandai Namco Entertainment",
         "tags": ["Flight", "Action", "Arcade", "Cinematic", "Singleplayer"],
         "steam_store_url": "https://store.steampowered.com/app/9000001/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/library_hero.jpg"
+        "header_image": "/acecombat8beranda.png",
+        "banner_image": "/acecombat8detail.png"
     },
     9000002: {
         "app_id": 9000002,
@@ -314,8 +314,8 @@ STEAM_CATALOG = {
         "publisher": "505 Games",
         "tags": ["Action", "Supernatural", "Story Rich", "Ray Tracing", "Third Person"],
         "steam_store_url": "https://store.steampowered.com/app/9000004/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/library_hero.jpg"
+        "header_image": "/controlresonantberanda.png",
+        "banner_image": "/controlresonantdetail.png"
     },
     9000005: {
         "app_id": 9000005,
@@ -328,8 +328,8 @@ STEAM_CATALOG = {
         "publisher": "Xbox Game Studios",
         "tags": ["Racing", "Open World", "Automobile Sim", "Multiplayer", "Beautiful"],
         "steam_store_url": "https://store.steampowered.com/app/9000005/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2561060/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2561060/library_hero.jpg"
+        "header_image": "/forzahorizon6beranda.png",
+        "banner_image": "/forzahorizon6detail.png"
     },
     2369170: {
         "app_id": 2369170,
@@ -342,8 +342,8 @@ STEAM_CATALOG = {
         "publisher": "Sony Interactive Entertainment",
         "tags": ["Action", "Superhero", "Open World", "Story Rich", "Marvel"],
         "steam_store_url": "https://store.steampowered.com/app/2369170/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2369170/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2369170/library_hero.jpg"
+        "header_image": "/marvelspiderman2beranda.png",
+        "banner_image": "/marvelspiderman2detail.png"
     },
     9000006: {
         "app_id": 9000006,
@@ -356,8 +356,8 @@ STEAM_CATALOG = {
         "publisher": "Capcom",
         "tags": ["Horror", "Survival", "Action", "Atmospheric", "Singleplayer"],
         "steam_store_url": "https://store.steampowered.com/app/9000006/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/library_hero.jpg"
+        "header_image": "/residentevilrequiemberanda.png",
+        "banner_image": "/residentevilrequiemdetail.png"
     },
     9000007: {
         "app_id": 9000007,
@@ -370,8 +370,8 @@ STEAM_CATALOG = {
         "publisher": "2K Games",
         "tags": ["Sports", "Basketball", "Simulation", "Multiplayer", "Career Mode"],
         "steam_store_url": "https://store.steampowered.com/app/9000007/",
-        "header_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2805120/header.jpg",
-        "banner_image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2805120/library_hero.jpg"
+        "header_image": "/nba2k27beranda.png",
+        "banner_image": "/nba2k27detail.png"
     }
 }
 

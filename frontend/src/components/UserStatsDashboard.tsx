@@ -217,7 +217,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'Ace Combat 8: Wings of Theve',
     appId: 9000001,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/502500/header.jpg',
+    image: '/acecombat8beranda.png',
     genre: 'Flight / Action',
     trophies: [
       { title: 'Wings of Theve Champion', rarity: 'Top 6.8%', icon: '✈️' },
@@ -261,7 +261,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'Control: Resonant',
     appId: 9000004,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg',
+    image: '/controlresonantberanda.png',
     genre: 'Action / Supernatural',
     trophies: [
       { title: 'Director of the FBC', rarity: 'Top 8.5%', icon: '🌀' },
@@ -272,7 +272,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'Forza Horizon 6',
     appId: 9000005,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2561060/header.jpg',
+    image: '/forzahorizon6beranda.png',
     genre: 'Racing',
     trophies: [
       { title: 'Horizon Champion', rarity: 'Top 4.9%', icon: '🏁' },
@@ -283,7 +283,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: "Marvel's Spider-Man 2",
     appId: 2369170,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2369170/header.jpg',
+    image: '/marvelspiderman2beranda.png',
     genre: 'Action / Adventure',
     trophies: [
       { title: 'Symbiote Slayer', rarity: 'Top 6.3%', icon: '🕷️' },
@@ -294,7 +294,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'Resident Evil: Requiem',
     appId: 9000006,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1196590/header.jpg',
+    image: '/residentevilrequiemberanda.png',
     genre: 'Survival Horror',
     trophies: [
       { title: 'Requiem Survivor (S+)', rarity: 'Top 3.4%', icon: '🧟' },
@@ -305,7 +305,7 @@ const CATALOG_GAMES: CatalogGame[] = [
   {
     title: 'NBA 2K27',
     appId: 9000007,
-    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2805120/header.jpg',
+    image: '/nba2k27beranda.png',
     genre: 'Sports / Basketball',
     trophies: [
       { title: 'MyCAREER MVP Season', rarity: 'Top 5.7%', icon: '🏀' },
