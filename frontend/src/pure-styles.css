@@ -9737,7 +9737,12 @@ body {
     min-height: 460px !important;
     max-height: 590px !important;
     margin-bottom: 16px !important;
-    border-radius: 0 0 16px 16px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    contain: paint !important;
+    isolation: isolate !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important;
@@ -9788,7 +9793,12 @@ body {
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    background: linear-gradient(0deg, #090c15 0%, rgba(9, 12, 21, 0.95) 45%, rgba(9, 12, 21, 0.5) 75%, rgba(9, 12, 21, 0.2) 100%) !important;
+    background: linear-gradient(0deg,
+      #0c0e15 0%,
+      #0c0e15 15%,
+      rgba(12, 14, 21, 0.96) 40%,
+      rgba(12, 14, 21, 0.6) 70%,
+      transparent 100%) !important;
     pointer-events: none !important;
     z-index: 2 !important;
   }
