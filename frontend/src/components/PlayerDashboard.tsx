@@ -836,14 +836,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     <div className="game-library-wrap">
       
       {/* 1. HERO SECTION (Dynamic Featured Game Carousel) */}
-      <div 
-        className="hero-banner-container"
-        style={{
-          backgroundImage: `url(${activeGame.image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
+      <div className="hero-banner-container">
         {/* Layered Crossfade Backgrounds (Static Base Layer) */}
         {featuredGames.map((game, idx) => (
           <div 

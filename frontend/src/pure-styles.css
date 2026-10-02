@@ -815,17 +815,18 @@ body {
   height: 520px;
   margin-bottom: 32px;
   overflow: hidden;
-  border-bottom: 1px solid var(--border-subtle);
-  perspective: 1200px;
+  border-bottom: none;
+  contain: paint;
+  isolation: isolate;
 }
 
 /* Multi-slide Crossfade Backgrounds */
 .hero-banner-bg {
   position: absolute;
-  inset: -20px;
+  inset: 0;
   background-size: cover;
   background-position: center 25%;
-  transform: translateZ(0) scale(1.02);
+  transform: scale(1.02);
   filter: brightness(0.82);
   opacity: 0;
   visibility: hidden;
@@ -839,7 +840,7 @@ body {
 .hero-banner-bg.active {
   opacity: 1;
   visibility: visible;
-  transform: translateZ(0) scale(1.07);
+  transform: scale(1.05);
 }
 
 .hero-banner-container:hover .hero-banner-bg.active {
@@ -879,9 +880,10 @@ body {
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(0deg,
-      var(--bg-window) 0%,
-      rgba(12, 14, 21, 0.88) 32%,
-      rgba(12, 14, 21, 0.4) 62%,
+      #0c0e15 0%,
+      #0c0e15 10%,
+      rgba(12, 14, 21, 0.95) 28%,
+      rgba(12, 14, 21, 0.6) 58%,
       transparent 100%);
 }
 
@@ -967,7 +969,6 @@ body {
   padding-left: 100px;
   max-width: 800px;
   z-index: 10;
-  transform-style: preserve-3d;
 }
 
 .hero-banner-content.slide-next {
