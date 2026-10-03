@@ -12289,6 +12289,332 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
+/* Cross-Region Replication Pairs & Backup Architecture */
+.dr-subblock {
+  margin-top: 24px;
+}
+
+.dr-subblock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dr-subblock-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.dr-subblock-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  color: #00d2ff;
+}
+
+.dr-pairs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .dr-pairs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dr-pair-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  position: relative;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.dr-pair-card:hover {
+  border-color: rgba(0, 210, 255, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dr-pair-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dr-pair-nodes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.dr-pair-role {
+  font-size: 11px;
+  color: var(--neon-cyan, #00d2ff);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.dr-pair-desc {
+  font-size: 12px;
+  color: var(--text-muted, #8b929e);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.dr-pair-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+}
+
+/* Multi-Region Vault Grid */
+.vault-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .vault-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .vault-specs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vault-spec-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vault-spec-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.vault-spec-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.vault-spec-desc {
+  font-size: 11px;
+  color: var(--text-muted, #8b929e);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Data Categories Grid */
+.backup-data-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1050px) {
+  .backup-data-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .backup-data-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.backup-category-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.backup-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.backup-cat-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.backup-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.backup-items-list li {
+  font-size: 11.5px;
+  color: var(--text-muted, #8b929e);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.35;
+}
+
+.backup-items-list li span.bullet {
+  color: var(--neon-cyan, #00d2ff);
+  font-weight: 800;
+}
+
+/* DR Runbook 6-Step Workflow */
+.dr-runbook-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .dr-runbook-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .dr-runbook-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dr-runbook-step {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dr-step-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--neon-cyan, #00d2ff);
+  background: rgba(0, 210, 255, 0.1);
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dr-step-title {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.dr-step-desc {
+  font-size: 10.5px;
+  color: var(--text-muted, #8b929e);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* DR Target Callout Banner */
+.dr-target-banner {
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(0, 210, 255, 0.08));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.dr-target-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dr-target-badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dr-target-badge-pill {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* 4. Live Cloud Telemetry & Audit Logs Table */
 .infra-audit-card {
   background: rgba(14, 18, 30, 0.7);

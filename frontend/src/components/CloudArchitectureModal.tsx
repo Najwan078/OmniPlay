@@ -235,10 +235,10 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       components: [
         'Primary Storage: 10.0 TB NVMe Gen5 SAN Cluster (7,200 MB/s Read)',
         'Distributed Steam Cache: 583.7 GB pre-installed games ready to stream',
-        'Synchronous WAL Replication: Jakarta Core (JK-01) ⟷ Singapore Standby (SG-01)',
-        'Cold Vault Backup: AWS S3 Glacier Multi Region (RTO < 30s, RPO = 0s)'
+        'Cross-Region DR Pairs: Jakarta ⟷ Singapore | Tokyo ⟷ California | Frankfurt ⟷ London',
+        'Multi-Region Backup Vault: S3 Encrypted, Versioned & SHA-256 Verified (DR Target: RTO < 30m, RPO < 5m)'
       ],
-      description: 'Ultra-fast storage pool that holds game libraries and automatically backs up save files across multiple cloud regions.'
+      description: 'Ultra-fast storage pool that holds game libraries, replicates via 3 regional pairs, and securely archives encrypted snapshots into a centralized multi-region vault.'
     }
   ];
 

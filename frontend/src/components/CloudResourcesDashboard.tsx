@@ -7,7 +7,7 @@ import {
   CheckCircle2, ArrowRight, Shield, Lock, Key, RefreshCw, 
   Download, Cloud, FileText, AlertTriangle, Activity, 
   Wifi, Layers, ShieldAlert, Wrench, Gamepad2, Sparkles,
-  TrendingUp, DollarSign, Award
+  TrendingUp, DollarSign, Award, Fingerprint, GitBranch
 } from 'lucide-react';
 import CloudArchitectureModal from './CloudArchitectureModal';
 
@@ -94,7 +94,7 @@ export default function CloudResourcesDashboard() {
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setLastBackupTime(`Just now (${timeStr})`);
-      setBackupSuccessMessage(`Snapshot #OMNI-BKP-${Date.now().toString().slice(-6)} created! Securely saved and encrypted in S3.`);
+      setBackupSuccessMessage(`Snapshot #OMNI-BKP-${Date.now().toString().slice(-6)} created across all 6 Cloud Centers! SHA-256 integrity verified, AES-256-GCM encrypted, and archived into Multi-Region Backup Vault.`);
       
       // Auto-clear message after 8 seconds
       setTimeout(() => {
@@ -107,8 +107,98 @@ export default function CloudResourcesDashboard() {
     // Generate real JSON export of current cloud infrastructure, security, and sessions state
     const backupData = {
       backup_id: `OMNI-SNAP-${Date.now()}`,
-      cluster: "OmniPlay High Performance Cloud Fleet",
+      cluster: "OmniPlay Global Cloud Gaming Fleet",
       timestamp: new Date().toISOString(),
+      disaster_recovery_design_target: {
+        label: "DISASTER RECOVERY DESIGN TARGET",
+        rto: "< 30 minutes (Regional Disaster Recovery Target)",
+        rpo: "< 5 minutes (Automated Backup & Snapshot Cadence)",
+        critical_wal_sync_target: "< 5 seconds (Real-Time Database WAL Streaming)",
+        architecture_pattern: "Regional Replication Pairs + Centralized Multi-Region Backup Vault"
+      },
+      cloud_centers: [
+        { id: "JK-01", city: "Jakarta", country: "Indonesia", dr_pair: "Singapore (SG-01)" },
+        { id: "SG-01", city: "Singapore", country: "Singapore", dr_pair: "Jakarta (JK-01)" },
+        { id: "TY-01", city: "Tokyo", country: "Japan", dr_pair: "California (US-01)" },
+        { id: "US-01", city: "California", country: "United States", dr_pair: "Tokyo (TY-01)" },
+        { id: "EU-02", city: "Frankfurt", country: "Germany", dr_pair: "London (EU-01)" },
+        { id: "EU-01", city: "London", country: "United Kingdom", dr_pair: "Frankfurt (EU-02)" }
+      ],
+      cross_region_replication_pairs: [
+        {
+          pair: "Jakarta (JK-01) ⟷ Singapore (SG-01)",
+          region_type: "APAC West / Southeast Asia Pair",
+          channel: "Active Bidirectional WAL Sync & Gaming Save States",
+          latency: "~12ms Peering",
+          status: "REPLICATION_ACTIVE"
+        },
+        {
+          pair: "Tokyo (TY-01) ⟷ California (US-01)",
+          region_type: "Trans-Pacific Cross-Continental Pair",
+          channel: "Asynchronous Snapshot & Session State Sync",
+          latency: "~98ms Optical Pipe",
+          status: "REPLICATION_ACTIVE"
+        },
+        {
+          pair: "Frankfurt (EU-02) ⟷ London (EU-01)",
+          region_type: "Western Europe Core Fiber Backbone",
+          channel: "Active Database WAL & Configuration Sync",
+          latency: "~14ms Backbone Ring",
+          status: "REPLICATION_ACTIVE"
+        }
+      ],
+      all_center_automated_backups: {
+        coverage: "100% of 6 Global Cloud Centers (JK, SG, TY, US, EU-01, EU-02)",
+        local_protections: [
+          "Automated Local Backup (Hourly NVMe snapshots)",
+          "Database Transaction Backup (Continuous WAL archiving)",
+          "Configuration Backup (Daily GitOps and network state)",
+          "Monitoring & Log Backup (Centralized elastic pipeline)"
+        ]
+      },
+      multi_region_backup_vault: {
+        storage_tier: "AWS S3 Multi-Region Glacier & Active Vault",
+        encryption: "AES-256-GCM / AWS KMS Hardware Security Module (Enforced)",
+        versioning: "Enabled (Point-in-Time Immutable Snapshots)",
+        integrity_verification: "SHA-256 Checksum Cryptographic Hash (Verified)",
+        deletion_protection: "WORM / S3 Object Lock & Multi-Party Approval Active"
+      },
+      backed_up_data_categories: {
+        omniplay_database: [
+          "user accounts & credentials",
+          "profiles & game history",
+          "game metadata & library catalog",
+          "rental data & active allocations",
+          "financial transactions & audit logs",
+          "subscriptions & Cloud Pass memberships",
+          "cluster system configuration"
+        ],
+        game_storage: [
+          "game executable files & binaries",
+          "game assets, textures & audio depots",
+          "game updates & differential patches"
+        ],
+        logs_and_monitoring: [
+          "cloud server & container daemon logs",
+          "player activity & streaming telemetry",
+          "security audit & Cloudflare DDoS deflection logs",
+          "analytics & streaming QoS metrics"
+        ],
+        system_configuration: [
+          "cloud node GPU & hardware configurations",
+          "network configuration & WebRTC routing",
+          "deployment manifests & container configs",
+          "security policies & firewall rules"
+        ]
+      },
+      disaster_recovery_runbook: [
+        "1. Detect regional failure (Heartbeat monitoring detects regional disruption within 30s)",
+        "2. Activate DR region / replica (Failover initiates to designated replication pair: JK↔SG, TY↔US, FRA↔LDN)",
+        "3. Restore or synchronize required data (Mount latest snapshot & WAL delta state from Multi-Region Vault)",
+        "4. Redirect affected gaming services (Anycast BGP and WebRTC session rerouting)",
+        "5. Recover original region (Node diagnostic, container restart, GPU driver validation)",
+        "6. Re-establish replication (Reverse delta resync and replication pair normalization)"
+      ],
       security_matrix: {
         encryption_in_transit: "TLS 1.3 / AES-256-GCM (Enforced)",
         stream_protocol: "WebRTC DTLS-SRTP (Sub 2ms Encrypted Datagrams)",
@@ -116,13 +206,6 @@ export default function CloudResourcesDashboard() {
         sandbox_isolation: "Docker/KVM Ephemeral Pods (Zero Local Footprint Per Rental)",
         firewall: "Cloudflare Enterprise Layer 3/4/7 DDoS Shield (0 Breaches)",
         anti_cheat_compatibility: "Valve Anti Cheat (VAC) & Steam Guard Passthrough Safe"
-      },
-      disaster_recovery: {
-        recovery_time_objective: "< 30 seconds (Automatic Multi PoP Failover)",
-        recovery_point_objective: "0 seconds (Continuous Write Ahead Log Stream)",
-        primary_storage: "NVMe SAN Cluster (10.0 TB Pool, 583.7 GB Distributed Cache)",
-        cold_storage_target: "AWS S3 Multi Region Glacier Vault (ap-southeast-1 & ap-northeast-1)",
-        cross_region_sync: "Active Global Mesh (JK-01 <-> SG-01 <-> TY-01 <-> US-01 <-> EU-01 <-> EU-02)"
       },
       edge_nodes: topologyNodes,
       active_sessions: activeSessions,
@@ -335,7 +418,7 @@ export default function CloudResourcesDashboard() {
       time: '19:51:15',
       type: 'CLOUD_SAVE_SYNC',
       target: 'SG-01 ⟷ JK-01',
-      detail: 'Bidirectional user save state sync verified across edge clusters (RPO=0)',
+      detail: 'Bidirectional user save state sync verified across edge clusters (RPO < 5s WAL stream)',
       badge: 'REPLICATED',
       badgeColor: 'green'
     },
@@ -1022,28 +1105,34 @@ export default function CloudResourcesDashboard() {
         </div>
       </section>
 
-      {/* 4. CLOUD BACKUP & DISASTER RECOVERY ORCHESTRATOR (UTS POIN 8) */}
+      {/* 4. CLOUD BACKUP & DISASTER RECOVERY ORCHESTRATOR */}
       <section className="infra-backup-section">
         <div className="section-title-strip">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Database style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
             <h2 className="section-heading">Automated Backup & Disaster Recovery Center</h2>
           </div>
-          <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: '#00d2ff' }}>
-            RTO &lt; 30s • RPO = 0s
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <span className="topology-badge" style={{ borderColor: 'rgba(168, 85, 247, 0.4)', color: '#c084fc', background: 'rgba(168, 85, 247, 0.08)' }}>
+              DISASTER RECOVERY DESIGN TARGET
+            </span>
+            <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: '#00d2ff', background: 'rgba(0, 210, 255, 0.08)' }}>
+              RTO &lt; 30m • RPO &lt; 5m
+            </span>
+          </div>
         </div>
 
         <div className="backup-control-card">
+          {/* Main Control Header */}
           <div className="backup-header-row">
             <div className="backup-title-wrap">
               <div className="backup-title-icon">
                 <Cloud style={{ width: 22, height: 22 }} />
               </div>
               <div>
-                <h3 className="backup-title">Automated Database & Cloud Backup Sync</h3>
+                <h3 className="backup-title">Automated Multi-Region Backup & Disaster Recovery Orchestrator</h3>
                 <p className="backup-desc">
-                  Continuous data replication between Jakarta and Singapore nodes, saved securely in S3.
+                  Automated local snapshots across all 6 Cloud Centers, continuously replicated via 3 Cross-Region DR pairs and archived in the Multi-Region Encrypted Backup Vault.
                 </p>
               </div>
             </div>
@@ -1058,7 +1147,7 @@ export default function CloudResourcesDashboard() {
                 {isBackingUp ? (
                   <>
                     <Loader2 className="btn-spinner" />
-                    <span>Backing Up...</span>
+                    <span>Backing Up Fleet...</span>
                   </>
                 ) : (
                   <>
@@ -1101,22 +1190,305 @@ export default function CloudResourcesDashboard() {
           {/* Backup Health & Telemetry Metrics Chips */}
           <div className="backup-metrics-row">
             <div className="backup-status-chip">
-              <span className="chip-lbl">Last Backup</span>
+              <span className="chip-lbl">Last Backup Execution</span>
               <span className="chip-val green">{lastBackupTime}</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Inter Node Replication</span>
-              <span className="chip-val cyan">Jakarta ⟷ Singapore Active</span>
+              <span className="chip-lbl">Replication Topology</span>
+              <span className="chip-val cyan">3 Cross-Region DR Pairs</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Secure Storage</span>
-              <span className="chip-val">AWS S3 Glacier Multi Region</span>
+              <span className="chip-lbl">Backup Storage</span>
+              <span className="chip-val">Multi-Region S3 Glacier Vault</span>
             </div>
             <div className="backup-status-chip">
               <span className="chip-lbl">Data Verification</span>
-              <span className="chip-val green">Valid (SHA-256 Verified)</span>
+              <span className="chip-val green">SHA-256 Verified (WORM Protected)</span>
             </div>
           </div>
+
+          {/* SUB-BLOCK 1: CROSS-REGION DISASTER RECOVERY & REPLICATION PAIRS */}
+          <div className="dr-subblock">
+            <div className="dr-subblock-header">
+              <h4 className="dr-subblock-title">
+                <GitBranch style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
+                Cross-Region Disaster Recovery & Replication Pairs
+              </h4>
+              <span className="dr-subblock-badge">
+                Regional Replication Pairs + Centralized Multi-Region Backup
+              </span>
+            </div>
+            <div className="dr-pairs-grid">
+              {/* Pair 1: Jakarta ⟷ Singapore */}
+              <div className="dr-pair-card">
+                <div className="dr-pair-header">
+                  <div className="dr-pair-nodes">
+                    <span>🇮🇩 Jakarta</span>
+                    <span style={{ color: 'var(--neon-cyan)' }}>⟷</span>
+                    <span>🇸🇬 Singapore</span>
+                  </div>
+                  <span className="security-badge-live" style={{ fontSize: 10, padding: '2px 8px' }}>ACTIVE</span>
+                </div>
+                <div className="dr-pair-role">APAC West & Southeast Asia DR Pair</div>
+                <p className="dr-pair-desc">
+                  Sub-12ms inter-PoP direct optical peering. Continuous PostgreSQL Write-Ahead Log (WAL) streaming and bidirectional player game save state synchronization.
+                </p>
+                <div className="dr-pair-footer">
+                  <span style={{ color: 'var(--text-muted)' }}>Failover Target:</span>
+                  <span style={{ color: 'var(--neon-cyan)', fontWeight: 700 }}>JK-01 ⇄ SG-01 (&lt; 30s failover)</span>
+                </div>
+              </div>
+
+              {/* Pair 2: Tokyo ⟷ California */}
+              <div className="dr-pair-card">
+                <div className="dr-pair-header">
+                  <div className="dr-pair-nodes">
+                    <span>🇯🇵 Tokyo</span>
+                    <span style={{ color: 'var(--neon-cyan)' }}>⟷</span>
+                    <span>🇺🇸 California</span>
+                  </div>
+                  <span className="security-badge-live" style={{ fontSize: 10, padding: '2px 8px' }}>ACTIVE</span>
+                </div>
+                <div className="dr-pair-role">Trans-Pacific Cross-Continental DR Pair</div>
+                <p className="dr-pair-desc">
+                  Asynchronous trans-Pacific replication over dedicated submarine cable route (~98ms). Session profile and transaction ledger mirroring across East Asia and Americas.
+                </p>
+                <div className="dr-pair-footer">
+                  <span style={{ color: 'var(--text-muted)' }}>Failover Target:</span>
+                  <span style={{ color: 'var(--neon-cyan)', fontWeight: 700 }}>TY-01 ⇄ US-01 (Multi-PoP Rerouting)</span>
+                </div>
+              </div>
+
+              {/* Pair 3: Frankfurt ⟷ London */}
+              <div className="dr-pair-card">
+                <div className="dr-pair-header">
+                  <div className="dr-pair-nodes">
+                    <span>🇩🇪 Frankfurt</span>
+                    <span style={{ color: 'var(--neon-cyan)' }}>⟷</span>
+                    <span>🇬🇧 London</span>
+                  </div>
+                  <span className="security-badge-live" style={{ fontSize: 10, padding: '2px 8px' }}>ACTIVE</span>
+                </div>
+                <div className="dr-pair-role">European Core Inter-Hub DR Pair</div>
+                <p className="dr-pair-desc">
+                  Sub-14ms European backbone ring connecting DE-CIX Frankfurt and London Telehouse. Continuous game catalog, user session tokens, and billing sync.
+                </p>
+                <div className="dr-pair-footer">
+                  <span style={{ color: 'var(--text-muted)' }}>Failover Target:</span>
+                  <span style={{ color: 'var(--neon-cyan)', fontWeight: 700 }}>EU-02 ⇄ EU-01 (&lt; 30s failover)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SUB-BLOCK 2: AUTOMATED ALL-CENTER PROTECTION & MULTI-REGION VAULT */}
+          <div className="dr-subblock">
+            <div className="dr-subblock-header">
+              <h4 className="dr-subblock-title">
+                <ShieldCheck style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
+                Multi-Region Backup Storage & Vault Specifications
+              </h4>
+              <span className="dr-subblock-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.3)', color: 'var(--neon-emerald)' }}>
+                Enforced Across All 6 Cloud Centers
+              </span>
+            </div>
+            <div className="vault-specs-grid">
+              <div className="vault-spec-card">
+                <div className="vault-spec-icon" style={{ background: 'rgba(0, 210, 255, 0.12)', color: '#00d2ff' }}>
+                  <Lock style={{ width: 18, height: 18 }} />
+                </div>
+                <h5 className="vault-spec-title">Encrypted (AES-256)</h5>
+                <p className="vault-spec-desc">
+                  Hardware KMS HSM keys enforce AES-256-GCM encryption for all snapshot blocks at rest and TLS 1.3 in transit.
+                </p>
+              </div>
+
+              <div className="vault-spec-card">
+                <div className="vault-spec-icon" style={{ background: 'rgba(168, 85, 247, 0.12)', color: '#c084fc' }}>
+                  <Layers style={{ width: 18, height: 18 }} />
+                </div>
+                <h5 className="vault-spec-title">Versioned Snapshots</h5>
+                <p className="vault-spec-desc">
+                  Immutable point-in-time snapshot tree with automated version retention prevents silent data overwrite or rollback corruption.
+                </p>
+              </div>
+
+              <div className="vault-spec-card">
+                <div className="vault-spec-icon" style={{ background: 'rgba(16, 185, 129, 0.12)', color: 'var(--neon-emerald)' }}>
+                  <Fingerprint style={{ width: 18, height: 18 }} />
+                </div>
+                <h5 className="vault-spec-title">SHA-256 Verified</h5>
+                <p className="vault-spec-desc">
+                  Every backup block generates a SHA-256 cryptographic checksum verified on ingest and validated prior to any restore action.
+                </p>
+              </div>
+
+              <div className="vault-spec-card">
+                <div className="vault-spec-icon" style={{ background: 'rgba(245, 158, 11, 0.12)', color: '#fbbf24' }}>
+                  <ShieldAlert style={{ width: 18, height: 18 }} />
+                </div>
+                <h5 className="vault-spec-title">Deletion Protected</h5>
+                <p className="vault-spec-desc">
+                  WORM (Write-Once-Read-Many) Object Lock and MFA Delete safeguard all backup vaults from ransomware or rogue administrative purging.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* SUB-BLOCK 3: DATA THAT IS BACKED UP (DATA YANG DIBACKUP) */}
+          <div className="dr-subblock">
+            <div className="dr-subblock-header">
+              <h4 className="dr-subblock-title">
+                <HardDrive style={{ width: 16, height: 16, color: '#fbbf24' }} />
+                Data That Is Backed Up (Protected Asset Classes)
+              </h4>
+              <span className="dr-subblock-badge">
+                Continuous WAL + Scheduled Multi-Region Snapshots
+              </span>
+            </div>
+            <div className="backup-data-grid">
+              {/* Category 1: OmniPlay Database */}
+              <div className="backup-category-card">
+                <div className="backup-cat-header">
+                  <Database style={{ width: 15, height: 15, color: 'var(--neon-cyan)' }} />
+                  <h5 className="backup-cat-title">1. OmniPlay Database</h5>
+                </div>
+                <ul className="backup-items-list">
+                  <li><span className="bullet">•</span> User accounts & authentication tokens</li>
+                  <li><span className="bullet">•</span> Profiles, player history & game statistics</li>
+                  <li><span className="bullet">•</span> Game library metadata & Steam AppIDs</li>
+                  <li><span className="bullet">•</span> Rental data & active streaming sessions</li>
+                  <li><span className="bullet">•</span> Transactions & payment audit ledger</li>
+                  <li><span className="bullet">•</span> Pro/Ultra subscriptions & Cloud Pass</li>
+                  <li><span className="bullet">•</span> Cluster system config & environment flags</li>
+                </ul>
+              </div>
+
+              {/* Category 2: Game Storage */}
+              <div className="backup-category-card">
+                <div className="backup-cat-header">
+                  <Gamepad2 style={{ width: 15, height: 15, color: 'var(--neon-purple)' }} />
+                  <h5 className="backup-cat-title">2. Game Storage</h5>
+                </div>
+                <ul className="backup-items-list">
+                  <li><span className="bullet">•</span> Pre-installed game binaries & execution depots</li>
+                  <li><span className="bullet">•</span> 4K/1080p game assets, textures & audio packs</li>
+                  <li><span className="bullet">•</span> Steam pre-cached libraries (583.7 GB)</li>
+                  <li><span className="bullet">•</span> Differential game updates & version patches</li>
+                  <li><span className="bullet">•</span> Engine shaders pre-warmed for instant play</li>
+                </ul>
+              </div>
+
+              {/* Category 3: Logs & Monitoring */}
+              <div className="backup-category-card">
+                <div className="backup-cat-header">
+                  <Activity style={{ width: 15, height: 15, color: 'var(--neon-emerald)' }} />
+                  <h5 className="backup-cat-title">3. Logs & Monitoring</h5>
+                </div>
+                <ul className="backup-items-list">
+                  <li><span className="bullet">•</span> Cloud server daemon & container logs</li>
+                  <li><span className="bullet">•</span> Player session activity & connection logs</li>
+                  <li><span className="bullet">•</span> Security audit & Cloudflare DDoS deflection</li>
+                  <li><span className="bullet">•</span> Streaming QoS, FPS & latency telemetry</li>
+                  <li><span className="bullet">•</span> Resource capacity & GPU health time-series</li>
+                </ul>
+              </div>
+
+              {/* Category 4: System Configuration */}
+              <div className="backup-category-card">
+                <div className="backup-cat-header">
+                  <Wrench style={{ width: 15, height: 15, color: '#fbbf24' }} />
+                  <h5 className="backup-cat-title">4. System Configuration</h5>
+                </div>
+                <ul className="backup-items-list">
+                  <li><span className="bullet">•</span> Cloud node hardware & NVIDIA driver specs</li>
+                  <li><span className="bullet">•</span> Edge network routing & WebRTC Anycast configs</li>
+                  <li><span className="bullet">•</span> Deployment manifests, Docker & Helm charts</li>
+                  <li><span className="bullet">•</span> Security policies, RBAC & firewall rules</li>
+                  <li><span className="bullet">•</span> Health probe endpoints & failover triggers</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* SUB-BLOCK 4: DISASTER RECOVERY RUNBOOK (6-STEP WORKFLOW) */}
+          <div className="dr-subblock">
+            <div className="dr-subblock-header">
+              <h4 className="dr-subblock-title">
+                <RefreshCw style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
+                Disaster Recovery Runbook (Regional Incident Failover Workflow)
+              </h4>
+              <span className="dr-subblock-badge">
+                Automated 6-Step Failover Protocol
+              </span>
+            </div>
+            <div className="dr-runbook-grid">
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 1</span>
+                <h5 className="dr-step-title">Detect Regional Failure</h5>
+                <p className="dr-step-desc">Automated edge health probes detect node, power, or network anomaly within 30 seconds.</p>
+              </div>
+
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 2</span>
+                <h5 className="dr-step-title">Activate DR Replica</h5>
+                <p className="dr-step-desc">Automated failover promotes paired region replica (JK↔SG, TY↔US, FRA↔LDN).</p>
+              </div>
+
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 3</span>
+                <h5 className="dr-step-title">Restore / Sync Data</h5>
+                <p className="dr-step-desc">Mount latest snapshot delta and continuous WAL logs from Multi-Region Vault (RPO &lt; 5m).</p>
+              </div>
+
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 4</span>
+                <h5 className="dr-step-title">Redirect Gaming Services</h5>
+                <p className="dr-step-desc">Anycast BGP and WebRTC signaling dynamically reroute player connections with minimal latency change.</p>
+              </div>
+
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 5</span>
+                <h5 className="dr-step-title">Recover Original Region</h5>
+                <p className="dr-step-desc">Automated node diagnostics, GPU driver reload, and container cluster remediation executed.</p>
+              </div>
+
+              <div className="dr-runbook-step">
+                <span className="dr-step-num">STEP 6</span>
+                <h5 className="dr-step-title">Re-establish Replication</h5>
+                <p className="dr-step-desc">Reverse delta synchronization completes and restores bidirectional replication pair health.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* SUB-BLOCK 5: DISASTER RECOVERY DESIGN TARGET CALLOUT BANNER */}
+          <div className="dr-target-banner">
+            <div className="dr-target-info">
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(168, 85, 247, 0.15)', border: '1px solid rgba(168, 85, 247, 0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc' }}>
+                <Clock style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <h4 style={{ margin: 0, fontFamily: 'var(--font-display, "Rajdhani")', fontSize: 16, fontWeight: 800, color: '#ffffff', letterSpacing: '0.05em' }}>
+                  DISASTER RECOVERY DESIGN TARGET
+                </h4>
+                <p style={{ margin: '3px 0 0', fontSize: 12, color: 'var(--text-muted)' }}>
+                  Architecture target for business continuity across all 6 Cloud Centers. Critical database transactions stream in real-time (sub-5s), while snapshot storage targets RPO &lt; 5m.
+                </p>
+              </div>
+            </div>
+
+            <div className="dr-target-badges">
+              <div className="dr-target-badge-pill">
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recovery Time Objective</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 800, color: 'var(--neon-cyan)' }}>RTO &lt; 30 minutes</span>
+              </div>
+              <div className="dr-target-badge-pill">
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recovery Point Objective</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 800, color: 'var(--neon-emerald)' }}>RPO &lt; 5 minutes</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
