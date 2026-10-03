@@ -137,6 +137,7 @@ export default function AnalyticsDashboard() {
 
   const formatUSD = (val: number) => `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const formatIdr = (val: number) => `Rp ${Math.round(val * 15800).toLocaleString('id-ID')}`;
+  const formatRawIdr = (val: number) => `Rp ${Math.round(val).toLocaleString('id-ID')}`;
   const formatDual = (usd: number) => `${formatUSD(usd)} (~${formatIdr(usd)})`;
 
   // Export handler - strictly respects single Export button rule
@@ -149,7 +150,7 @@ export default function AnalyticsDashboard() {
         platform: "OmniPlay Cloud Gaming",
         reportType: "Cloud Gaming Business Model & Financial Profitability Projection",
         academicNote: "Estimated cloud gaming projection based on 12-GPU game rendering infrastructure across 6 Global Cloud Centers",
-        initialInvestment: formatIdr(financialConfig.initialInvestment),
+        initialInvestment: formatRawIdr(financialConfig.initialInvestment),
         monthlyOpex: formatUSD(currentSim.monthlyOpex),
         utilizationRate: `${(currentSim.utilizationRate * 100).toFixed(1)}%`,
         activeGamingHours: `${currentSim.gamingHours} hrs`,
@@ -444,9 +445,17 @@ export default function AnalyticsDashboard() {
   }, [activeSubView, selectedUtilization, timeRange]);
 
   const filteredTransactions = useMemo(() => {
-    if (transactionFilter === 'LIVE') return transactions.filter(t => !t.isDemo);
-    if (transactionFilter === 'DEMO') return transactions.filter(t => t.isDemo);
-    return transactions;
+    // Strictly filter out any legacy or compute transactions
+    const clean = transactions.filter(t => 
+      (t.category as string) !== 'Compute' &&
+      !t.itemTitle.toLowerCase().includes('compute') &&
+      !t.itemTitle.toLowerCase().includes('llm') &&
+      !t.itemTitle.toLowerCase().includes('blender') &&
+      !t.user.toLowerCase().includes('enterprise')
+    );
+    if (transactionFilter === 'LIVE') return clean.filter(t => !t.isDemo);
+    if (transactionFilter === 'DEMO') return clean.filter(t => t.isDemo);
+    return clean;
   }, [transactions, transactionFilter]);
 
   const renderInsightIcon = (type: GameInsightItem['iconType']) => {
@@ -486,8 +495,8 @@ export default function AnalyticsDashboard() {
           <p className="analytics-sub">
             {activeSubView === 'financial' && 'Simulated academic financial projection across 12 GPUs, multi-revenue streams, and profitability metrics.'}
             {activeSubView === 'telemetry' && 'Playtime metrics, FPS stability, network latency, and cloud instance telemetry.'}
-            {activeSubView === 'transactions' && 'Real-time record of customer gaming sessions, compute workloads, and cloud pass payments.'}
-            {activeSubView === 'pricing' && 'Adjust gaming rates, compute rates, bundles, Day Pass, subscriptions, and OPEX assumptions.'}
+            {activeSubView === 'transactions' && 'Real-time record of customer cloud gaming sessions, passes, and membership payments.'}
+            {activeSubView === 'pricing' && 'Adjust cloud gaming rates, pass bundles, Day Pass, subscriptions, and OPEX assumptions.'}
           </p>
         </div>
 
@@ -1215,7 +1224,7 @@ export default function AnalyticsDashboard() {
           <div className="chart-card-header">
             <div>
               <h3 className="chart-card-title">Transaction & Rental Audit Log</h3>
-              <p className="chart-card-sub">Recorded rental payments, subscriptions, and GPU compute sessions</p>
+              <p className="chart-card-sub">Recorded rental payments, subscriptions, and cloud gaming sessions</p>
             </div>
 
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -1225,21 +1234,21 @@ export default function AnalyticsDashboard() {
                   className={`time-pill ${transactionFilter === 'ALL' ? 'active' : ''}`}
                   onClick={() => setTransactionFilter('ALL')}
                 >
-                  All ({transactions.length})
+                  All ({filteredTransactions.length})
                 </button>
                 <button
                   type="button"
                   className={`time-pill ${transactionFilter === 'LIVE' ? 'active' : ''}`}
                   onClick={() => setTransactionFilter('LIVE')}
                 >
-                  Live Flow ({transactions.filter(t => !t.isDemo).length})
+                  Live Flow ({transactions.filter(t => !t.isDemo && (t.category as string) !== 'Compute' && !t.itemTitle.toLowerCase().includes('compute')).length})
                 </button>
                 <button
                   type="button"
                   className={`time-pill ${transactionFilter === 'DEMO' ? 'active' : ''}`}
                   onClick={() => setTransactionFilter('DEMO')}
                 >
-                  Simulation ({transactions.filter(t => t.isDemo).length})
+                  Simulation ({transactions.filter(t => t.isDemo && (t.category as string) !== 'Compute' && !t.itemTitle.toLowerCase().includes('compute')).length})
                 </button>
               </div>
             </div>
@@ -1251,7 +1260,7 @@ export default function AnalyticsDashboard() {
                 <tr>
                   <th>Transaction ID</th>
                   <th>Customer / User</th>
-                  <th>Item / Workload</th>
+                  <th>Game / Cloud Pass</th>
                   <th>Category</th>
                   <th>Node & GPU</th>
                   <th>Duration</th>
@@ -1273,7 +1282,12 @@ export default function AnalyticsDashboard() {
                     </td>
                     <td>{tx.gpuTier}</td>
                     <td>{tx.durationHours} hrs</td>
-                    <td style={{ fontWeight: 800 }}>{formatIdr(tx.amountIdr)}</td>
+                    <td style={{ fontWeight: 800 }}>
+                      <div style={{ color: '#ffffff' }}>{formatRawIdr(tx.amountIdr)}</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 400 }}>
+                        ${(tx.amountIdr / 15800).toFixed(2)} USD
+                      </div>
+                    </td>
                     <td style={{ color: 'var(--text-muted)' }}>{tx.paymentMethod}</td>
                     <td>
                       <span className={`status-badge ${tx.paymentStatus.toLowerCase()}`}>

@@ -234,7 +234,7 @@ export interface TransactionRecord {
   id: string;
   user: string;
   itemTitle: string;
-  category: 'Gaming' | 'Compute' | 'Subscription' | 'Add-on';
+  category: 'Gaming' | 'Subscription' | 'Add-on';
   nodeId: string;
   nodeName: string;
   gpuTier: string;
@@ -249,7 +249,7 @@ export interface TransactionRecord {
 }
 
 const CONFIG_STORAGE_KEY = 'omniplay_financial_config_v2';
-const TRANSACTIONS_STORAGE_KEY = 'omniplay_transactions_v2';
+const TRANSACTIONS_STORAGE_KEY = 'omniplay_cloud_gaming_tx_v5';
 
 /**
  * Load persisted financial configuration or fallback to defaults
@@ -648,24 +648,42 @@ export function calculateCloudPassPrice(
 }
 
 /**
- * Transaction Audit Repository
+ * Transaction Audit Repository (Strictly Cloud Gaming Rentals & Subscriptions)
  */
 export function getStoredTransactions(): TransactionRecord[] {
   try {
-    const raw = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
+    // Purge old legacy caches that contained compute workloads
+    if (typeof localStorage !== 'undefined') {
+      ['omniplay_transactions', 'omniplay_transactions_v1', 'omniplay_transactions_v2', 'omniplay_transactions_v3', 'omniplay_transactions_v4'].forEach(k => {
+        try { localStorage.removeItem(k); } catch {}
+      });
+    }
+
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(TRANSACTIONS_STORAGE_KEY) : null;
     if (raw) {
-      return JSON.parse(raw);
+      const parsed: TransactionRecord[] = JSON.parse(raw);
+      // Strictly sanitize: ensure no compute workloads or AI developers appear
+      const sanitized = parsed.filter(t => 
+        (t.category as string) !== 'Compute' &&
+        !t.itemTitle.toLowerCase().includes('compute') &&
+        !t.itemTitle.toLowerCase().includes('llm') &&
+        !t.itemTitle.toLowerCase().includes('blender') &&
+        !t.user.toLowerCase().includes('enterprise')
+      );
+      if (sanitized.length > 0) {
+        return sanitized;
+      }
     }
   } catch (e) {
     console.warn('Error reading transactions:', e);
   }
 
-  // Seed baseline realistic simulation & audit transactions (Clearly marked as DEMO / SIMULATION)
+  // Seed baseline realistic simulation & audit transactions (Strictly Cloud Gaming)
   const initialSeeds: TransactionRecord[] = [
     {
       id: 'OMNI-TX-984210',
       user: 'AlphaGamer',
-      itemTitle: 'EA SPORTS FC 25',
+      itemTitle: 'EA SPORTS FC 25 (5h Pass)',
       category: 'Gaming',
       nodeId: 'JK-01',
       nodeName: 'Jakarta Edge (JK-01)',
@@ -681,7 +699,7 @@ export function getStoredTransactions(): TransactionRecord[] {
     {
       id: 'OMNI-TX-984209',
       user: 'VortexGamer',
-      itemTitle: 'Black Myth: Wukong (4K Ray Tracing)',
+      itemTitle: 'Black Myth: Wukong (10h Pass)',
       category: 'Gaming',
       nodeId: 'TY-01',
       nodeName: 'Tokyo Ultra (TY-01)',
@@ -697,7 +715,7 @@ export function getStoredTransactions(): TransactionRecord[] {
     {
       id: 'OMNI-TX-984208',
       user: 'CyberSamurai',
-      itemTitle: 'Cyberpunk 2077: Phantom Liberty',
+      itemTitle: 'Cyberpunk 2077: Phantom Liberty (10h Pass)',
       category: 'Gaming',
       nodeId: 'SG-01',
       nodeName: 'Singapore Premium (SG-01)',
@@ -713,7 +731,7 @@ export function getStoredTransactions(): TransactionRecord[] {
     {
       id: 'OMNI-TX-984207',
       user: 'ApexWarrior_EU',
-      itemTitle: 'Forza Horizon 5 (120 FPS Ultra Stream)',
+      itemTitle: 'Forza Horizon 5 (5h Pass)',
       category: 'Gaming',
       nodeId: 'EU-02',
       nodeName: 'Frankfurt Central (EU-02)',
@@ -758,10 +776,28 @@ export function getStoredTransactions(): TransactionRecord[] {
       isDemo: true,
       date: new Date(Date.now() - 3600000 * 72).toISOString(),
     },
+    {
+      id: 'OMNI-TX-984204',
+      user: 'TokyoDrifter',
+      itemTitle: 'Ghost Recon Wildlands (1h Quickplay)',
+      category: 'Gaming',
+      nodeId: 'TY-01',
+      nodeName: 'Tokyo Ultra (TY-01)',
+      gpuTier: 'RTX 4090 (Tier 3)',
+      durationHours: 1,
+      amountIdr: 109_000,
+      paymentMethod: 'LINE Pay',
+      paymentStatus: 'PAID',
+      rentalStatus: 'COMPLETED',
+      isDemo: true,
+      date: new Date(Date.now() - 3600000 * 85).toISOString(),
+    },
   ];
 
   try {
-    localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(initialSeeds));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(initialSeeds));
+    }
   } catch (e) {
     console.warn('Error seeding initial transactions:', e);
   }

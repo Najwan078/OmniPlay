@@ -6,7 +6,7 @@ import {
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
   Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock, Globe, Coins,
-  Cpu, Sparkles, Terminal
+  Sparkles
 } from 'lucide-react';
 import { 
   getFinancialConfig, 
@@ -88,15 +88,6 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   // Cloud Pass Bundles & Add-ons State
   const [includePriorityQueue, setIncludePriorityQueue] = useState(false);
   const [includeExtraStorage, setIncludeExtraStorage] = useState(false);
-
-  // Cloud Compute Modal State (Section 8: AI/3D GPU Compute)
-  const [showComputeModal, setShowComputeModal] = useState(false);
-  const [computeWorkload, setComputeWorkload] = useState('AI / Machine Learning (LLM Fine-Tuning)');
-  const [computeGpu, setComputeGpu] = useState<'RTX 4070' | 'RTX 4080' | 'RTX 4090'>('RTX 4090');
-  const [computeRegion, setComputeRegion] = useState('TY-01 (Tokyo Core)');
-  const [computeDuration, setComputeDuration] = useState(4);
-  const [computeProcessing, setComputeProcessing] = useState(false);
-  const [computeSuccessNotice, setComputeSuccessNotice] = useState<string | null>(null);
 
   // Payment Modal State
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -682,7 +673,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     }
   ];
 
-  // Featured Carousel Showcase Titles
+  // Featured Carousel Showcase Titles (Cloud Gaming Pricing Aligned with Cloud Pass)
   const featuredGames = [
     {
       id: 102,
@@ -693,12 +684,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'Official 2026 Edition',
       nodeBadge: 'Instant Steam Cloud Launch',
       desc: 'Experience unrivaled realism in EA SPORTS FC™ 26 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam direct link integration.',
-      hourlyRate: '$1.25',
+      hourlyRate: '$3.73',
       rateUnit: '/ hr',
+      rateIdr: 'Rp 59.000 / jam',
       ratingScore: '85%',
       ratingSentiment: 'Very Positive',
-      nodeSpec: 'RTX 4090',
-      nodeSub: '4K 120FPS',
+      nodeSpec: 'RTX 4070',
+      nodeSub: '1080p Ultra 144Hz',
       banner: '/eafc26hd_details.jpeg',
       themeColor: 'var(--neon-emerald)',
       glowColor: 'rgba(0, 240, 255, 0.4)',
@@ -712,9 +704,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       genre: 'Sci Fi Action RPG',
       badge: 'Ray Tracing Overdrive',
       nodeBadge: 'Path Tracing & DLSS 3.5',
-      desc: 'Enter the neon soaked underworld of Night City. Rent high performance cloud compute with full path tracing, DLSS 3.5 ray reconstruction, and ultra low input latency.',
-      hourlyRate: '$1.50',
+      desc: 'Enter the neon soaked underworld of Night City. Rent high performance cloud gaming instance with full path tracing, DLSS 3.5 ray reconstruction, and ultra low input latency.',
+      hourlyRate: '$6.90',
       rateUnit: '/ hr',
+      rateIdr: 'Rp 109.000 / jam',
       ratingScore: '92%',
       ratingSentiment: 'Overwhelmingly Positive',
       nodeSpec: 'RTX 4090',
@@ -733,8 +726,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'Esports Ready',
       nodeBadge: 'Instant Steam Cloud Launch • 2ms',
       desc: 'Blend pinpoint gunplay with tactical agent abilities. Stream direct from Jakarta Edge with under 2ms network routing, NVIDIA Reflex 360Hz tuning, and Steam Cloud synchronization.',
-      hourlyRate: '$0.99',
+      hourlyRate: '$5.00',
       rateUnit: '/ hr',
+      rateIdr: 'Rp 79.000 / jam',
       ratingScore: '94%',
       ratingSentiment: 'Very Positive',
       nodeSpec: 'RTX 4080',
@@ -753,8 +747,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       badge: 'Global Blockbuster',
       nodeBadge: 'Unreal Engine 5 Nanite',
       desc: 'Set out as the Destined One to venture into the marvels and perils of ancient Chinese mythology. Powered by cutting edge Nanite geometry and Lumen lighting on cloud nodes.',
-      hourlyRate: '$1.40',
+      hourlyRate: '$6.90',
       rateUnit: '/ hr',
+      rateIdr: 'Rp 109.000 / jam',
       ratingScore: '95%',
       ratingSentiment: 'Overwhelmingly Positive',
       nodeSpec: 'RTX 4090',
@@ -1100,7 +1095,14 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           <div className="hero-stats-row">
             <div className="hero-stat-item">
               <p className="label">Hourly Rate</p>
-              <p className="val">{currentFeatured.hourlyRate} <span>{currentFeatured.rateUnit}</span></p>
+              <p className="val">
+                {currentFeatured.hourlyRate} <span>{currentFeatured.rateUnit}</span>
+              </p>
+              {(currentFeatured as any).rateIdr && (
+                <span style={{ fontSize: '11px', color: 'var(--neon-cyan)', display: 'block', marginTop: '2px', fontWeight: 600 }}>
+                  (~{(currentFeatured as any).rateIdr})
+                </span>
+              )}
             </div>
             <div className="hero-stat-item">
               <p className="label">Steam Rating</p>
@@ -1618,7 +1620,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     Optimized specifically for OmniPlay cloud streaming architecture. Shaders are precompiled and warmed across all edge clusters, eliminating compilation stutter and in game frame drops. Input packets utilize synchronized UDP subtick streams with automatic packet recovery.
                   </p>
                   <p className="synopsis-text" style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                    Whether you are playing on a low spec ultrabook, tablet, or handheld terminal, you get the fidelity of a high performance dedicated gaming rig powered by green energy cloud compute centers.
+                    Whether you are playing on a low spec ultrabook, tablet, or handheld console, you get the fidelity of a high performance dedicated gaming rig powered by green energy cloud gaming data centers.
                   </p>
                 </div>
 
@@ -2275,287 +2277,6 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   : "SELECT PAYMENT METHOD"
                 }
               </button>
-            </div>
-          </div>
-        </div>
-      , document.body)}
-
-      {/* 5. CLOUD COMPUTE WORKLOAD MODAL (Section 8) */}
-      {showComputeModal && typeof document !== 'undefined' && createPortal(
-        <div 
-          className="compute-modal-overlay"
-          onClick={(e) => {
-            if (e.target === e.currentTarget && !computeProcessing) {
-              setShowComputeModal(false);
-              setComputeSuccessNotice(null);
-            }
-          }}
-        >
-          <div className="compute-modal-card">
-            {/* Header */}
-            <div className="compute-modal-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(168, 85, 247, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc' }}>
-                  <Cpu style={{ width: 20, height: 20 }} />
-                </div>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#ffffff' }}>OmniPlay Cloud Compute</h3>
-                  <p style={{ margin: 0, fontSize: 11, color: 'var(--text-muted)' }}>High-Performance GPU Compute for AI, 3D Rendering & Science</p>
-                </div>
-              </div>
-              <button 
-                type="button" 
-                onClick={() => {
-                  if (!computeProcessing) {
-                    setShowComputeModal(false);
-                    setComputeSuccessNotice(null);
-                  }
-                }}
-                className="payment-back-btn"
-                title="Close"
-              >
-                <X style={{ width: 18, height: 18 }} />
-              </button>
-            </div>
-
-            {/* Content Body */}
-            <div className="compute-modal-body">
-              {computeSuccessNotice ? (
-                <div style={{ textAlign: 'center', padding: '24px 16px' }}>
-                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--neon-emerald)' }}>
-                    <CheckCircle2 style={{ width: 32, height: 32 }} />
-                  </div>
-                  <h4 style={{ fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Compute Instance Allocated!</h4>
-                  <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16, lineHeight: 1.5 }}>
-                    {computeSuccessNotice}
-                  </p>
-                  <div style={{ background: 'rgba(0,0,0,0.4)', borderRadius: 8, padding: 12, marginBottom: 20, fontFamily: 'monospace', fontSize: 11, color: '#38bdf8', textAlign: 'left' }}>
-                    $ ssh -i ~/.ssh/omniplay.pem root@{computeRegion.toLowerCase().slice(0, 5)}.omniplay.cloud<br />
-                    # GPU: NVIDIA {computeGpu} | Container: PyTorch 2.3 CUDA 12.4<br />
-                    # Session active for {computeDuration} hours
-                  </div>
-                  <button
-                    type="button"
-                    className="hero-btn-primary"
-                    style={{ width: '100%', justifyContent: 'center' }}
-                    onClick={() => {
-                      setShowComputeModal(false);
-                      setComputeSuccessNotice(null);
-                    }}
-                  >
-                    Done & Return to Library
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {/* Notice banner */}
-                  <div style={{ background: 'rgba(168, 85, 247, 0.08)', border: '1px solid rgba(168, 85, 247, 0.25)', borderRadius: 8, padding: '10px 12px', marginBottom: 16, fontSize: 11, color: '#d8b4fe', lineHeight: 1.4 }}>
-                    💡 <strong>Idle Capacity Monetization:</strong> Tap into dedicated enterprise GPUs when gamer demand is off-peak. All instances are containerized, isolated, and billed strictly per GPU-hour.
-                  </div>
-
-                  {/* 1. Workload Type */}
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
-                      1. Select Compute Workload:
-                    </label>
-                    <select 
-                      value={computeWorkload} 
-                      onChange={e => setComputeWorkload(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: 8,
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        color: '#ffffff',
-                        fontSize: 12,
-                        outline: 'none'
-                      }}
-                    >
-                      <option value="AI / Machine Learning (LLM Fine-Tuning)">AI / Machine Learning (LLM Fine-Tuning & Inference)</option>
-                      <option value="3D Rendering (Blender / Unreal / Octane)">3D Rendering (Blender / Unreal Engine / Octane)</option>
-                      <option value="Video Processing & VFX (8K Transcoding)">Video Processing & VFX (8K Transcoding / DaVinci)</option>
-                      <option value="Scientific Simulation & Physics">Scientific Simulation & Physics (CUDA acceleration)</option>
-                      <option value="General GPU Compute & Development">General GPU Dev (Jupyter Notebook / Docker)</option>
-                    </select>
-                  </div>
-
-                  {/* 2. GPU Tier Selector */}
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
-                      2. GPU Hardware Tier:
-                    </label>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                      {(['RTX 4070', 'RTX 4080', 'RTX 4090'] as const).map(gpu => {
-                        const rate = financialConfig.pricing.cloudCompute[gpu];
-                        const isSelected = computeGpu === gpu;
-                        return (
-                          <div 
-                            key={gpu}
-                            onClick={() => setComputeGpu(gpu)}
-                            style={{
-                              padding: '10px 8px',
-                              borderRadius: 8,
-                              border: `1px solid ${isSelected ? 'var(--neon-purple)' : 'rgba(255,255,255,0.08)'}`,
-                              background: isSelected ? 'rgba(168, 85, 247, 0.15)' : 'rgba(255,255,255,0.02)',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            <p style={{ margin: 0, fontWeight: 700, fontSize: 12, color: isSelected ? '#ffffff' : 'var(--text-muted)' }}>{gpu}</p>
-                            <p style={{ margin: '4px 0 0', fontSize: 11, color: isSelected ? '#c084fc' : 'var(--text-muted)' }}>
-                              {formatPrice(rate / 15800)}/h
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* 3. Cloud Region & Duration */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-                    <div>
-                      <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
-                        3. Cloud Region:
-                      </label>
-                      <select 
-                        value={computeRegion} 
-                        onChange={e => setComputeRegion(e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '10px 12px',
-                          borderRadius: 8,
-                          background: 'rgba(255,255,255,0.04)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          color: '#ffffff',
-                          fontSize: 12,
-                          outline: 'none'
-                        }}
-                      >
-                        <option value="JK-01 (Jakarta Edge)">🇮🇩 JK-01 (Jakarta)</option>
-                        <option value="SG-01 (Singapore Edge)">🇸🇬 SG-01 (Singapore)</option>
-                        <option value="TY-01 (Tokyo Core)">🇯🇵 TY-01 (Tokyo)</option>
-                        <option value="EU-01 (London Core)">🇬🇧 EU-01 (London)</option>
-                        <option value="EU-02 (Frankfurt Central)">🇩🇪 EU-02 (Frankfurt)</option>
-                        <option value="US-01 (California West)">🇺🇸 US-01 (California)</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
-                        4. Duration ({computeDuration}h):
-                      </label>
-                      <select 
-                        value={computeDuration} 
-                        onChange={e => setComputeDuration(parseInt(e.target.value))}
-                        style={{
-                          width: '100%',
-                          padding: '10px 12px',
-                          borderRadius: 8,
-                          background: 'rgba(255,255,255,0.04)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          color: '#ffffff',
-                          fontSize: 12,
-                          outline: 'none'
-                        }}
-                      >
-                        <option value={1}>1 Hour Batch</option>
-                        <option value={4}>4 Hours Standard</option>
-                        <option value={8}>8 Hours Workday</option>
-                        <option value={12}>12 Hours Heavy</option>
-                        <option value={24}>24 Hours Full Pipeline</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* 4. Cost Breakdown */}
-                  {(() => {
-                    const rateIdr = financialConfig.pricing.cloudCompute[computeGpu];
-                    const computeTotalIdr = rateIdr * computeDuration;
-                    const computeTotalUsd = computeTotalIdr / 15800;
-
-                    return (
-                      <div className="rental-pricing-breakdown" style={{ marginBottom: 16 }}>
-                        <div className="price-row">
-                          <span>Workload / Service</span>
-                          <span style={{ maxWidth: 180, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{computeWorkload}</span>
-                        </div>
-                        <div className="price-row">
-                          <span>Rate per GPU-hour</span>
-                          <span>{formatPrice(rateIdr / 15800)}/h</span>
-                        </div>
-                        <div className="price-row">
-                          <span>Allocated GPU Duration</span>
-                          <span>{computeDuration} GPU-hours</span>
-                        </div>
-                        <div className="price-row total">
-                          <span>Estimated Compute Cost</span>
-                          <div style={{ textAlign: 'right' }}>
-                            <span className="total-amount" style={{ color: '#c084fc' }}>{formatPrice(computeTotalUsd)}</span>
-                            {selectedCurrency !== 'USD' && (
-                              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
-                                (${computeTotalUsd.toFixed(2)} USD)
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {/* Deploy Action Button */}
-                  <button
-                    type="button"
-                    disabled={computeProcessing}
-                    onClick={() => {
-                      setComputeProcessing(true);
-                      const rateIdr = financialConfig.pricing.cloudCompute[computeGpu];
-                      const computeTotalIdr = rateIdr * computeDuration;
-
-                      setTimeout(() => {
-                        // Record to real audit transaction ledger
-                        recordLiveTransaction({
-                          user: 'Enterprise / AI Developer (OmniCompute)',
-                          itemTitle: `Compute: ${computeWorkload.slice(0, 32)}`,
-                          category: 'Compute',
-                          nodeId: computeRegion.split(' ')[0],
-                          nodeName: computeRegion,
-                          gpuTier: computeGpu,
-                          durationHours: computeDuration,
-                          amountIdr: computeTotalIdr,
-                          paymentMethod: 'CORPORATE_INVOICE',
-                          paymentStatus: 'PAID',
-                          rentalStatus: 'ACTIVE',
-                          metadata: {
-                            workload: computeWorkload,
-                            node: computeRegion
-                          }
-                        });
-
-                        setComputeProcessing(false);
-                        setComputeSuccessNotice(`Allocated ${computeDuration} GPU-hours on ${computeGpu} in ${computeRegion}. Orchestration telemetry active.`);
-                      }, 1200);
-                    }}
-                    className="hero-btn-primary"
-                    style={{
-                      width: '100%',
-                      justifyContent: 'center',
-                      background: 'linear-gradient(135deg, #9333ea, #6366f1)',
-                      borderColor: '#a855f7'
-                    }}
-                  >
-                    {computeProcessing ? (
-                      <span>Allocating GPU Cluster...</span>
-                    ) : (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                        <Terminal style={{ width: 16, height: 16 }} />
-                        <span>Deploy Workload Instance ({formatPrice((financialConfig.pricing.cloudCompute[computeGpu] * computeDuration) / 15800)})</span>
-                      </span>
-                    )}
-                  </button>
-                </>
-              )}
             </div>
           </div>
         </div>
