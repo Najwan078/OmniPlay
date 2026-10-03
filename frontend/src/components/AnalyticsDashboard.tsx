@@ -7,11 +7,65 @@ import {
   Wifi, ShieldCheck, Cpu, HardDrive, PieChart as PieIcon, Flame
 } from 'lucide-react';
 
+interface GameShare {
+  name: string;
+  pct: number;
+  color: string;
+  hours: string | number;
+}
+
+interface NodeLatency {
+  id: string;
+  name: string;
+  flag: string;
+  sub: string;
+  latency: string;
+  latencyVal: number;
+  width: string;
+  className: string;
+  background?: string;
+  isUltra?: boolean;
+}
+
+interface GameInsightItem {
+  game: string;
+  stat: string;
+  value: string;
+  iconType: 'activity' | 'gauge' | 'crosshair' | 'trophy' | 'trophy-green' | 'target';
+}
+
+interface TelemetryDataset {
+  kpis: {
+    totalPlaytime: string;
+    totalPlaytimeUnit: string;
+    playtimeTrend: string;
+    avgFps: number;
+    fpsLow: string;
+    latency: number;
+    latencySub: string;
+    bandwidth: number;
+    bandwidthSub: string;
+  };
+  games: GameShare[];
+  fpsChart: {
+    min: string;
+    avg: string;
+    max: string;
+    frameDrop: string;
+    pathArea: string;
+    pathLine: string;
+    dots: { cx: number; cy: number }[];
+  };
+  nodes: NodeLatency[];
+  insights: GameInsightItem[];
+}
+
 export default function AnalyticsDashboard() {
   const [exportOpen, setExportOpen] = useState(false);
   const [exportNotice, setExportNotice] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const analyticsContainerRef = useRef<HTMLDivElement>(null);
 
   // Close export dropdown on outside click
   useEffect(() => {
@@ -24,19 +78,160 @@ export default function AnalyticsDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Comprehensive Telemetry Datasets for 24H, 7D, and 30D
+  const telemetryDatasets: Record<'24h' | '7d' | '30d', TelemetryDataset> = useMemo(() => ({
+    '24h': {
+      kpis: {
+        totalPlaytime: '18.5',
+        totalPlaytimeUnit: 'hrs',
+        playtimeTrend: '↑ +2.4 hrs vs yesterday',
+        avgFps: 119,
+        fpsLow: '1% Low: 104 fps (Ultra Smooth)',
+        latency: 3.2,
+        latencySub: 'Sub 3.5ms Direct Tunnel',
+        bandwidth: 52.4,
+        bandwidthSub: 'Peak: 64.2 Mbps • AV1 Codec',
+      },
+      games: [
+        { name: 'EA SPORTS FC™ 25', pct: 39, color: '#00f0ff', hours: '7.2' },
+        { name: 'Valorant', pct: 28, color: '#10b981', hours: '5.2' },
+        { name: 'Cyberpunk 2077', pct: 18, color: '#3b82f6', hours: '3.3' },
+        { name: 'Black Myth: Wukong', pct: 10, color: '#8b5cf6', hours: '1.8' },
+        { name: "Baldur's Gate 3", pct: 5, color: '#f59e0b', hours: '1.0' },
+      ],
+      fpsChart: {
+        min: '112 FPS',
+        avg: '119.2 FPS',
+        max: '120 FPS',
+        frameDrop: '0.00%',
+        pathArea: 'M 0,33 Q 70,30 140,32 T 280,31 T 420,33 T 560,31 T 700,32 L 700,150 L 0,150 Z',
+        pathLine: 'M 0,33 Q 70,30 140,32 T 280,31 T 420,33 T 560,31 T 700,32',
+        dots: [{ cx: 280, cy: 31 }, { cx: 560, cy: 31 }],
+      },
+      nodes: [
+        { id: 'JK-01', name: 'JK-01 (Jakarta)', flag: '🇮🇩', sub: 'RTX 4070 Ti • Direct Fiber', latency: '1.9 ms', latencyVal: 1.9, width: '13%', className: 'jk', isUltra: true },
+        { id: 'SG-01', name: 'SG-01 (Singapore)', flag: '🇸🇬', sub: 'RTX 4080 • Equinix Direct', latency: '3.4 ms', latencyVal: 3.4, width: '18%', className: 'sg' },
+        { id: 'US-01', name: 'US-01 (California)', flag: '🇺🇸', sub: 'RTX 4090 • Silicon Hub', latency: '9.2 ms', latencyVal: 9.2, width: '28%', className: 'us', background: 'linear-gradient(90deg, #3b82f6, #00f0ff)' },
+        { id: 'EU-02', name: 'EU-02 (Frankfurt)', flag: '🇩🇪', sub: 'RTX 4080 Super • DE-CIX Telehouse', latency: '11.6 ms', latencyVal: 11.6, width: '36%', className: 'fra', background: 'linear-gradient(90deg, #10b981, #00f0ff)' },
+        { id: 'EU-01', name: 'EU-01 (London)', flag: '🇬🇧', sub: 'RTX 4090 • LINX Direct', latency: '14.0 ms', latencyVal: 14.0, width: '40%', className: 'ld', background: 'linear-gradient(90deg, #8b5cf6, #3b82f6)' },
+        { id: 'TY-01', name: 'TY-01 (Tokyo)', flag: '🇯🇵', sub: 'RTX 4090 • Trans Pacific', latency: '21.2 ms', latencyVal: 21.2, width: '52%', className: 'ty' },
+      ],
+      insights: [
+        { game: 'Valorant', stat: 'Esports Reflex Latency', value: '1.9 ms (JK-01)', iconType: 'activity' },
+        { game: 'Forza Horizon 5', stat: 'Session Lap Record', value: '1:31.890', iconType: 'gauge' },
+        { game: 'Helldivers 2', stat: 'Headshot Accuracy', value: '36.8%', iconType: 'crosshair' },
+        { game: 'Black Myth: Wukong', stat: 'Bosses Cleared', value: '2 / 28 Today', iconType: 'trophy' },
+        { game: 'Cyberpunk 2077', stat: 'Path Tracing Lock', value: '100% Stability', iconType: 'target' },
+        { game: 'EA FC 25', stat: 'FUT Win Rate', value: '72.0%', iconType: 'trophy-green' },
+      ],
+    },
+    '7d': {
+      kpis: {
+        totalPlaytime: '142',
+        totalPlaytimeUnit: 'hrs',
+        playtimeTrend: '↑ 8.4% vs previous week',
+        avgFps: 117,
+        fpsLow: '1% Low: 96 fps (Optimal)',
+        latency: 3.6,
+        latencySub: 'Sub 4ms Cloud WebRTC Pipeline',
+        bandwidth: 49.8,
+        bandwidthSub: 'Average Stream Bitrate',
+      },
+      games: [
+        { name: 'EA SPORTS FC™ 25', pct: 36, color: '#00f0ff', hours: '51' },
+        { name: 'Cyberpunk 2077', pct: 26, color: '#3b82f6', hours: '37' },
+        { name: 'Valorant', pct: 20, color: '#10b981', hours: '29' },
+        { name: 'Black Myth: Wukong', pct: 11, color: '#8b5cf6', hours: '16' },
+        { name: "Baldur's Gate 3", pct: 7, color: '#f59e0b', hours: '9' },
+      ],
+      fpsChart: {
+        min: '96 FPS',
+        avg: '117.6 FPS',
+        max: '120 FPS',
+        frameDrop: '0.01%',
+        pathArea: 'M 0,36 Q 80,42 160,34 T 320,40 T 480,33 T 600,38 T 700,35 L 700,150 L 0,150 Z',
+        pathLine: 'M 0,36 Q 80,42 160,34 T 320,40 T 480,33 T 600,38 T 700,35',
+        dots: [{ cx: 160, cy: 34 }, { cx: 480, cy: 33 }],
+      },
+      nodes: [
+        { id: 'JK-01', name: 'JK-01 (Jakarta)', flag: '🇮🇩', sub: 'RTX 4070 Ti • Direct Fiber', latency: '2.0 ms', latencyVal: 2.0, width: '13.5%', className: 'jk', isUltra: true },
+        { id: 'SG-01', name: 'SG-01 (Singapore)', flag: '🇸🇬', sub: 'RTX 4080 • Equinix Direct', latency: '3.6 ms', latencyVal: 3.6, width: '19%', className: 'sg' },
+        { id: 'US-01', name: 'US-01 (California)', flag: '🇺🇸', sub: 'RTX 4090 • Silicon Hub', latency: '9.6 ms', latencyVal: 9.6, width: '29%', className: 'us', background: 'linear-gradient(90deg, #3b82f6, #00f0ff)' },
+        { id: 'EU-02', name: 'EU-02 (Frankfurt)', flag: '🇩🇪', sub: 'RTX 4080 Super • DE-CIX Telehouse', latency: '12.0 ms', latencyVal: 12.0, width: '37%', className: 'fra', background: 'linear-gradient(90deg, #10b981, #00f0ff)' },
+        { id: 'EU-01', name: 'EU-01 (London)', flag: '🇬🇧', sub: 'RTX 4090 • LINX Direct', latency: '14.3 ms', latencyVal: 14.3, width: '41%', className: 'ld', background: 'linear-gradient(90deg, #8b5cf6, #3b82f6)' },
+        { id: 'TY-01', name: 'TY-01 (Tokyo)', flag: '🇯🇵', sub: 'RTX 4090 • Trans Pacific', latency: '21.8 ms', latencyVal: 21.8, width: '54%', className: 'ty' },
+      ],
+      insights: [
+        { game: 'Valorant', stat: 'Weekly Reflex Average', value: '2.0 ms (JK-01)', iconType: 'activity' },
+        { game: 'Forza Horizon 5', stat: 'Fastest Weekly Lap', value: '1:32.102', iconType: 'gauge' },
+        { game: 'Helldivers 2', stat: 'Headshot Accuracy', value: '35.4%', iconType: 'crosshair' },
+        { game: 'Black Myth: Wukong', stat: 'Bosses Cleared', value: '5 / 28 This Week', iconType: 'trophy' },
+        { game: 'Cyberpunk 2077', stat: 'Ray Tracing Stability', value: '99.9% Uptime', iconType: 'target' },
+        { game: 'EA FC 25', stat: 'FUT Division Rank', value: 'Division 1 (69.2% WR)', iconType: 'trophy-green' },
+      ],
+    },
+    '30d': {
+      kpis: {
+        totalPlaytime: '847',
+        totalPlaytimeUnit: 'hrs',
+        playtimeTrend: '↑ 12% vs last month',
+        avgFps: 118,
+        fpsLow: '1% Low: 94 fps (Rock Solid)',
+        latency: 3.8,
+        latencySub: 'Sub 4ms Cloud WebRTC Pipeline',
+        bandwidth: 48.5,
+        bandwidthSub: 'AV1 Codec Hardware Accelerated',
+      },
+      games: [
+        { name: 'EA SPORTS FC™ 25', pct: 34, color: '#00f0ff', hours: '288' },
+        { name: 'Cyberpunk 2077', pct: 26, color: '#3b82f6', hours: '220' },
+        { name: 'Valorant', pct: 20, color: '#10b981', hours: '170' },
+        { name: 'Black Myth: Wukong', pct: 12, color: '#8b5cf6', hours: '101' },
+        { name: "Baldur's Gate 3", pct: 8, color: '#f59e0b', hours: '68' },
+      ],
+      fpsChart: {
+        min: '94 FPS',
+        avg: '118.4 FPS',
+        max: '120 FPS',
+        frameDrop: '0.02%',
+        pathArea: 'M 0,35 Q 80,32 140,36 T 280,33 T 420,38 T 560,34 T 700,35 L 700,150 L 0,150 Z',
+        pathLine: 'M 0,35 Q 80,32 140,36 T 280,33 T 420,38 T 560,34 T 700,35',
+        dots: [{ cx: 280, cy: 33 }, { cx: 560, cy: 34 }],
+      },
+      nodes: [
+        { id: 'JK-01', name: 'JK-01 (Jakarta)', flag: '🇮🇩', sub: 'RTX 4070 Ti • Direct Fiber', latency: '2.1 ms', latencyVal: 2.1, width: '14%', className: 'jk', isUltra: true },
+        { id: 'SG-01', name: 'SG-01 (Singapore)', flag: '🇸🇬', sub: 'RTX 4080 • Equinix Direct', latency: '3.8 ms', latencyVal: 3.8, width: '20%', className: 'sg' },
+        { id: 'US-01', name: 'US-01 (California)', flag: '🇺🇸', sub: 'RTX 4090 • Silicon Hub', latency: '9.8 ms', latencyVal: 9.8, width: '30%', className: 'us', background: 'linear-gradient(90deg, #3b82f6, #00f0ff)' },
+        { id: 'EU-02', name: 'EU-02 (Frankfurt)', flag: '🇩🇪', sub: 'RTX 4080 Super • DE-CIX Telehouse', latency: '12.2 ms', latencyVal: 12.2, width: '38%', className: 'fra', background: 'linear-gradient(90deg, #10b981, #00f0ff)' },
+        { id: 'EU-01', name: 'EU-01 (London)', flag: '🇬🇧', sub: 'RTX 4090 • LINX Direct', latency: '14.5 ms', latencyVal: 14.5, width: '42%', className: 'ld', background: 'linear-gradient(90deg, #8b5cf6, #3b82f6)' },
+        { id: 'TY-01', name: 'TY-01 (Tokyo)', flag: '🇯🇵', sub: 'RTX 4090 • Trans Pacific', latency: '22.0 ms', latencyVal: 22.0, width: '55%', className: 'ty' },
+      ],
+      insights: [
+        { game: 'Valorant', stat: 'Reflex Esports Latency', value: '2.1 ms (JK-01)', iconType: 'activity' },
+        { game: 'Forza Horizon 5', stat: 'Best Lap Time', value: '1:32.458', iconType: 'gauge' },
+        { game: 'Helldivers 2', stat: 'Headshot Accuracy', value: '34.2%', iconType: 'crosshair' },
+        { game: 'Black Myth: Wukong', stat: 'Bosses Defeated', value: '12 / 28', iconType: 'trophy' },
+        { game: 'Cyberpunk 2077', stat: 'Path Tracing Stability', value: '99.8% (SG-01)', iconType: 'target' },
+        { game: 'EA FC 25', stat: 'FUT Win Rate', value: '68.5%', iconType: 'trophy-green' },
+      ],
+    },
+  }), []);
+
+  const currentData = telemetryDatasets[timeRange];
+
   // Export handler - strictly respects single Export button rule
   const handleExport = async (type: 'PDF' | 'JSON') => {
     setExportOpen(false);
-    setExportNotice(`Exporting analytics report as ${type}...`);
+    setExportNotice(`Exporting analytics report (${timeRange.toUpperCase()}) as ${type}...`);
     
     try {
-      const res = await fetch(`/api/export?format=${type.toLowerCase()}`);
+      const res = await fetch(`/api/export?format=${type.toLowerCase()}&timeRange=${timeRange}`);
       if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `omniplay_analytics.${type.toLowerCase()}`;
+      a.download = `omniplay_analytics_${timeRange}.${type.toLowerCase()}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -47,41 +242,43 @@ export default function AnalyticsDashboard() {
       if (type === 'JSON') {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
           platform: "OmniPlay Cloud Computing",
-          report: "Performance Analytics & Telemetry Audit",
-          timeRange,
-          totalPlaytime: "847 hrs",
-          averageFPS: 118,
-          inputLatency: "3.8 ms",
-          packetLoss: "0.001%",
-          gameShare: [
-            { game: "EA SPORTS FC 25", share: "34%", hours: 288 },
-            { game: "Cyberpunk 2077", share: "26%", hours: 220 },
-            { game: "Valorant", share: "20%", hours: 170 },
-            { game: "Black Myth: Wukong", share: "12%", hours: 101 },
-            { game: "Baldur's Gate 3", share: "8%", hours: 68 }
-          ],
-          nodes: [
-            { id: "JK-01", latency: "2.1ms", gpu: "RTX 4070 Ti", uptime: "99.99%", region: "APAC" },
-            { id: "SG-01", latency: "3.8ms", gpu: "RTX 4080", uptime: "99.98%", region: "APAC" },
-            { id: "TY-01", latency: "22ms", gpu: "RTX 4090", uptime: "99.95%", region: "APAC" },
-            { id: "US-01", latency: "9.8ms", gpu: "RTX 4090", uptime: "99.99%", region: "Americas" },
-            { id: "EU-01", latency: "14.5ms", gpu: "RTX 4090", uptime: "99.97%", region: "Europe" },
-            { id: "EU-02", latency: "12.2ms", gpu: "RTX 4080 Super", uptime: "99.98%", region: "Europe" }
-          ],
+          report: "Cloud Performance Analytics & Telemetry Audit",
+          timeRange: timeRange.toUpperCase(),
+          totalPlaytime: `${currentData.kpis.totalPlaytime} ${currentData.kpis.totalPlaytimeUnit}`,
+          averageFPS: currentData.kpis.avgFps,
+          inputLatency: `${currentData.kpis.latency} ms`,
+          bandwidth: `${currentData.kpis.bandwidth} Mbps`,
+          gameDistribution: currentData.games.map(g => ({
+            game: g.name,
+            share: `${g.pct}%`,
+            hours: g.hours
+          })),
+          nodes: currentData.nodes.map(n => ({
+            id: n.id,
+            name: n.name,
+            latency: n.latency,
+            spec: n.sub
+          })),
           exportedAt: new Date().toISOString()
         }, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "omniplay_analytics.json");
+        downloadAnchor.setAttribute("download", `omniplay_analytics_${timeRange}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
       } else {
-        const blob = new Blob(["%PDF-1.4 Mock OmniPlay Analytics Audit Report\nGenerated via OmniPlay Client Engine"], { type: 'application/pdf' });
+        const blob = new Blob([
+          `%PDF-1.4 OmniPlay Cloud Computing Analytics Audit Report (${timeRange.toUpperCase()})\n` +
+          `Total Playtime: ${currentData.kpis.totalPlaytime} ${currentData.kpis.totalPlaytimeUnit}\n` +
+          `Average Framerate: ${currentData.kpis.avgFps} FPS\n` +
+          `Input Latency: ${currentData.kpis.latency} ms\n` +
+          `Generated via OmniPlay Client Engine`
+        ], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = "omniplay_analytics.pdf";
+        a.download = `omniplay_analytics_${timeRange}.pdf`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -95,119 +292,128 @@ export default function AnalyticsDashboard() {
     }, 3500);
   };
 
-  // Pie chart data for most played games
-  const mostPlayedGames = [
-    { name: 'EA SPORTS FC™ 25', pct: 34, color: '#00f0ff', hours: 288 },
-    { name: 'Cyberpunk 2077', pct: 26, color: '#3b82f6', hours: 220 },
-    { name: 'Valorant', pct: 20, color: '#10b981', hours: 170 },
-    { name: 'Black Myth: Wukong', pct: 12, color: '#8b5cf6', hours: 101 },
-    { name: 'Baldur\'s Gate 3', pct: 8, color: '#f59e0b', hours: 68 },
-  ];
-
-  // 7-day x 24-hour heatmap activity schedule (0: Idle, 1: Low, 2: Med, 3: High, 4: Peak)
+  // Heatmap configuration
   const heatmapDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const heatmapHours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
-
-  // Intensity metadata mappings
   const intensityClasses = ['idle', 'low', 'med', 'high', 'peak'] as const;
-  const intensityLabels = ['Idle (0)', 'Low (1)', 'Medium (2)', 'High (3)', 'Peak (4)'] as const;
+  const intensityLabels = ['Idle (0)', 'Low (1)', 'Moderate (2)', 'High (3)', 'Peak (4)'] as const;
 
-  /**
-   * TASK 1: Realistic Dummy Data Generator
-   * Generates a 2D array representing 7 days (rows) and available hours (columns).
-   * Patterns:
-   * - Night/Morning (02:00 to 08:00): Mostly 0 or 1.
-   * - Evening/Prime Time (18:00 to 22:00): Mostly 3 or 4.
-   * - Daytime (10:00 to 16:00): Randomized between 1, 2, and 3.
-   */
-  const generateRealisticHeatmapData = (daysCount: number, hours: number[]): number[][] => {
-    return Array.from({ length: daysCount }, (_, dayIdx) => {
-      const isWeekend = dayIdx === 5 || dayIdx === 6; // Saturday or Sunday
-      const isFriday = dayIdx === 4;
+  // Dynamic Heatmap Matrices reflecting 24H, 7D, and 30D usage patterns
+  const heatmapMatrices: Record<'24h' | '7d' | '30d', number[][]> = useMemo(() => ({
+    '24h': [
+      [0, 0, 0, 0, 1, 2, 2, 1, 2, 4, 4, 3], // Today: active peak hours
+      [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 2],
+      [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 1],
+      [0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 1],
+      [0, 0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 3],
+      [1, 0, 0, 0, 1, 2, 3, 3, 3, 4, 4, 3],
+      [1, 0, 0, 0, 1, 2, 2, 2, 3, 4, 4, 2],
+    ],
+    '7d': [
+      [0, 0, 0, 0, 1, 2, 2, 2, 2, 4, 4, 3],
+      [0, 0, 0, 0, 1, 2, 2, 2, 3, 3, 4, 3],
+      [0, 0, 0, 0, 1, 1, 2, 2, 2, 4, 4, 2],
+      [0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 4, 3],
+      [0, 0, 0, 0, 1, 2, 3, 3, 4, 4, 4, 4],
+      [1, 0, 0, 0, 1, 2, 3, 3, 4, 4, 4, 4],
+      [1, 0, 0, 0, 1, 2, 3, 2, 3, 4, 4, 3],
+    ],
+    '30d': [
+      [1, 0, 0, 0, 1, 2, 3, 2, 3, 4, 4, 3],
+      [1, 0, 0, 0, 1, 3, 3, 2, 3, 4, 4, 3],
+      [0, 0, 0, 0, 1, 2, 3, 2, 3, 4, 4, 3],
+      [0, 0, 0, 0, 1, 2, 3, 3, 3, 4, 4, 3],
+      [1, 0, 0, 0, 1, 3, 3, 3, 4, 4, 4, 4],
+      [2, 0, 0, 0, 2, 3, 3, 3, 4, 4, 4, 4],
+      [1, 0, 0, 0, 2, 3, 3, 3, 4, 4, 4, 3],
+    ],
+  }), []);
 
-      return hours.map(hour => {
-        // 1. Night / Early Morning (02:00 to 08:00): mostly 0 or 1
-        if (hour >= 2 && hour <= 8) {
-          const lowChance = isWeekend && hour <= 4 ? 0.35 : 0.15;
-          return Math.random() < lowChance ? 1 : 0;
-        }
+  const activeHeatmap = heatmapMatrices[timeRange];
 
-        // 2. Evening / Prime Time (18:00 to 22:00): mostly 3 or 4
-        if (hour >= 18 && hour <= 22) {
-          if (isFriday || isWeekend) {
-            return Math.random() < 0.85 ? 4 : 3;
-          }
-          return Math.random() < 0.6 ? 4 : 3;
-        }
-
-        // 3. Daytime (10:00 to 16:00): randomize between 1, 2, and 3
-        if (hour >= 10 && hour <= 16) {
-          if (isWeekend) {
-            const rand = Math.random();
-            return rand < 0.2 ? 1 : rand < 0.65 ? 2 : 3;
-          }
-          const rand = Math.random();
-          return rand < 0.45 ? 1 : rand < 0.85 ? 2 : 3;
-        }
-
-        // 4. Midnight (00:00) & Late hours:
-        if (hour === 0) {
-          if (isFriday || isWeekend) return Math.random() < 0.5 ? 3 : 2;
-          return Math.random() < 0.6 ? 1 : 2;
-        }
-
-        // Transition fallback (08:00-10:00 or 16:00-18:00):
-        if (hour >= 16 && hour < 18) {
-          return isWeekend ? 3 : (Math.random() < 0.5 ? 2 : 3);
-        }
-        return Math.random() < 0.6 ? 1 : 2;
-      });
+  // Dynamic SVG Donut Calculations for Segments
+  const CIRCUMFERENCE = 2 * Math.PI * 70; // ≈ 439.82
+  const donutSlices = useMemo(() => {
+    let accumulatedPct = 0;
+    return currentData.games.map(game => {
+      const sliceLength = (game.pct / 100) * CIRCUMFERENCE;
+      const strokeDasharray = `${sliceLength} ${CIRCUMFERENCE}`;
+      const strokeDashoffset = -((accumulatedPct / 100) * CIRCUMFERENCE);
+      accumulatedPct += game.pct;
+      return {
+        ...game,
+        strokeDasharray,
+        strokeDashoffset,
+      };
     });
-  };
+  }, [currentData.games, CIRCUMFERENCE]);
 
-  // Generate 2D array matrix: 7 days x 12 hours
-  const heatmapMatrix = useMemo(
-    () => generateRealisticHeatmapData(heatmapDays.length, heatmapHours),
-    []
-  );
-
-  const gameInsights = [
-    { game: 'Valorant', stat: 'Reflex Esports Latency', value: '2.1 ms (JK-01)', icon: <Activity style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} /> },
-    { game: 'Forza Horizon 5', stat: 'Best Lap Time', value: '1:32.458', icon: <Gauge style={{ width: 16, height: 16, color: 'var(--neon-amber)' }} /> },
-    { game: 'Helldivers 2', stat: 'Headshot Accuracy', value: '34.2%', icon: <Crosshair style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} /> },
-    { game: 'Black Myth: Wukong', stat: 'Bosses Defeated', value: '12 / 28', icon: <Trophy style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} /> },
-    { game: 'Cyberpunk 2077', stat: 'Path Tracing Stability', value: '99.8% (SG-01)', icon: <Target style={{ width: 16, height: 16, color: 'var(--neon-blue)' }} /> },
-    { game: 'EA FC 25', stat: 'FUT Win Rate', value: '68.5%', icon: <Trophy style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} /> },
-  ];
-
-  const analyticsContainerRef = useRef<HTMLDivElement>(null);
-
-  // GSAP Smooth Analytics Animation
+  // Initial Page Mount Animation
   useGSAP(() => {
     if (analyticsContainerRef.current) {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
       tl.from('.analytics-header', { opacity: 0, y: 14, duration: 0.4 })
-        .from('.kpi-card', { opacity: 0, y: 12, stagger: 0.06, duration: 0.35 }, '-=0.25')
-        .from('.heatmap-card, .chart-card, .analytics-section-card', { opacity: 0, y: 14, stagger: 0.05, duration: 0.35 }, '-=0.2');
+        .from('.analytics-kpi-card', { opacity: 0, y: 12, stagger: 0.06, duration: 0.35 }, '-=0.25')
+        .from('.analytics-chart-card, .insights-panel', { opacity: 0, y: 14, stagger: 0.05, duration: 0.35 }, '-=0.2');
     }
   }, { scope: analyticsContainerRef });
+
+  // Interactive Time Range Switch Transition (GSAP)
+  useGSAP(() => {
+    if (analyticsContainerRef.current) {
+      gsap.fromTo('.analytics-kpi-card', 
+        { y: 5, opacity: 0.8 }, 
+        { y: 0, opacity: 1, duration: 0.28, stagger: 0.04, ease: 'power2.out', clearProps: 'all' }
+      );
+      gsap.fromTo('.pie-donut-svg', 
+        { scale: 0.94, rotate: -6 }, 
+        { scale: 1, rotate: 0, duration: 0.35, ease: 'back.out(1.5)', clearProps: 'all' }
+      );
+      gsap.fromTo('.telemetry-svg', 
+        { opacity: 0.75, y: 3 }, 
+        { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out', clearProps: 'all' }
+      );
+      gsap.fromTo('.heat-cell',
+        { scale: 0.75, opacity: 0.6 },
+        { scale: 1, opacity: 1, duration: 0.22, stagger: { amount: 0.15, from: 'center' }, ease: 'power1.out', clearProps: 'all' }
+      );
+    }
+  }, [timeRange]);
+
+  const renderInsightIcon = (type: GameInsightItem['iconType']) => {
+    switch (type) {
+      case 'activity':
+        return <Activity style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />;
+      case 'gauge':
+        return <Gauge style={{ width: 16, height: 16, color: 'var(--neon-amber)' }} />;
+      case 'crosshair':
+        return <Crosshair style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />;
+      case 'trophy':
+        return <Trophy style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} />;
+      case 'trophy-green':
+        return <Trophy style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />;
+      case 'target':
+      default:
+        return <Target style={{ width: 16, height: 16, color: 'var(--neon-blue)' }} />;
+    }
+  };
 
   return (
     <div ref={analyticsContainerRef} className="analytics-page-wrap">
       
-      {/* 1. Analytics Header with STRICT SINGLE EXPORT BUTTON RULE */}
+      {/* 1. Analytics Header with Interactive Time Pills & Strict Single Export Button */}
       <header className="analytics-header">
         <div className="analytics-header-titles">
           <div className="analytics-badge">
             <ShieldCheck style={{ width: 14, height: 14 }} />
-            <span>STATISTIK & PERFORMA CLOUD</span>
+            <span>CLOUD PERFORMANCE & TELEMETRY</span>
           </div>
-          <h1 className="analytics-title">Analisis Performa Cloud</h1>
-          <p className="analytics-sub">Data waktu bermain, kestabilan FPS, latensi jaringan, dan status server cloud.</p>
+          <h1 className="analytics-title">Cloud Performance Analytics</h1>
+          <p className="analytics-sub">Playtime metrics, FPS stability, network latency, and cloud instance telemetry.</p>
         </div>
 
         <div className="analytics-header-actions">
-          {/* Time Filter Pills */}
+          {/* Interactive Time Filter Pills */}
           <div className="analytics-time-pills">
             {(['24h', '7d', '30d'] as const).map(t => (
               <button
@@ -215,6 +421,8 @@ export default function AnalyticsDashboard() {
                 onClick={() => setTimeRange(t)}
                 className={`time-pill ${timeRange === t ? 'active' : ''}`}
                 type="button"
+                aria-pressed={timeRange === t}
+                aria-label={`View ${t.toUpperCase()} telemetry data`}
               >
                 {t.toUpperCase()}
               </button>
@@ -273,42 +481,42 @@ export default function AnalyticsDashboard() {
         </div>
       </header>
 
-      {/* 2. Key Performance Indicators (KPI) Grid */}
+      {/* 2. Key Performance Indicators (KPI) Grid - Fully Reactive */}
       <div className="analytics-kpi-grid">
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">TOTAL WAKTU MAIN</span>
+            <span className="kpi-tag">TOTAL PLAYTIME</span>
             <Clock style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />
           </div>
-          <p className="kpi-value">847 <span className="unit">hrs</span></p>
-          <p className="kpi-sub green">↑ 12% vs last month</p>
+          <p className="kpi-value">{currentData.kpis.totalPlaytime} <span className="unit">{currentData.kpis.totalPlaytimeUnit}</span></p>
+          <p className="kpi-sub green">{currentData.kpis.playtimeTrend}</p>
         </div>
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">Rata Rata FPS</span>
+            <span className="kpi-tag">AVERAGE FPS</span>
             <Zap style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
           </div>
-          <p className="kpi-value cyan">118 <span className="unit">fps</span></p>
-          <p className="kpi-sub">1% Low: 94 fps (Rock Solid)</p>
+          <p className="kpi-value cyan">{currentData.kpis.avgFps} <span className="unit">fps</span></p>
+          <p className="kpi-sub">{currentData.kpis.fpsLow}</p>
         </div>
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">LATENSI INPUT</span>
+            <span className="kpi-tag">INPUT LATENCY</span>
             <Activity style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
           </div>
-          <p className="kpi-value emerald">3.8 <span className="unit">ms</span></p>
-          <p className="kpi-sub">Sub 4ms Cloud WebRTC Pipeline</p>
+          <p className="kpi-value emerald">{currentData.kpis.latency} <span className="unit">ms</span></p>
+          <p className="kpi-sub">{currentData.kpis.latencySub}</p>
         </div>
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">PENGGUNAAN INTERNET</span>
+            <span className="kpi-tag">BANDWIDTH USAGE</span>
             <BarChart3 style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} />
           </div>
-          <p className="kpi-value purple">48.5 <span className="unit">Mbps</span></p>
-          <p className="kpi-sub">AV1 Codec Hardware Accelerated</p>
+          <p className="kpi-value purple">{currentData.kpis.bandwidth} <span className="unit">Mbps</span></p>
+          <p className="kpi-sub">{currentData.kpis.bandwidthSub}</p>
         </div>
       </div>
 
@@ -321,16 +529,16 @@ export default function AnalyticsDashboard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Flame style={{ width: 20, height: 20, color: 'var(--neon-amber)' }} />
               <div>
-                <h3 className="chart-card-title">Grafik Jam Ramai Pemain</h3>
-                <p className="chart-card-sub">Jumlah pemain aktif berdasarkan hari dan jam</p>
+                <h3 className="chart-card-title">Player Activity Heatmap</h3>
+                <p className="chart-card-sub">Active concurrent players by day and hour</p>
               </div>
             </div>
             <div className="heatmap-legend">
-              <span className="heat-cell-sample idle" /> <span>0: Kosong</span>
-              <span className="heat-cell-sample low" /> <span>1: Rendah</span>
-              <span className="heat-cell-sample med" /> <span>2: Sedang</span>
-              <span className="heat-cell-sample high" /> <span>3: Ramai</span>
-              <span className="heat-cell-sample peak" /> <span>4: Puncak</span>
+              <span className="heat-cell-sample idle" /> <span>0: Idle</span>
+              <span className="heat-cell-sample low" /> <span>1: Low</span>
+              <span className="heat-cell-sample med" /> <span>2: Moderate</span>
+              <span className="heat-cell-sample high" /> <span>3: High</span>
+              <span className="heat-cell-sample peak" /> <span>4: Peak</span>
             </div>
           </div>
 
@@ -345,8 +553,7 @@ export default function AnalyticsDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {/* TASK 2: Render 2D array dynamically with React .map() */}
-                {heatmapMatrix.map((dayRow, dayIdx) => {
+                {activeHeatmap.map((dayRow, dayIdx) => {
                   const day = heatmapDays[dayIdx];
                   return (
                     <tr key={day}>
@@ -382,103 +589,57 @@ export default function AnalyticsDashboard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <PieIcon style={{ width: 20, height: 20, color: 'var(--neon-cyan)' }} />
               <div>
-                <h3 className="chart-card-title">Distribusi Game Paling Banyak Dimainkan</h3>
-                <p className="chart-card-sub">Persentase jam bermain pada server cloud</p>
+                <h3 className="chart-card-title">Most Played Game Distribution</h3>
+                <p className="chart-card-sub">Percentage of playtime across cloud nodes</p>
               </div>
             </div>
-            <span className="chart-badge-tag">Total: 847 Jam</span>
+            <span className="chart-badge-tag">Total: {currentData.kpis.totalPlaytime} hrs</span>
           </div>
 
           <div className="pie-chart-content-row">
-            {/* SVG Donut Chart */}
+            {/* SVG Donut Chart - Dynamically Computed */}
             <div className="pie-svg-wrap">
               <svg viewBox="0 0 200 200" className="pie-donut-svg">
                 {/* Background Track */}
                 <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="26" />
                 
-                {/* Segments: circumference = 2 * pi * 70 ≈ 439.8 */}
-                {/* EA FC: 34% -> 149.5 */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="#00f0ff"
-                  strokeWidth="26"
-                  strokeDasharray="149.5 439.8"
-                  strokeDashoffset="0"
-                  transform="rotate(-90 100 100)"
-                  filter="drop-shadow(0 0 4px rgba(0,240,255,0.4))"
-                />
-                {/* Cyberpunk: 26% -> 114.3 */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="#3b82f6"
-                  strokeWidth="26"
-                  strokeDasharray="114.3 439.8"
-                  strokeDashoffset="-149.5"
-                  transform="rotate(-90 100 100)"
-                />
-                {/* Valorant: 20% -> 88.0 */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="#10b981"
-                  strokeWidth="26"
-                  strokeDasharray="88.0 439.8"
-                  strokeDashoffset="-263.8"
-                  transform="rotate(-90 100 100)"
-                />
-                {/* Black Myth: 12% -> 52.8 */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="#8b5cf6"
-                  strokeWidth="26"
-                  strokeDasharray="52.8 439.8"
-                  strokeDashoffset="-351.8"
-                  transform="rotate(-90 100 100)"
-                />
-                {/* Baldur's Gate: 8% -> 35.2 */}
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="#f59e0b"
-                  strokeWidth="26"
-                  strokeDasharray="35.2 439.8"
-                  strokeDashoffset="-404.6"
-                  transform="rotate(-90 100 100)"
-                />
+                {/* Dynamic Slices */}
+                {donutSlices.map((slice) => (
+                  <circle
+                    key={slice.name}
+                    cx="100"
+                    cy="100"
+                    r="70"
+                    fill="none"
+                    stroke={slice.color}
+                    strokeWidth="26"
+                    strokeDasharray={slice.strokeDasharray}
+                    strokeDashoffset={slice.strokeDashoffset}
+                    transform="rotate(-90 100 100)"
+                    style={{ transition: 'stroke-dasharray 0.4s ease, stroke-dashoffset 0.4s ease' }}
+                  />
+                ))}
                 
                 {/* Center text */}
                 <text x="100" y="95" textAnchor="middle" fill="#ffffff" fontSize="18" fontWeight="800" fontFamily="sans-serif">
-                  847h
+                  {currentData.kpis.totalPlaytime}h
                 </text>
-                <text x="100" y="112" textAnchor="middle" fill="#94a3b8" fontSize="10" fontFamily="sans-serif">
-                  TOTAL MAIN
+                <text x="100" y="112" textAnchor="middle" fill="#94a3b8" fontSize="10" fontWeight="700" letterSpacing="0.5" fontFamily="sans-serif">
+                  TOTAL PLAYTIME
                 </text>
               </svg>
             </div>
 
             {/* Legend & Details */}
             <div className="pie-legend-list">
-              {mostPlayedGames.map((game) => (
+              {currentData.games.map((game) => (
                 <div key={game.name} className="pie-legend-row">
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span className="pie-legend-dot" style={{ background: game.color, boxShadow: `0 0 8px ${game.color}` }} />
                     <span className="pie-game-name">{game.name}</span>
                   </div>
                   <div className="pie-stats-meta">
-                    <span className="pie-hours">{game.hours} jam</span>
+                    <span className="pie-hours">{game.hours} hrs</span>
                     <span className="pie-pct-chip" style={{ color: game.color, borderColor: game.color }}>{game.pct}%</span>
                   </div>
                 </div>
@@ -495,12 +656,12 @@ export default function AnalyticsDashboard() {
         <div className="analytics-chart-card">
           <div className="chart-card-header">
             <div>
-              <h3 className="chart-card-title">Kestabilan FPS Streaming (60 Detik Terakhir)</h3>
-              <p className="chart-card-sub">Target streaming stabil: 120 FPS</p>
+              <h3 className="chart-card-title">Streaming FPS Stability (Live Telemetry)</h3>
+              <p className="chart-card-sub">Target framerate baseline: 120 FPS</p>
             </div>
             <div className="chart-legend">
               <span className="legend-dot target" /> <span>Target 120 FPS</span>
-              <span className="legend-dot actual" /> <span>FPS Saat Ini</span>
+              <span className="legend-dot actual" /> <span>Current FPS</span>
             </div>
           </div>
 
@@ -523,30 +684,40 @@ export default function AnalyticsDashboard() {
 
               {/* Area Fill */}
               <path
-                d="M 0,35 Q 80,32 140,36 T 280,33 T 420,38 T 560,34 T 700,35 L 700,150 L 0,150 Z"
+                d={currentData.fpsChart.pathArea}
                 fill="url(#fpsGradient)"
+                style={{ transition: 'd 0.4s ease' }}
               />
 
               {/* Actual FPS Line */}
               <path
-                d="M 0,35 Q 80,32 140,36 T 280,33 T 420,38 T 560,34 T 700,35"
+                d={currentData.fpsChart.pathLine}
                 fill="none"
                 stroke="#00f0ff"
                 strokeWidth="2.5"
                 strokeLinecap="round"
+                style={{ transition: 'd 0.4s ease' }}
               />
 
               {/* Data Point Glow Dots */}
-              <circle cx="280" cy="33" r="4" fill="#00f0ff" filter="drop-shadow(0 0 6px #00f0ff)" />
-              <circle cx="560" cy="34" r="4" fill="#00f0ff" filter="drop-shadow(0 0 6px #00f0ff)" />
+              {currentData.fpsChart.dots.map((dot, idx) => (
+                <circle 
+                  key={idx}
+                  cx={dot.cx} 
+                  cy={dot.cy} 
+                  r="4" 
+                  fill="#00f0ff" 
+                  filter="drop-shadow(0 0 6px #00f0ff)" 
+                />
+              ))}
             </svg>
           </div>
 
           <div className="chart-footer-metrics">
-            <span className="metric-pill">Min: <strong>94 FPS</strong></span>
-            <span className="metric-pill">Avg: <strong>118.4 FPS</strong></span>
-            <span className="metric-pill">Max: <strong>120 FPS</strong></span>
-            <span className="metric-pill green">Frame Drop: <strong>0.00%</strong></span>
+            <span className="metric-pill">Min: <strong>{currentData.fpsChart.min}</strong></span>
+            <span className="metric-pill">Avg: <strong>{currentData.fpsChart.avg}</strong></span>
+            <span className="metric-pill">Max: <strong>{currentData.fpsChart.max}</strong></span>
+            <span className="metric-pill green">Frame Drop: <strong>{currentData.fpsChart.frameDrop}</strong></span>
           </div>
         </div>
 
@@ -554,80 +725,33 @@ export default function AnalyticsDashboard() {
         <div className="analytics-chart-card">
           <div className="chart-card-header">
             <div>
-              <h3 className="chart-card-title">Latensi Server Edge Node</h3>
-              <p className="chart-card-sub">Kecepatan respon rute server antar wilayah</p>
+              <h3 className="chart-card-title">Edge Node Server Latency</h3>
+              <p className="chart-card-sub">Round trip response times across global regions</p>
             </div>
             <div className="node-active-count">
-              <span className="node-status-dot" /> 6 Node Global Terhubung
+              <span className="node-status-dot" /> 6 Global Nodes Connected
             </div>
           </div>
 
           <div className="node-latency-list">
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇮🇩 JK-01 (Jakarta)</span>
-                <span className="node-sub">RTX 4070 Ti • Direct Fiber</span>
+            {currentData.nodes.map(node => (
+              <div key={node.id} className="node-latency-row">
+                <div className="node-row-info">
+                  <span className="node-flag">{node.flag} {node.name}</span>
+                  <span className="node-sub">{node.sub}</span>
+                </div>
+                <div className="node-bar-track">
+                  <div 
+                    className={`node-bar-fill ${node.className}`} 
+                    style={{ 
+                      width: node.width,
+                      ...(node.background ? { background: node.background } : {})
+                    }} 
+                  />
+                </div>
+                <span className={`node-ms-val ${node.isUltra ? 'ultra' : ''}`}>{node.latency}</span>
               </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill jk" style={{ width: '14%' }} />
-              </div>
-              <span className="node-ms-val ultra">2.1 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇸🇬 SG-01 (Singapore)</span>
-                <span className="node-sub">RTX 4080 • Equinix Direct</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill sg" style={{ width: '20%' }} />
-              </div>
-              <span className="node-ms-val">3.8 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇺🇸 US-01 (California)</span>
-                <span className="node-sub">RTX 4090 • Silicon Hub</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill us" style={{ width: '30%', background: 'linear-gradient(90deg, #3b82f6, #00f0ff)' }} />
-              </div>
-              <span className="node-ms-val">9.8 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇩🇪 EU-02 (Frankfurt)</span>
-                <span className="node-sub">RTX 4080 Super • DE-CIX Telehouse</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill fra" style={{ width: '38%', background: 'linear-gradient(90deg, #10b981, #00f0ff)' }} />
-              </div>
-              <span className="node-ms-val">12.2 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇬🇧 EU-01 (London)</span>
-                <span className="node-sub">RTX 4090 • LINX Direct</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill ld" style={{ width: '42%', background: 'linear-gradient(90deg, #8b5cf6, #3b82f6)' }} />
-              </div>
-              <span className="node-ms-val">14.5 ms</span>
-            </div>
-
-            <div className="node-latency-row">
-              <div className="node-row-info">
-                <span className="node-flag">🇯🇵 TY-01 (Tokyo)</span>
-                <span className="node-sub">RTX 4090 • Trans Pacific</span>
-              </div>
-              <div className="node-bar-track">
-                <div className="node-bar-fill ty" style={{ width: '55%' }} />
-              </div>
-              <span className="node-ms-val">22.0 ms</span>
-            </div>
+            ))}
           </div>
 
           <div className="node-summary-pills">
@@ -642,16 +766,16 @@ export default function AnalyticsDashboard() {
       <div className="insights-panel">
         <div className="insights-panel-header">
           <div>
-            <h3 className="panel-title">Performa Tiap Game</h3>
-            <p className="panel-sub">Hasil pengujian performa pada game yang sedang berjalan di cloud.</p>
+            <h3 className="panel-title">Per-Game Performance Metrics</h3>
+            <p className="panel-sub">Real-time telemetry benchmarks across active cloud instances.</p>
           </div>
         </div>
 
         <div className="insights-grid">
-          {gameInsights.map(g => (
+          {currentData.insights.map(g => (
             <div key={g.game} className="insight-card">
               <div className="insight-top">
-                <div className="insight-icon-box">{g.icon}</div>
+                <div className="insight-icon-box">{renderInsightIcon(g.iconType)}</div>
                 <span className="insight-game">{g.game}</span>
               </div>
               <p className="insight-stat">{g.stat}</p>
