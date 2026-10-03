@@ -359,9 +359,10 @@ function Sidebar({
           {onClose && (
             <button 
               type="button" 
-              className="sidebar-mobile-close-btn" 
+              className="sidebar-drawer-close-btn" 
               onClick={onClose}
-              aria-label="Close sidebar"
+              aria-label="Close navigation drawer"
+              title="Close Drawer"
             >
               <X style={{ width: 18, height: 18 }} />
             </button>
@@ -468,49 +469,44 @@ function DashboardShell({
   const role = authContext?.user?.role || authContext?.role || 'user';
   const isAdmin = role === 'admin';
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth > 768;
-    }
-    return true;
-  });
+  // Option A: Primary Topbar Navigation with 100% Full-Width Canvas
+  // Sidebar acts as an optional slide-over console drawer, closed by default
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };
 
-  const closeSidebarMobile = () => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      setIsSidebarOpen(false);
-    }
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
   };
 
-  // Menu Click Simulation: Wrap the sidebar navigation logic in a function that sets isPageLoading(true), waits ~600ms via setTimeout, updates the view, and sets isPageLoading(false)
+  // Smooth menu tab change & close drawer
   const handleMenuClick = (tab: string) => {
-    closeSidebarMobile();
+    closeSidebar();
     if (tab === activeTab) return;
     setIsPageLoading(true);
     setTimeout(() => {
       onTabChange(tab);
       setIsPageLoading(false);
-    }, 600);
+    }, 350);
   };
 
   return (
     <>
       <div className="omni-app enter-dashboard">
         
-        {/* Mobile Drawer Overlay Backdrop */}
+        {/* Slide-Over Drawer Overlay Backdrop */}
         {isSidebarOpen && (
           <div 
-            className="omni-sidebar-mobile-backdrop"
-            onClick={closeSidebarMobile}
+            className="omni-sidebar-backdrop"
+            onClick={closeSidebar}
             aria-hidden="true"
           />
         )}
 
-        {/* 1. TOP NAVBAR */}
+        {/* 1. TOP NAVBAR (Primary Navigation Header) */}
         <TopNavbar 
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
@@ -520,14 +516,14 @@ function DashboardShell({
           isAdmin={isAdmin} 
         />
 
-        {/* 2. APP BODY & SIDEBAR */}
+        {/* 2. APP BODY & SLIDE-OVER SIDEBAR */}
         <div className="omni-body">
           <Sidebar 
             isSidebarOpen={isSidebarOpen}
             activeTab={activeTab} 
             onTabChange={handleMenuClick} 
             isAdmin={isAdmin} 
-            onClose={closeSidebarMobile}
+            onClose={closeSidebar}
           />
 
           {/* Main Content View with Page Loading Spinner */}

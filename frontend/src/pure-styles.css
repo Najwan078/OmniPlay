@@ -171,25 +171,40 @@ body {
 
 .omni-topbar-menu {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
 }
 
 .omni-menu-item {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   cursor: pointer;
   position: relative;
-  padding: 4px 6px;
-  transition: color 0.2s ease, transform 0.2s var(--ease-spring);
+  padding: 6px 14px;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .omni-menu-item:hover {
-  color: var(--text-primary);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
   transform: translateY(-1px);
+}
+
+.omni-menu-item.active {
+  color: #ffffff;
+  background: rgba(0, 210, 255, 0.12);
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  box-shadow: 0 0 16px rgba(0, 210, 255, 0.25), inset 0 0 12px rgba(0, 210, 255, 0.1);
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
 }
 
 .omni-menu-item::after {
@@ -207,6 +222,10 @@ body {
 }
 
 .omni-menu-item:hover::after {
+  width: 60%;
+}
+
+.omni-menu-item.active::after {
   width: 80%;
 }
 
@@ -383,34 +402,77 @@ body {
   width: 100vw;
 }
 
+/* Option A: Slide-Over Floating Console Drawer */
 .omni-sidebar {
-  width: 260px;
-  background: var(--bg-sidebar);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border-right: 1px solid var(--border-subtle);
+  position: fixed;
+  top: 48px;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: rgba(10, 13, 22, 0.96);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-right: 1px solid rgba(0, 210, 255, 0.25);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 12px;
-  z-index: 20;
-  flex-shrink: 0;
-  height: 100%;
+  padding: 20px 14px;
+  z-index: 1000;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 12px 0 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 210, 255, 0.15);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .omni-sidebar.collapsed {
-  width: 0px !important;
-  min-width: 0px !important;
-  max-width: 0px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  transform: translateX(-100%) !important;
   opacity: 0 !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+  width: 280px !important;
+  min-width: 0 !important;
+  padding: 20px 14px !important;
   margin: 0 !important;
-  border: none !important;
-  pointer-events: none;
+}
+
+/* Slide-Over Drawer Overlay Backdrop */
+.omni-sidebar-backdrop,
+.omni-sidebar-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  top: 48px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 999;
+  animation: modalBackdropIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  cursor: pointer;
+}
+
+.sidebar-drawer-close-btn,
+.sidebar-mobile-close-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.12));
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-drawer-close-btn:hover,
+.sidebar-mobile-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 /* Main Content Area - Full Flex & Independent Scroll */
