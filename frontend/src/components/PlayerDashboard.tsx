@@ -1242,22 +1242,6 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   {cat}
                 </button>
               ))}
-              <button 
-                onClick={() => setShowComputeModal(true)}
-                className="filter-pill"
-                type="button"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  borderColor: 'rgba(168, 85, 247, 0.4)',
-                  color: '#c084fc',
-                  background: 'rgba(168, 85, 247, 0.08)'
-                }}
-              >
-                <Cpu style={{ width: 13, height: 13 }} />
-                <span>Cloud Compute (AI / 3D)</span>
-              </button>
             </div>
           </div>
 

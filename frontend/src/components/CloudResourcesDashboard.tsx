@@ -770,7 +770,7 @@ export default function CloudResourcesDashboard() {
         <div className="section-title-strip">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <DollarSign style={{ width: 18, height: 18, color: 'var(--neon-emerald)' }} />
-            <h2 className="section-heading">Cloud Cost & FinOps Telemetry (Measured Service)</h2>
+            <h2 className="section-heading">Cloud Gaming Cost & FinOps Telemetry (Simulated Cloud Gaming Operating Cost)</h2>
           </div>
           <span className="topology-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.4)', color: 'var(--neon-emerald)' }}>
             NIST Standard: Pay-As-You-Go
@@ -781,11 +781,11 @@ export default function CloudResourcesDashboard() {
           {/* OpEx Cards */}
           <div className="finops-card">
             <div className="finops-card-top">
-              <span className="finops-label">GPU Cluster Compute</span>
+              <span className="finops-label">GPU Cluster Compute (Game Rigs)</span>
               <span className="finops-rate">$0.85 – $1.75 / hr</span>
             </div>
             <p className="finops-total">$398.50 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">6 Global Edge Pools (RTX 40 Series)</p>
+            <p className="finops-sub">6 Global Edge Pools (12 GPUs Rendering Rigs)</p>
           </div>
 
           <div className="finops-card">
@@ -794,16 +794,16 @@ export default function CloudResourcesDashboard() {
               <span className="finops-rate">$0.04 / GB</span>
             </div>
             <p className="finops-total">$118.20 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">3.25 TB AV1 Stream (DE-CIX, LINX, IXP)</p>
+            <p className="finops-sub">3.25 TB AV1 Game Stream (Sub-4ms Low Latency)</p>
           </div>
 
           <div className="finops-card">
             <div className="finops-card-top">
-              <span className="finops-label">Global Storage & Snapshot</span>
+              <span className="finops-label">Global Game Storage & Snapshot</span>
               <span className="finops-rate">$0.023 / GB</span>
             </div>
             <p className="finops-total">$24.60 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">Frankfurt, London, US & Asia Mesh Vault</p>
+            <p className="finops-sub">AAA Game Installations & NVMe Cloud Save Vault</p>
           </div>
 
           <div className="finops-card">
@@ -812,7 +812,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-rate">Flat Tier</span>
             </div>
             <p className="finops-total">$30.00 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">Enterprise L3/L4/L7 Anycast Defense</p>
+            <p className="finops-sub">Enterprise L3/L4/L7 Game Session Defense</p>
           </div>
         </div>
 

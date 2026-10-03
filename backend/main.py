@@ -557,47 +557,75 @@ def start_rental_session(req: CloudSessionRequest):
 def get_financial_summary(utilization: float = 0.75):
     """
     Academic Financial Simulation Engine Endpoint
-    Returns itemized monthly revenue, OPEX, operating profit, and break-even metrics.
+    Returns itemized monthly revenue, OpEx, gross profit, and break-even metrics
+    calibrated with the Global Cloud Center Infrastructure (6 PoPs, 12 GPUs).
+    Strictly Cloud Gaming Platform Model (Rental, Subscriptions, Add-ons).
     """
-    total_capacity = THEORETICAL_CAPACITY_HOURS
-    sold_hours = int(total_capacity * utilization)
-    
-    # 55% gaming, 20% compute at 75% baseline
-    gaming_hours = int(total_capacity * ((55 / 75) * utilization))
-    compute_hours = int(total_capacity * ((20 / 75) * utilization))
-    
-    gaming_rev = int((gaming_hours * (2/12) * 59000) + (gaming_hours * (4/12) * 79000) + (gaming_hours * (6/12) * 109000))
-    compute_rev = int((compute_hours * (2/12) * 49000) + (compute_hours * (4/12) * 69000) + (compute_hours * (6/12) * 89000))
-    
+    total_capacity = THEORETICAL_CAPACITY_HOURS # 8,640 hrs
     scale = utilization / 0.75
-    sub_rev = int((50 * scale * 699000) + (20 * scale * 1199000))
-    addon_rev = int((400 * scale * 15000) + (350 * scale * 20000) + (200 * scale * 25000) + (80 * scale * 49000))
     
-    total_rev = gaming_rev + compute_rev + sub_rev + addon_rev
-    monthly_opex = ACADEMIC_MONTHLY_OPEX
-    operating_profit = total_rev - monthly_opex
-    margin_pct = round((operating_profit / total_rev) * 100, 2) if total_rev > 0 else 0
-    rev_per_gpu_hour = int(total_rev / sold_hours) if sold_hours > 0 else 0
+    # Base 75% utilization (Strictly Cloud Gaming):
+    # - Gaming Rental: 570 rentals x 2.11h avg = 1,204h direct play -> $1,650.00
+    # - Gaming Subscriptions: OmniPlay Pro & Ultra Monthly Passes -> $140.00
+    # - Premium Gaming Add-ons: Priority Queue Skip & NVMe Cloud Saves -> $100.00
+    gaming_rental_usd = round(1650.00 * scale, 2)
+    subscription_rev_usd = round(140.00 * scale, 2)
+    addon_rev_usd = round(100.00 * scale, 2)
+    total_rev_usd = round(gaming_rental_usd + subscription_rev_usd + addon_rev_usd, 2) # $1,890.00
+    
+    # OpEx Itemization ($571.30/mo) - Supporting Cloud Gaming
+    # - GPU Cluster Compute: $398.50 (Game Rendering Fleets)
+    # - WebRTC Egress Bandwidth: $118.20 (AV1 Game Stream)
+    # - Global Storage & Snapshot: $24.60 (Game Installations & Cloud Saves)
+    # - Cloudflare Anti-DDoS Shield: $30.00 (Gaming Session & Account Defense)
+    monthly_opex_usd = 571.30
+    gross_profit_usd = round(total_rev_usd - monthly_opex_usd, 2) # +$1,318.70
+    margin_pct = round((gross_profit_usd / total_rev_usd) * 100, 2) if total_rev_usd > 0 else 0.0
+    
+    # Break-even: $571.30 / ($1890 / 0.75) = 22.67%
+    break_even_utilization = 22.67
+    
+    gaming_sessions = int(570 * scale)
+    gaming_hours = int(1204 * scale)
+    rev_per_session = round(total_rev_usd / gaming_sessions, 2) if gaming_sessions > 0 else 0.0
+    rev_per_gpu_hour = round(total_rev_usd / gaming_hours, 2) if gaming_hours > 0 else 0.0
+    
+    # IDR conversion (1 USD = Rp 15,800)
+    usd_to_idr = 15800
     
     return {
         "scenario": f"Simulation ({int(utilization * 100)}% Utilization)",
-        "initial_investment_idr": ACADEMIC_INITIAL_INVESTMENT,
-        "monthly_opex_idr": monthly_opex,
+        "model_label": "SIMULATED FINANCIAL MODEL • BUSINESS PROJECTION",
+        "monthly_opex_usd": monthly_opex_usd,
+        "monthly_opex_idr": int(monthly_opex_usd * usd_to_idr),
+        "opex_breakdown_usd": {
+            "gpu_cluster_compute": 398.50,
+            "webrtc_bandwidth": 118.20,
+            "global_storage_snapshot": 24.60,
+            "cloudflare_ddos_shield": 30.00
+        },
         "total_gpu_capacity_hours": total_capacity,
         "utilization_rate": utilization,
-        "sold_capacity_hours": sold_hours,
-        "gaming_revenue_idr": gaming_rev,
-        "compute_revenue_idr": compute_rev,
-        "subscription_revenue_idr": sub_rev,
-        "addon_revenue_idr": addon_rev,
-        "total_monthly_revenue_idr": total_rev,
-        "operating_profit_idr": operating_profit,
-        "operating_margin_pct": margin_pct,
-        "revenue_per_gpu_hour_idr": rev_per_gpu_hour,
-        "annual_revenue_idr": total_rev * 12,
-        "annual_operating_profit_idr": operating_profit * 12,
-        "break_even_utilization_pct": 42.54,
-        "model_type": "ACADEMIC_FINANCIAL_SIMULATION"
+        "active_gaming_hours": gaming_hours,
+        "active_gaming_sessions": gaming_sessions,
+        "gaming_rental_revenue_usd": gaming_rental_usd,
+        "gaming_rental_revenue_idr": int(gaming_rental_usd * usd_to_idr),
+        "subscription_revenue_usd": subscription_rev_usd,
+        "subscription_revenue_idr": int(subscription_rev_usd * usd_to_idr),
+        "addon_revenue_usd": addon_rev_usd,
+        "addon_revenue_idr": int(addon_rev_usd * usd_to_idr),
+        "total_monthly_revenue_usd": total_rev_usd,
+        "total_monthly_revenue_idr": int(total_rev_usd * usd_to_idr),
+        "gross_profit_usd": gross_profit_usd,
+        "gross_profit_idr": int(gross_profit_usd * usd_to_idr),
+        "gross_profit_margin_pct": margin_pct,
+        "revenue_per_gaming_session_usd": rev_per_session,
+        "revenue_per_gpu_hour_usd": rev_per_gpu_hour,
+        "annual_revenue_usd": round(total_rev_usd * 12, 2),
+        "annual_gross_profit_usd": round(gross_profit_usd * 12, 2),
+        "break_even_revenue_usd": monthly_opex_usd,
+        "break_even_utilization_pct": break_even_utilization,
+        "model_type": "CLOUD_GAMING_FINANCIAL_PROJECTION"
     }
 
 # 5. Secure Authentication & Session Endpoints

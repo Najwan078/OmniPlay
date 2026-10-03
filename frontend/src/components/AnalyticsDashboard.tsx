@@ -135,7 +135,9 @@ export default function AnalyticsDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const formatIdr = (val: number) => `Rp ${Math.round(val).toLocaleString('id-ID')}`;
+  const formatUSD = (val: number) => `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const formatIdr = (val: number) => `Rp ${Math.round(val * 15800).toLocaleString('id-ID')}`;
+  const formatDual = (usd: number) => `${formatUSD(usd)} (~${formatIdr(usd)})`;
 
   // Export handler - strictly respects single Export button rule
   const handleExport = async (type: 'PDF' | 'JSON') => {
@@ -144,27 +146,30 @@ export default function AnalyticsDashboard() {
     
     if (activeSubView === 'financial' || activeSubView === 'pricing') {
       const reportPayload = {
-        platform: "OmniPlay Cloud Computing",
-        reportType: "Financial Model & Business Profitability Audit",
-        academicNote: "Estimated academic projection based on 12-GPU infrastructure across 6 Cloud Centers",
+        platform: "OmniPlay Cloud Gaming",
+        reportType: "Cloud Gaming Business Model & Financial Profitability Projection",
+        academicNote: "Estimated cloud gaming projection based on 12-GPU game rendering infrastructure across 6 Global Cloud Centers",
         initialInvestment: formatIdr(financialConfig.initialInvestment),
-        monthlyOpex: formatIdr(currentSim.monthlyOpex),
+        monthlyOpex: formatUSD(currentSim.monthlyOpex),
         utilizationRate: `${(currentSim.utilizationRate * 100).toFixed(1)}%`,
-        soldCapacityHours: `${currentSim.soldCapacityHours} hrs / 8,640 hrs`,
+        activeGamingHours: `${currentSim.gamingHours} hrs`,
+        activeGamingSessions: currentSim.gamingSessionsCount,
         revenue: {
-          gaming: formatIdr(currentSim.gamingRevenue),
-          compute: formatIdr(currentSim.computeRevenue),
-          subscription: formatIdr(currentSim.subscriptionRevenue),
-          addons: formatIdr(currentSim.addonRevenue),
-          totalMonthly: formatIdr(currentSim.totalMonthlyRevenue),
-          annual: formatIdr(currentSim.annualRevenue),
+          cloudGamingRental: formatUSD(currentSim.gamingRentalRevenue),
+          gamingSubscriptions: formatUSD(currentSim.subscriptionRevenue),
+          premiumAddons: formatUSD(currentSim.addonRevenue),
+          totalMonthlyUsd: formatUSD(currentSim.totalMonthlyRevenue),
+          totalMonthlyIdr: formatIdr(currentSim.totalMonthlyRevenue),
+          annualUsd: formatUSD(currentSim.annualRevenue),
         },
         profitability: {
-          operatingProfitMonthly: formatIdr(currentSim.operatingProfit),
+          monthlyOpex: formatUSD(currentSim.monthlyOpex),
+          operatingProfitMonthly: formatUSD(currentSim.operatingProfit),
           operatingMargin: `${currentSim.operatingMarginPct.toFixed(2)}%`,
-          revenuePerGpuHour: formatIdr(currentSim.revenuePerGpuHour),
+          revenuePerGamingSession: formatUSD(currentSim.revenuePerGamingSession),
+          revenuePerGpuHour: formatUSD(currentSim.revenuePerGpuHour),
           breakEvenUtilization: `${currentSim.breakEvenUtilizationPct.toFixed(1)}%`,
-          annualOperatingProfit: formatIdr(currentSim.annualOperatingProfit),
+          annualOperatingProfit: formatUSD(currentSim.annualOperatingProfit),
         },
         regionalBreakdown: currentSim.regions.map(r => ({
           region: r.location,
@@ -616,16 +621,19 @@ export default function AnalyticsDashboard() {
 
             <div className="financial-banner-stats">
               <div className="banner-stat-box">
-                <div className="banner-stat-label">Initial Investment</div>
-                <div className="banner-stat-val cyan">{formatIdr(financialConfig.initialInvestment)}</div>
+                <div className="banner-stat-label">Total Monthly OpEx</div>
+                <div className="banner-stat-val">{formatUSD(currentSim.monthlyOpex)}</div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>~{formatIdr(currentSim.monthlyOpex)} / mo</div>
               </div>
               <div className="banner-stat-box">
-                <div className="banner-stat-label">Monthly OPEX</div>
-                <div className="banner-stat-val">{formatIdr(currentSim.monthlyOpex)}</div>
+                <div className="banner-stat-label">Estimated Revenue (Base)</div>
+                <div className="banner-stat-val cyan">{formatUSD(currentSim.totalMonthlyRevenue)}</div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>~{formatIdr(currentSim.totalMonthlyRevenue)} / mo</div>
               </div>
               <div className="banner-stat-box">
-                <div className="banner-stat-label">Break-Even Utilization</div>
-                <div className="banner-stat-val profit">{currentSim.breakEvenUtilizationPct.toFixed(1)}%</div>
+                <div className="banner-stat-label">Gross Profit Margin</div>
+                <div className="banner-stat-val profit">+{currentSim.operatingMarginPct.toFixed(1)}%</div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Break-even: {currentSim.breakEvenUtilizationPct.toFixed(1)}%</div>
               </div>
             </div>
           </div>
@@ -637,7 +645,7 @@ export default function AnalyticsDashboard() {
                 Simulate Fleet Utilization Rate
               </span>
               <p style={{ margin: '2px 0 0 0', fontSize: 14, fontWeight: 700, color: '#ffffff' }}>
-                Active Scenario: <strong style={{ color: 'var(--neon-cyan)' }}>{Math.round(selectedUtilization * 100)}% Utilization</strong> ({currentSim.soldCapacityHours.toLocaleString()} / 8,640 GPU-hours sold)
+                Active Scenario: <strong style={{ color: 'var(--neon-cyan)' }}>{Math.round(selectedUtilization * 100)}% Utilization</strong> ({currentSim.soldCapacityHours.toLocaleString()} GPU-hours sold / month)
               </p>
             </div>
 
@@ -649,7 +657,7 @@ export default function AnalyticsDashboard() {
                   className={`utilization-pill-btn ${selectedUtilization === rate ? 'active' : ''}`}
                   onClick={() => setSelectedUtilization(rate)}
                 >
-                  {Math.round(rate * 100)}% {rate === 0.75 ? '(Base)' : rate === 0.50 ? '(Min)' : rate === 0.90 ? '(High)' : ''}
+                  {Math.round(rate * 100)}% {rate === 0.75 ? '(Base)' : rate === 0.50 ? '(Conservative)' : rate === 0.90 ? '(High Demand)' : ''}
                 </button>
               ))}
             </div>
@@ -659,96 +667,96 @@ export default function AnalyticsDashboard() {
           <div className="financial-kpi-grid">
             <div className="financial-kpi-card highlight-revenue">
               <div className="kpi-header">
-                <span className="kpi-tag">MONTHLY REVENUE</span>
+                <span className="kpi-tag">ESTIMATED MONTHLY REVENUE</span>
                 <DollarSign style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
               </div>
-              <p className="kpi-value cyan">{formatIdr(currentSim.totalMonthlyRevenue)}</p>
-              <p className="kpi-sub green">Annualized: {formatIdr(currentSim.annualRevenue)}</p>
+              <p className="kpi-value cyan">{formatUSD(currentSim.totalMonthlyRevenue)}</p>
+              <p className="kpi-sub green">~{formatIdr(currentSim.totalMonthlyRevenue)} • Annual: {formatUSD(currentSim.annualRevenue)}</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">MONTHLY OPEX</span>
+                <span className="kpi-tag">TOTAL MONTHLY OPEX</span>
                 <HardDrive style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />
               </div>
-              <p className="kpi-value">{formatIdr(currentSim.monthlyOpex)}</p>
-              <p className="kpi-sub">Facility, Power, Bandwidth & Security</p>
+              <p className="kpi-value">{formatUSD(currentSim.monthlyOpex)}</p>
+              <p className="kpi-sub">~{formatIdr(currentSim.monthlyOpex)} • 4 Measured Categories</p>
             </div>
 
             <div className="financial-kpi-card highlight-profit">
               <div className="kpi-header">
-                <span className="kpi-tag">OPERATING PROFIT</span>
+                <span className="kpi-tag">GROSS PROFIT</span>
                 <TrendingUp style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
               </div>
               <p className="kpi-value emerald">
-                {currentSim.operatingProfit >= 0 ? `+${formatIdr(currentSim.operatingProfit)}` : formatIdr(currentSim.operatingProfit)}
+                {currentSim.operatingProfit >= 0 ? `+${formatUSD(currentSim.operatingProfit)}` : formatUSD(currentSim.operatingProfit)}
               </p>
               <p className="kpi-sub green">
-                Annual Profit: {formatIdr(currentSim.annualOperatingProfit)}
+                ~{formatIdr(currentSim.operatingProfit)} • Annual: {formatUSD(currentSim.annualOperatingProfit)}
               </p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">OPERATING MARGIN</span>
+                <span className="kpi-tag">GROSS PROFIT MARGIN</span>
                 <PieIcon style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
               </div>
-              <p className="kpi-value emerald">{currentSim.operatingMarginPct.toFixed(1)}<span className="unit">%</span></p>
-              <p className="kpi-sub">Target Range: 20.0% – 40.0%</p>
+              <p className="kpi-value emerald">+{currentSim.operatingMarginPct.toFixed(1)}<span className="unit">%</span></p>
+              <p className="kpi-sub">Healthy Global Unit Economics</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">FLEET UTILIZATION</span>
+                <span className="kpi-tag">GPU FLEET UTILIZATION</span>
                 <Cpu style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
               </div>
               <p className="kpi-value cyan">{(currentSim.utilizationRate * 100).toFixed(0)}<span className="unit">%</span></p>
-              <p className="kpi-sub">{currentSim.soldCapacityHours} of 8,640 GPU-hours</p>
+              <p className="kpi-sub">{currentSim.soldCapacityHours} GPU-hours sold / month</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">REVENUE PER GPU-HOUR</span>
+                <span className="kpi-tag">BREAK-EVEN POINT</span>
                 <Zap style={{ width: 16, height: 16, color: 'var(--neon-amber)' }} />
               </div>
-              <p className="kpi-value">{formatIdr(currentSim.revenuePerGpuHour)}</p>
-              <p className="kpi-sub">Weighted across 3 GPU Tiers</p>
+              <p className="kpi-value">{currentSim.breakEvenUtilizationPct.toFixed(1)}<span className="unit">%</span></p>
+              <p className="kpi-sub">OpEx: {formatUSD(currentSim.breakEvenRevenue)} / mo</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">GAMING REVENUE</span>
+                <span className="kpi-tag">GAMING RENTAL REVENUE</span>
                 <Flame style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
               </div>
-              <p className="kpi-value cyan">{formatIdr(currentSim.gamingRevenue)}</p>
-              <p className="kpi-sub">{currentSim.gamingHours} hrs • 55% Capacity</p>
+              <p className="kpi-value cyan">{formatUSD(currentSim.gamingRentalRevenue)}</p>
+              <p className="kpi-sub">570 gamer rentals • avg 2.1h session</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">CLOUD COMPUTE REV</span>
-                <Cpu style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} />
-              </div>
-              <p className="kpi-value purple">{formatIdr(currentSim.computeRevenue)}</p>
-              <p className="kpi-sub">{currentSim.computeHours} hrs • AI & 3D Render</p>
-            </div>
-
-            <div className="financial-kpi-card">
-              <div className="kpi-header">
-                <span className="kpi-tag">SUBSCRIPTIONS</span>
+                <span className="kpi-tag">SUBSCRIPTION REVENUE</span>
                 <ShieldCheck style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
               </div>
-              <p className="kpi-value emerald">{formatIdr(currentSim.subscriptionRevenue)}</p>
-              <p className="kpi-sub">OmniPlay Pro & Ultra Recurring</p>
+              <p className="kpi-value emerald">{formatUSD(currentSim.subscriptionRevenue)}</p>
+              <p className="kpi-sub">Pro & Ultra Gaming Passes • Monthly</p>
             </div>
 
             <div className="financial-kpi-card">
               <div className="kpi-header">
-                <span className="kpi-tag">ADD-ONS REVENUE</span>
+                <span className="kpi-tag">PREMIUM ADD-ON REVENUE</span>
                 <Layers style={{ width: 16, height: 16, color: 'var(--neon-amber)' }} />
               </div>
-              <p className="kpi-value">{formatIdr(currentSim.addonRevenue)}</p>
-              <p className="kpi-sub">Priority Queue & Cloud Storage</p>
+              <p className="kpi-value">{formatUSD(currentSim.addonRevenue)}</p>
+              <p className="kpi-sub">Priority Queue Skip & NVMe Cloud Saves</p>
+            </div>
+
+            <div className="financial-kpi-card">
+              <div className="kpi-header">
+                <span className="kpi-tag">REV PER GAMING SESSION</span>
+                <Target style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
+              </div>
+              <p className="kpi-value cyan">{formatUSD(currentSim.revenuePerGamingSession)}</p>
+              <p className="kpi-sub">~{formatIdr(currentSim.revenuePerGamingSession)} • Rev/GPU-hr: {formatUSD(currentSim.revenuePerGpuHour)}</p>
             </div>
           </div>
 
@@ -758,23 +766,22 @@ export default function AnalyticsDashboard() {
             <div className="analytics-chart-card">
               <div className="chart-card-header">
                 <div>
-                  <h3 className="chart-card-title">Revenue Streams Contribution</h3>
-                  <p className="chart-card-sub">Diversified revenue beyond pure cloud gaming</p>
+                  <h3 className="chart-card-title">Cloud Gaming Revenue Streams</h3>
+                  <p className="chart-card-sub">Pure gaming rental, day passes, subscriptions & add-ons</p>
                 </div>
-                <span className="chart-badge-tag">Total: {formatIdr(currentSim.totalMonthlyRevenue)}</span>
+                <span className="chart-badge-tag">Total: {formatUSD(currentSim.totalMonthlyRevenue)}</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '10px 0' }}>
                 {[
-                  { label: 'Cloud Gaming (Premium Hourly & Bundles)', amount: currentSim.gamingRevenue, color: 'var(--neon-cyan)', share: (currentSim.gamingRevenue / currentSim.totalMonthlyRevenue) * 100 },
-                  { label: 'Cloud Compute (AI/ML, 3D Rendering, Dev)', amount: currentSim.computeRevenue, color: 'var(--neon-purple)', share: (currentSim.computeRevenue / currentSim.totalMonthlyRevenue) * 100 },
-                  { label: 'Recurring Subscriptions (Pro & Ultra)', amount: currentSim.subscriptionRevenue, color: 'var(--neon-emerald)', share: (currentSim.subscriptionRevenue / currentSim.totalMonthlyRevenue) * 100 },
-                  { label: 'Premium Add-ons (Priority Queue, Storage)', amount: currentSim.addonRevenue, color: 'var(--neon-amber)', share: (currentSim.addonRevenue / currentSim.totalMonthlyRevenue) * 100 }
+                  { label: 'Cloud Gaming Rental (Hourly & Day Passes)', amount: currentSim.gamingRentalRevenue, color: 'var(--neon-cyan)', share: (currentSim.gamingRentalRevenue / currentSim.totalMonthlyRevenue) * 100 },
+                  { label: 'Gaming Subscriptions (Pro & Ultra Membership)', amount: currentSim.subscriptionRevenue, color: 'var(--neon-emerald)', share: (currentSim.subscriptionRevenue / currentSim.totalMonthlyRevenue) * 100 },
+                  { label: 'Premium Gaming Add-ons (Priority Queue & Saves)', amount: currentSim.addonRevenue, color: 'var(--neon-amber)', share: (currentSim.addonRevenue / currentSim.totalMonthlyRevenue) * 100 }
                 ].map(stream => (
                   <div key={stream.label}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
                       <span style={{ fontWeight: 600, color: '#ffffff' }}>{stream.label}</span>
-                      <span style={{ fontWeight: 700, color: stream.color }}>{formatIdr(stream.amount)} ({stream.share.toFixed(1)}%)</span>
+                      <span style={{ fontWeight: 700, color: stream.color }}>{formatUSD(stream.amount)} ({stream.share.toFixed(1)}%)</span>
                     </div>
                     <div style={{ width: '100%', height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
                       <div style={{ width: `${stream.share}%`, height: '100%', background: stream.color, borderRadius: 4, transition: 'width 0.4s ease' }} />
@@ -789,21 +796,21 @@ export default function AnalyticsDashboard() {
               <div className="chart-card-header">
                 <div>
                   <h3 className="chart-card-title">Revenue by GPU Fleet Tier</h3>
-                  <p className="chart-card-sub">Actual 12-GPU fleet distribution weighting</p>
+                  <p className="chart-card-sub">Actual 12-GPU game rendering fleet weighting</p>
                 </div>
                 <span className="chart-badge-tag">Fleet: 12 GPUs</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '10px 0' }}>
                 {[
-                  { tier: 'RTX 4070 (2 GPUs • Jakarta)', rev: currentSim.gpuTierRevenue.rtx4070.totalRev, hours: currentSim.gpuTierRevenue.rtx4070.hours, color: 'var(--neon-cyan)', share: (currentSim.gpuTierRevenue.rtx4070.totalRev / (currentSim.gamingRevenue + currentSim.computeRevenue)) * 100 },
-                  { tier: 'RTX 4080 (4 GPUs • Singapore & Frankfurt)', rev: currentSim.gpuTierRevenue.rtx4080.totalRev, hours: currentSim.gpuTierRevenue.rtx4080.hours, color: 'var(--neon-blue)', share: (currentSim.gpuTierRevenue.rtx4080.totalRev / (currentSim.gamingRevenue + currentSim.computeRevenue)) * 100 },
-                  { tier: 'RTX 4090 (6 GPUs • Tokyo, London, California)', rev: currentSim.gpuTierRevenue.rtx4090.totalRev, hours: currentSim.gpuTierRevenue.rtx4090.hours, color: 'var(--neon-purple)', share: (currentSim.gpuTierRevenue.rtx4090.totalRev / (currentSim.gamingRevenue + currentSim.computeRevenue)) * 100 },
+                  { tier: 'RTX 4070 (2 GPUs • Jakarta)', rev: currentSim.gpuTierRevenue.rtx4070.totalRev, hours: currentSim.gpuTierRevenue.rtx4070.hours, color: 'var(--neon-cyan)', share: (currentSim.gpuTierRevenue.rtx4070.totalRev / currentSim.totalMonthlyRevenue) * 100 },
+                  { tier: 'RTX 4080 (4 GPUs • Singapore & Frankfurt)', rev: currentSim.gpuTierRevenue.rtx4080.totalRev, hours: currentSim.gpuTierRevenue.rtx4080.hours, color: 'var(--neon-blue)', share: (currentSim.gpuTierRevenue.rtx4080.totalRev / currentSim.totalMonthlyRevenue) * 100 },
+                  { tier: 'RTX 4090 (6 GPUs • Tokyo, London, California)', rev: currentSim.gpuTierRevenue.rtx4090.totalRev, hours: currentSim.gpuTierRevenue.rtx4090.hours, color: 'var(--neon-purple)', share: (currentSim.gpuTierRevenue.rtx4090.totalRev / currentSim.totalMonthlyRevenue) * 100 },
                 ].map(item => (
                   <div key={item.tier}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
                       <span style={{ fontWeight: 600, color: '#ffffff' }}>{item.tier}</span>
-                      <span style={{ fontWeight: 700, color: item.color }}>{formatIdr(item.rev)} ({item.hours}h)</span>
+                      <span style={{ fontWeight: 700, color: item.color }}>{formatUSD(item.rev)} ({item.hours}h)</span>
                     </div>
                     <div style={{ width: '100%', height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
                       <div style={{ width: `${item.share}%`, height: '100%', background: item.color, borderRadius: 4, transition: 'width 0.4s ease' }} />
@@ -812,7 +819,7 @@ export default function AnalyticsDashboard() {
                 ))}
 
                 <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: 'rgba(0, 240, 255, 0.04)', border: '1px solid rgba(0, 240, 255, 0.15)', fontSize: 12, color: 'var(--text-muted)' }}>
-                  💡 <strong>Weighted Pricing Model:</strong> RTX 4090 nodes account for 50% of total fleet capacity (6 GPUs) and generate the highest operating margin due to high-value esports and AI compute workloads.
+                  💡 <strong>Weighted Pricing Model:</strong> RTX 4090 nodes account for 50% of total fleet capacity (6 GPUs) and generate the highest operating margin due to high-value 4K 120FPS ray-traced AAA gaming sessions.
                 </div>
               </div>
             </div>
@@ -837,9 +844,9 @@ export default function AnalyticsDashboard() {
                     <th>Cloud Center</th>
                     <th>GPU Tier</th>
                     <th>Count</th>
-                    <th>Sold Capacity</th>
-                    <th>Gaming Rev</th>
-                    <th>Compute Rev</th>
+                    <th>Active Stream</th>
+                    <th>Rental Rev</th>
+                    <th>Sub & Add-on</th>
                     <th>Total Revenue</th>
                     <th>Allocated OPEX</th>
                     <th>Operating Profit</th>
@@ -858,12 +865,12 @@ export default function AnalyticsDashboard() {
                       </td>
                       <td>{r.gpuCount}x</td>
                       <td>{r.soldHours}h ({(r.utilizationPct).toFixed(0)}%)</td>
-                      <td>{formatIdr(r.gamingRevenue)}</td>
-                      <td>{formatIdr(r.computeRevenue)}</td>
-                      <td style={{ fontWeight: 700, color: 'var(--neon-cyan)' }}>{formatIdr(r.totalRevenue)}</td>
-                      <td>{formatIdr(r.allocatedOpex)}</td>
+                      <td>{formatUSD(r.gamingRevenue)}</td>
+                      <td>{formatUSD(Number((r.subscriptionShare + r.addonShare).toFixed(2)))}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--neon-cyan)' }}>{formatUSD(r.totalRevenue)}</td>
+                      <td>{formatUSD(r.allocatedOpex)}</td>
                       <td style={{ fontWeight: 800, color: r.operatingProfit >= 0 ? 'var(--neon-emerald)' : '#ef4444' }}>
-                        {r.operatingProfit >= 0 ? `+${formatIdr(r.operatingProfit)}` : formatIdr(r.operatingProfit)}
+                        {r.operatingProfit >= 0 ? `+${formatUSD(r.operatingProfit)}` : formatUSD(r.operatingProfit)}
                       </td>
                       <td>
                         <span className="status-badge paid">
@@ -913,13 +920,13 @@ export default function AnalyticsDashboard() {
                       </td>
                       <td>{(sc.utilizationRate * 100).toFixed(0)}%</td>
                       <td>{sc.soldCapacityHours.toLocaleString()}h</td>
-                      <td>{formatIdr(sc.totalMonthlyRevenue)}</td>
-                      <td>{formatIdr(sc.monthlyOpex)}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--neon-cyan)' }}>{formatUSD(sc.totalMonthlyRevenue)}</td>
+                      <td>{formatUSD(sc.monthlyOpex)}</td>
                       <td style={{ fontWeight: 800, color: sc.operatingProfit >= 0 ? 'var(--neon-emerald)' : '#ef4444' }}>
-                        {sc.operatingProfit >= 0 ? `+${formatIdr(sc.operatingProfit)}` : formatIdr(sc.operatingProfit)}
+                        {sc.operatingProfit >= 0 ? `+${formatUSD(sc.operatingProfit)}` : formatUSD(sc.operatingProfit)}
                       </td>
                       <td>{sc.operatingMarginPct.toFixed(1)}%</td>
-                      <td style={{ fontWeight: 700 }}>{formatIdr(sc.annualOperatingProfit)}</td>
+                      <td style={{ fontWeight: 700 }}>{formatUSD(sc.annualOperatingProfit)}</td>
                       <td>
                         <span className={`status-badge ${sc.operatingProfit >= 0 ? 'paid' : 'failed'}`}>
                           {sc.operatingProfit >= 0 ? 'PROFITABLE' : 'DEFICIT'}
@@ -1339,45 +1346,57 @@ export default function AnalyticsDashboard() {
               </div>
             </div>
 
-            {/* Compute Hourly Rates */}
+            {/* Gaming Add-ons & Priority */}
             <div className="pricing-section-card">
               <h4 className="pricing-section-title">
-                <Cpu style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
-                Cloud Compute Rates (IDR / GPU-hr)
+                <Layers style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
+                Gaming Add-ons & Priority Queue (IDR)
               </h4>
               <div className="pricing-input-row">
-                <label className="pricing-input-label">RTX 4070 Compute</label>
+                <label className="pricing-input-label">Priority Queue Skip</label>
                 <input
                   type="number"
                   className="pricing-input-field"
-                  value={pricingEditForm.pricing.rtx4070Compute}
+                  value={pricingEditForm.pricing.addOns.priorityQueue}
                   onChange={e => setPricingEditForm({
                     ...pricingEditForm,
-                    pricing: { ...pricingEditForm.pricing, rtx4070Compute: parseInt(e.target.value) || 0 }
+                    pricing: { 
+                      ...pricingEditForm.pricing, 
+                      addonPriorityQueue: parseInt(e.target.value) || 0,
+                      addOns: { ...pricingEditForm.pricing.addOns, priorityQueue: parseInt(e.target.value) || 0 }
+                    }
                   })}
                 />
               </div>
               <div className="pricing-input-row">
-                <label className="pricing-input-label">RTX 4080 Compute</label>
+                <label className="pricing-input-label">Extra Playtime (per hr)</label>
                 <input
                   type="number"
                   className="pricing-input-field"
-                  value={pricingEditForm.pricing.rtx4080Compute}
+                  value={pricingEditForm.pricing.addOns.extraPlaytime}
                   onChange={e => setPricingEditForm({
                     ...pricingEditForm,
-                    pricing: { ...pricingEditForm.pricing, rtx4080Compute: parseInt(e.target.value) || 0 }
+                    pricing: { 
+                      ...pricingEditForm.pricing, 
+                      addonExtraPlaytime: parseInt(e.target.value) || 0,
+                      addOns: { ...pricingEditForm.pricing.addOns, extraPlaytime: parseInt(e.target.value) || 0 }
+                    }
                   })}
                 />
               </div>
               <div className="pricing-input-row">
-                <label className="pricing-input-label">RTX 4090 Compute</label>
+                <label className="pricing-input-label">NVMe Cloud Save Vault (mo)</label>
                 <input
                   type="number"
                   className="pricing-input-field"
-                  value={pricingEditForm.pricing.rtx4090Compute}
+                  value={pricingEditForm.pricing.addOns.extraCloudStorage}
                   onChange={e => setPricingEditForm({
                     ...pricingEditForm,
-                    pricing: { ...pricingEditForm.pricing, rtx4090Compute: parseInt(e.target.value) || 0 }
+                    pricing: { 
+                      ...pricingEditForm.pricing, 
+                      addonCloudStorage: parseInt(e.target.value) || 0,
+                      addOns: { ...pricingEditForm.pricing.addOns, extraCloudStorage: parseInt(e.target.value) || 0 }
+                    }
                   })}
                 />
               </div>
@@ -1483,103 +1502,73 @@ export default function AnalyticsDashboard() {
               </div>
             </div>
 
-            {/* Monthly OPEX Breakdown (± Rp399.000.000) */}
+            {/* Monthly OPEX Breakdown (Measured Infrastructure Services - $571.30 / month) */}
             <div className="pricing-section-card" style={{ gridColumn: 'span 2' }}>
               <h4 className="pricing-section-title">
                 <HardDrive style={{ width: 18, height: 18, color: 'var(--neon-emerald)' }} />
-                Monthly Operating Cost (OPEX Breakdown) — Total: {formatIdr(
-                  pricingEditForm.opex.facilityColocation +
-                  pricingEditForm.opex.electricityPower +
-                  pricingEditForm.opex.bandwidthPeering +
-                  pricingEditForm.opex.hardwareMaintenance +
-                  pricingEditForm.opex.cloudStorageSan +
-                  pricingEditForm.opex.securityDdos +
-                  pricingEditForm.opex.officeOperations
-                )}
+                Monthly Operating Expenses (OpEx Breakdown) — Total: {formatUSD(
+                  (pricingEditForm.opex.gpuClusterCompute || 398.50) +
+                  (pricingEditForm.opex.webrtcBandwidth || 118.20) +
+                  (pricingEditForm.opex.storageSnapshot || 24.60) +
+                  (pricingEditForm.opex.cloudflareDdos || 30.00)
+                )} (~{formatIdr(
+                  (pricingEditForm.opex.gpuClusterCompute || 398.50) +
+                  (pricingEditForm.opex.webrtcBandwidth || 118.20) +
+                  (pricingEditForm.opex.storageSnapshot || 24.60) +
+                  (pricingEditForm.opex.cloudflareDdos || 30.00)
+                )})
               </h4>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px 24px' }}>
                 <div className="pricing-input-row">
-                  <label className="pricing-input-label">Colocation / 6 Data Centers</label>
+                  <label className="pricing-input-label">GPU Cluster Compute (USD / mo)</label>
                   <input
                     type="number"
+                    step="0.01"
                     className="pricing-input-field"
-                    value={pricingEditForm.opex.facilityColocation}
+                    value={pricingEditForm.opex.gpuClusterCompute ?? 398.50}
                     onChange={e => setPricingEditForm({
                       ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, facilityColocation: parseInt(e.target.value) || 0 }
+                      opex: { ...pricingEditForm.opex, gpuClusterCompute: parseFloat(e.target.value) || 0 }
                     })}
                   />
                 </div>
                 <div className="pricing-input-row">
-                  <label className="pricing-input-label">Power & Electricity (12 GPUs)</label>
+                  <label className="pricing-input-label">WebRTC Egress Bandwidth (USD / mo)</label>
                   <input
                     type="number"
+                    step="0.01"
                     className="pricing-input-field"
-                    value={pricingEditForm.opex.electricityPower}
+                    value={pricingEditForm.opex.webrtcBandwidth ?? 118.20}
                     onChange={e => setPricingEditForm({
                       ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, electricityPower: parseInt(e.target.value) || 0 }
+                      opex: { ...pricingEditForm.opex, webrtcBandwidth: parseFloat(e.target.value) || 0 }
                     })}
                   />
                 </div>
                 <div className="pricing-input-row">
-                  <label className="pricing-input-label">Bandwidth & IX Direct Peering</label>
+                  <label className="pricing-input-label">Global Storage & Snapshot (USD / mo)</label>
                   <input
                     type="number"
+                    step="0.01"
                     className="pricing-input-field"
-                    value={pricingEditForm.opex.bandwidthPeering}
+                    value={pricingEditForm.opex.storageSnapshot ?? 24.60}
                     onChange={e => setPricingEditForm({
                       ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, bandwidthPeering: parseInt(e.target.value) || 0 }
+                      opex: { ...pricingEditForm.opex, storageSnapshot: parseFloat(e.target.value) || 0 }
                     })}
                   />
                 </div>
                 <div className="pricing-input-row">
-                  <label className="pricing-input-label">Hardware Maintenance & Aging</label>
+                  <label className="pricing-input-label">Cloudflare Anti-DDoS Shield (USD / mo)</label>
                   <input
                     type="number"
+                    step="0.01"
                     className="pricing-input-field"
-                    value={pricingEditForm.opex.hardwareMaintenance}
+                    value={pricingEditForm.opex.cloudflareDdos ?? 30.00}
                     onChange={e => setPricingEditForm({
                       ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, hardwareMaintenance: parseInt(e.target.value) || 0 }
-                    })}
-                  />
-                </div>
-                <div className="pricing-input-row">
-                  <label className="pricing-input-label">Storage SAN & S3 Vault</label>
-                  <input
-                    type="number"
-                    className="pricing-input-field"
-                    value={pricingEditForm.opex.cloudStorageSan}
-                    onChange={e => setPricingEditForm({
-                      ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, cloudStorageSan: parseInt(e.target.value) || 0 }
-                    })}
-                  />
-                </div>
-                <div className="pricing-input-row">
-                  <label className="pricing-input-label">Security, DDoS & VAC Shield</label>
-                  <input
-                    type="number"
-                    className="pricing-input-field"
-                    value={pricingEditForm.opex.securityDdos}
-                    onChange={e => setPricingEditForm({
-                      ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, securityDdos: parseInt(e.target.value) || 0 }
-                    })}
-                  />
-                </div>
-                <div className="pricing-input-row">
-                  <label className="pricing-input-label">NOC & Administrative Operations</label>
-                  <input
-                    type="number"
-                    className="pricing-input-field"
-                    value={pricingEditForm.opex.officeOperations}
-                    onChange={e => setPricingEditForm({
-                      ...pricingEditForm,
-                      opex: { ...pricingEditForm.opex, officeOperations: parseInt(e.target.value) || 0 }
+                      opex: { ...pricingEditForm.opex, cloudflareDdos: parseFloat(e.target.value) || 0 }
                     })}
                   />
                 </div>
