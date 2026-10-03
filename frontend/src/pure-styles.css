@@ -5639,32 +5639,67 @@ body {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Login submit button with hover glow */
+/* Login submit button with clean high-contrast styling and guaranteed visibility */
 .login-submit-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px;
-  margin-top: 6px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.25);
-  background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 50%, #00d2ff 100%);
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
-  transition: all 0.25s var(--ease-spring);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 13px 20px !important;
+  margin-top: 10px !important;
+  margin-bottom: 4px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(0, 212, 255, 0.4) !important;
+  background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 60%, #00b4d8 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--font-display) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
+  transition: all 0.25s var(--ease-spring) !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  position: relative !important;
+  z-index: 20 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
-/* Glowing box-shadow on login button hover */
 .login-submit-btn:hover {
-  transform: translateY(-2px);
-  border-color: rgba(0, 212, 255, 0.7);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #00c3eb 100%) !important;
+  border-color: rgba(0, 212, 255, 0.8) !important;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.5) !important;
+}
+
+.login-submit-btn:active {
+  transform: translateY(1px) !important;
+}
+
+.login-submit-btn.submitting,
+.login-submit-btn:disabled {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+
+.login-submit-btn .login-submit-label {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.login-submit-btn .login-submit-icon {
+  color: #ffffff !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Official Cloudflare Turnstile Wrapper */

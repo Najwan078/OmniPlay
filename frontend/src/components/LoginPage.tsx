@@ -507,30 +507,28 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       opacity: 0,
       y: 28,
       scale: 0.96,
-      duration: 0.65
+      duration: 0.65,
+      clearProps: 'all'
     })
     .from('.login-card-header > *', {
       opacity: 0,
       y: 10,
       duration: 0.35,
-      stagger: 0.08
+      stagger: 0.08,
+      clearProps: 'all'
     }, '-=0.35')
     .from('.login-role-selector', {
       opacity: 0,
       y: 8,
-      duration: 0.3
+      duration: 0.3,
+      clearProps: 'all'
     }, '-=0.25')
     .from('.login-input-group', {
       opacity: 0,
       y: 10,
       duration: 0.35,
-      stagger: 0.08
-    }, '-=0.2')
-    .from('.cf-turnstile-outer-wrap, .login-submit-btn, .login-toggle-wrap', {
-      opacity: 0,
-      y: 8,
-      duration: 0.3,
-      stagger: 0.06
+      stagger: 0.08,
+      clearProps: 'all'
     }, '-=0.2');
   }, { scope: cardRef });
 
@@ -538,8 +536,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   useGSAP(() => {
     if (formRef.current) {
       gsap.fromTo(formRef.current,
-        { opacity: 0.4, y: 8 },
-        { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }
+        { opacity: 0.5, y: 6 },
+        { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out', clearProps: 'all' }
       );
     }
   }, [isAdminMode, isCreatingAccount]);
@@ -868,52 +866,56 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             </div>
           </div>
 
-          {/* Official Cloudflare Turnstile Verification Container */}
-          <div className="cf-turnstile-outer-wrap">
-            <div ref={turnstileContainerRef} className="cf-real-turnstile-slot" />
-            {!isTurnstileRendered && (
-              <div className="cf-turnstile-box verifying">
-                <div className="cf-turnstile-left">
-                  <div className="cf-checkbox verifying">
-                    <div className="cf-spinner" />
+          {/* Official Cloudflare Turnstile Verification Container (Player Mode only) */}
+          {!isAdminMode && (
+            <div className="cf-turnstile-outer-wrap">
+              <div ref={turnstileContainerRef} className="cf-real-turnstile-slot" />
+              {!isTurnstileRendered && (
+                <div className="cf-turnstile-box verifying">
+                  <div className="cf-turnstile-left">
+                    <div className="cf-checkbox verifying">
+                      <div className="cf-spinner" />
+                    </div>
+                    <div className="cf-label-wrap">
+                      <span className="cf-main-label">Connecting to Cloudflare...</span>
+                      <span className="cf-sub-label">Loading Turnstile Edge Challenge</span>
+                    </div>
                   </div>
-                  <div className="cf-label-wrap">
-                    <span className="cf-main-label">Connecting to Cloudflare...</span>
-                    <span className="cf-sub-label">Loading Turnstile Edge Challenge</span>
-                  </div>
-                </div>
-                <div className="cf-turnstile-right">
-                  <div className="cf-brand">
-                    <svg className="cf-logo-svg" viewBox="0 0 120 80" fill="none">
-                      <path d="M84.2 38.8c-1-11.2-10.4-19.8-21.8-19.8-5.8 0-11.1 2.2-15.1 6-3.3-8.6-11.6-14.7-21.4-14.7-12.5 0-22.7 9.8-23.3 22.1C9.4 33.4 2.9 39.6 2.3 47.4c-.8 8.6 6 16 14.6 16.1h80.5c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#F38020"/>
-                      <path d="M84.2 38.8c-.3 0-.6.1-.9.1 1.7 2.2 2.7 5 2.7 8 0 7.2-5.8 13-13 13H16.9c-.8 0-1.5-.1-2.2-.2 2.3 2.5 5.7 4.1 9.4 4.1h56.4c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#FAAE40"/>
-                    </svg>
-                    <div className="cf-brand-text">
-                      <span className="cf-brand-title">Cloudflare</span>
-                      <span className="cf-brand-turnstile">Turnstile</span>
+                  <div className="cf-turnstile-right">
+                    <div className="cf-brand">
+                      <svg className="cf-logo-svg" viewBox="0 0 120 80" fill="none">
+                        <path d="M84.2 38.8c-1-11.2-10.4-19.8-21.8-19.8-5.8 0-11.1 2.2-15.1 6-3.3-8.6-11.6-14.7-21.4-14.7-12.5 0-22.7 9.8-23.3 22.1C9.4 33.4 2.9 39.6 2.3 47.4c-.8 8.6 6 16 14.6 16.1h80.5c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#F38020"/>
+                        <path d="M84.2 38.8c-.3 0-.6.1-.9.1 1.7 2.2 2.7 5 2.7 8 0 7.2-5.8 13-13 13H16.9c-.8 0-1.5-.1-2.2-.2 2.3 2.5 5.7 4.1 9.4 4.1h56.4c8.8 0 15.9-7.1 15.9-15.9 0-4.2-1.6-8-4.3-10.8 1-.6 1.9-1.4 2.7-2.3.8 1 1.4 2.3 1.8 3.6.3.9 1.1 1.4 2 1.4h1.5c1.3 0 2.2-1 2.2-2.3 0-.5-.1-1-.5-1.4-2.8-5.2-8.5-8.9-15.3-9.7z" fill="#FAAE40"/>
+                      </svg>
+                      <div className="cf-brand-text">
+                        <span className="cf-brand-title">Cloudflare</span>
+                        <span className="cf-brand-turnstile">Turnstile</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           <button
             type="submit"
+            id="omniplay-login-submit"
             className={`login-submit-btn ${isLoading || isSubmitting ? 'submitting' : ''}`}
             disabled={isLoading || isSubmitting || isExiting}
+            aria-label={isAdminMode ? "Sign In as Admin" : (isCreatingAccount ? "Create Account" : "Sign In as Player")}
           >
             {isLoading && <div className="omni-spinner omni-spinner-sm" style={{ marginRight: 8 }} />}
-            <span>
+            <span className="login-submit-label">
               {isLoading || isSubmitting
                 ? (isCreatingAccount ? 'Creating account...' : 'Signing in...')
                 : (isAdminMode 
-                    ? 'Sign In as Admin ->' 
-                    : (isCreatingAccount ? 'Create Account Now ->' : 'Sign In as Player ->')
+                    ? 'Sign In as Admin' 
+                    : (isCreatingAccount ? 'Create Account' : 'Sign In as Player')
                   )
               }
             </span>
-            {!isLoading && <ArrowRight style={{ width: 18, height: 18 }} />}
+            {!isLoading && <ArrowRight className="login-submit-icon" style={{ width: 18, height: 18, flexShrink: 0 }} />}
           </button>
 
           {/* Account Creation Toggle - Hidden when in Admin Mode */}
