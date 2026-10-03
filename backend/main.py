@@ -376,13 +376,18 @@ STEAM_CATALOG = {
 }
 
 NODE_SPECS = {
-    "JK-01": {"name": "Jakarta Edge (JK-01)", "tier": "Tier 1", "region": "APAC", "gpu": "RTX 4070 Ti", "latency": "2ms", "rate_per_hr": 13500, "rate_usd": 0.85, "multiplier": 1.0},
-    "SG-01": {"name": "Singapore Premium (SG-01)", "tier": "Tier 2", "region": "APAC", "gpu": "RTX 4080", "latency": "15ms", "rate_per_hr": 20000, "rate_usd": 1.25, "multiplier": 1.0},
-    "TY-01": {"name": "Tokyo Ultra (TY-01)", "tier": "Tier 3", "region": "APAC", "gpu": "RTX 4090", "latency": "22ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
-    "US-01": {"name": "California Ultra (US-01)", "tier": "Tier 3", "region": "Americas", "gpu": "RTX 4090", "latency": "10ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
-    "EU-01": {"name": "London Ultra (EU-01)", "tier": "Tier 3", "region": "Europe", "gpu": "RTX 4090", "latency": "15ms", "rate_per_hr": 28000, "rate_usd": 1.75, "multiplier": 1.0},
-    "EU-02": {"name": "Frankfurt Central (EU-02)", "tier": "Tier 2", "region": "Europe", "gpu": "RTX 4080 Super", "latency": "12ms", "rate_per_hr": 21000, "rate_usd": 1.30, "multiplier": 1.0}
+    "JK-01": {"name": "Jakarta Edge (JK-01)", "tier": "Tier 1", "region": "APAC", "gpu": "RTX 4070", "latency": "2ms", "rate_per_hr": 59000, "rate_usd": 3.73, "multiplier": 1.0},
+    "SG-01": {"name": "Singapore Premium (SG-01)", "tier": "Tier 2", "region": "APAC", "gpu": "RTX 4080", "latency": "15ms", "rate_per_hr": 79000, "rate_usd": 5.00, "multiplier": 1.0},
+    "TY-01": {"name": "Tokyo Ultra (TY-01)", "tier": "Tier 3", "region": "APAC", "gpu": "RTX 4090", "latency": "22ms", "rate_per_hr": 109000, "rate_usd": 6.90, "multiplier": 1.0},
+    "US-01": {"name": "California Ultra (US-01)", "tier": "Tier 3", "region": "Americas", "gpu": "RTX 4090", "latency": "10ms", "rate_per_hr": 109000, "rate_usd": 6.90, "multiplier": 1.0},
+    "EU-01": {"name": "London Ultra (EU-01)", "tier": "Tier 3", "region": "Europe", "gpu": "RTX 4090", "latency": "15ms", "rate_per_hr": 109000, "rate_usd": 6.90, "multiplier": 1.0},
+    "EU-02": {"name": "Frankfurt Central (EU-02)", "tier": "Tier 2", "region": "Europe", "gpu": "RTX 4080", "latency": "12ms", "rate_per_hr": 79000, "rate_usd": 5.00, "multiplier": 1.0}
 }
+
+# --- Academic Financial Business Model Assumptions ---
+ACADEMIC_INITIAL_INVESTMENT = 1_320_000_000
+ACADEMIC_MONTHLY_OPEX = 399_000_000
+THEORETICAL_CAPACITY_HOURS = 8640  # 12 GPUs x 24h x 30d
 
 # --- Pydantic Models ---
 class RentalCalculationRequest(BaseModel):
@@ -547,7 +552,55 @@ def start_rental_session(req: CloudSessionRequest):
         "expires_in_seconds": req.duration_hours * 3600
     }
 
-# 4. Secure Authentication & Session Endpoints
+# 4. Academic Financial Simulation & Business Model Endpoint
+@api_router.get("/financial/summary")
+def get_financial_summary(utilization: float = 0.75):
+    """
+    Academic Financial Simulation Engine Endpoint
+    Returns itemized monthly revenue, OPEX, operating profit, and break-even metrics.
+    """
+    total_capacity = THEORETICAL_CAPACITY_HOURS
+    sold_hours = int(total_capacity * utilization)
+    
+    # 55% gaming, 20% compute at 75% baseline
+    gaming_hours = int(total_capacity * ((55 / 75) * utilization))
+    compute_hours = int(total_capacity * ((20 / 75) * utilization))
+    
+    gaming_rev = int((gaming_hours * (2/12) * 59000) + (gaming_hours * (4/12) * 79000) + (gaming_hours * (6/12) * 109000))
+    compute_rev = int((compute_hours * (2/12) * 49000) + (compute_hours * (4/12) * 69000) + (compute_hours * (6/12) * 89000))
+    
+    scale = utilization / 0.75
+    sub_rev = int((50 * scale * 699000) + (20 * scale * 1199000))
+    addon_rev = int((400 * scale * 15000) + (350 * scale * 20000) + (200 * scale * 25000) + (80 * scale * 49000))
+    
+    total_rev = gaming_rev + compute_rev + sub_rev + addon_rev
+    monthly_opex = ACADEMIC_MONTHLY_OPEX
+    operating_profit = total_rev - monthly_opex
+    margin_pct = round((operating_profit / total_rev) * 100, 2) if total_rev > 0 else 0
+    rev_per_gpu_hour = int(total_rev / sold_hours) if sold_hours > 0 else 0
+    
+    return {
+        "scenario": f"Simulation ({int(utilization * 100)}% Utilization)",
+        "initial_investment_idr": ACADEMIC_INITIAL_INVESTMENT,
+        "monthly_opex_idr": monthly_opex,
+        "total_gpu_capacity_hours": total_capacity,
+        "utilization_rate": utilization,
+        "sold_capacity_hours": sold_hours,
+        "gaming_revenue_idr": gaming_rev,
+        "compute_revenue_idr": compute_rev,
+        "subscription_revenue_idr": sub_rev,
+        "addon_revenue_idr": addon_rev,
+        "total_monthly_revenue_idr": total_rev,
+        "operating_profit_idr": operating_profit,
+        "operating_margin_pct": margin_pct,
+        "revenue_per_gpu_hour_idr": rev_per_gpu_hour,
+        "annual_revenue_idr": total_rev * 12,
+        "annual_operating_profit_idr": operating_profit * 12,
+        "break_even_utilization_pct": 42.54,
+        "model_type": "ACADEMIC_FINANCIAL_SIMULATION"
+    }
+
+# 5. Secure Authentication & Session Endpoints
 class LoginPayload(BaseModel):
     nickname: str
     password: Optional[str] = None

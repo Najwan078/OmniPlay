@@ -5,8 +5,15 @@ import { useGSAP } from '@gsap/react';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
-  Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock, Globe, Coins
+  Volume2, VolumeX, CreditCard, Smartphone, Building2, Wallet, ChevronDown, Lock, Globe, Coins,
+  Cpu, Sparkles, Terminal
 } from 'lucide-react';
+import { 
+  getFinancialConfig, 
+  calculateCloudPassPrice, 
+  getDynamicPricingStatus, 
+  recordLiveTransaction 
+} from '../services/financialModel';
 
 interface Game {
   id: number;
@@ -74,9 +81,22 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   };
 
   // Rent-to-Play Universal State
-  const [rentalHours, setRentalHours] = useState(2);
+  const [rentalHours, setRentalHours] = useState(1);
   const [selectedNode, setSelectedNode] = useState('JK-01');
   const [isRentSuccess, setIsRentSuccess] = useState(false);
+
+  // Cloud Pass Bundles & Add-ons State
+  const [includePriorityQueue, setIncludePriorityQueue] = useState(false);
+  const [includeExtraStorage, setIncludeExtraStorage] = useState(false);
+
+  // Cloud Compute Modal State (Section 8: AI/3D GPU Compute)
+  const [showComputeModal, setShowComputeModal] = useState(false);
+  const [computeWorkload, setComputeWorkload] = useState('AI / Machine Learning (LLM Fine-Tuning)');
+  const [computeGpu, setComputeGpu] = useState<'RTX 4070' | 'RTX 4080' | 'RTX 4090'>('RTX 4090');
+  const [computeRegion, setComputeRegion] = useState('TY-01 (Tokyo Core)');
+  const [computeDuration, setComputeDuration] = useState(4);
+  const [computeProcessing, setComputeProcessing] = useState(false);
+  const [computeSuccessNotice, setComputeSuccessNotice] = useState<string | null>(null);
 
   // Payment Modal State
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -86,6 +106,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Standardized Worldwide Cloud Node Tiers (Worldwide Edge Network)
+  // Premium Cloud Gaming Pricing: RTX 4070 (Rp59.000/h), RTX 4080 (Rp79.000/h), RTX 4090 (Rp109.000/h)
+  const financialConfig = getFinancialConfig();
   const nodes = [
     { 
       id: 'JK-01', 
@@ -94,9 +116,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       location: 'Jakarta', 
       name: 'Jakarta Edge (JK-01)', 
       flag: '🇮🇩',
-      gpu: 'RTX 4070 Ti', 
+      gpu: 'RTX 4070', 
       latency: '2ms', 
-      ratePerHour: 0.85 
+      ratePerHour: financialConfig.pricing.rtx4070Gaming / 15800 // Rp59.000 / 15800 ≈ 3.73 USD
     },
     { 
       id: 'SG-01', 
@@ -107,7 +129,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       flag: '🇸🇬',
       gpu: 'RTX 4080', 
       latency: '15ms', 
-      ratePerHour: 1.25 
+      ratePerHour: financialConfig.pricing.rtx4080Gaming / 15800 // Rp79.000 / 15800 ≈ 5.00 USD
     },
     { 
       id: 'TY-01', 
@@ -118,7 +140,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       flag: '🇯🇵',
       gpu: 'RTX 4090', 
       latency: '22ms', 
-      ratePerHour: 1.75 
+      ratePerHour: financialConfig.pricing.rtx4090Gaming / 15800 // Rp109.000 / 15800 ≈ 6.90 USD
     },
     { 
       id: 'US-01', 
@@ -129,7 +151,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       flag: '🇺🇸',
       gpu: 'RTX 4090', 
       latency: '10ms', 
-      ratePerHour: 1.75 
+      ratePerHour: financialConfig.pricing.rtx4090Gaming / 15800 // Rp109.000 / 15800 ≈ 6.90 USD
     },
     { 
       id: 'EU-01', 
@@ -140,7 +162,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       flag: '🇬🇧',
       gpu: 'RTX 4090', 
       latency: '15ms', 
-      ratePerHour: 1.75 
+      ratePerHour: financialConfig.pricing.rtx4090Gaming / 15800 // Rp109.000 / 15800 ≈ 6.90 USD
     },
     { 
       id: 'EU-02', 
@@ -149,9 +171,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       location: 'Frankfurt', 
       name: 'Frankfurt Central (EU-02)', 
       flag: '🇩🇪',
-      gpu: 'RTX 4080 Super', 
+      gpu: 'RTX 4080', 
       latency: '12ms', 
-      ratePerHour: 1.30 
+      ratePerHour: financialConfig.pricing.rtx4080Gaming / 15800 // Rp79.000 / 15800 ≈ 5.00 USD
     },
   ];
 
@@ -906,11 +928,31 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       return 0;
     });
 
-  // Calculate dynamic price per PRD formula
+  // Calculate dynamic price per PRD formula with Cloud Pass bundles, dynamic pricing, and add-ons
   const currentNode = nodes.find(n => n.id === selectedNode) || nodes[0];
-  const subtotalPrice = currentNode.ratePerHour * rentalHours;
-  const platformFee = 0.25;
-  const totalPrice = subtotalPrice + platformFee;
+  const dynamicStatus = getDynamicPricingStatus();
+  
+  // Calculate Cloud Pass pricing using configured rates
+  const currentGpuTier = (currentNode.gpu as 'RTX 4070' | 'RTX 4080' | 'RTX 4090') || 'RTX 4070';
+  const passPricing = calculateCloudPassPrice(
+    currentGpuTier,
+    rentalHours,
+    true,
+    financialConfig.pricing
+  );
+
+  // Premium Add-ons
+  const priorityQueueFeeIdr = includePriorityQueue ? financialConfig.pricing.addOns.priorityQueue : 0;
+  const extraStorageFeeIdr = includeExtraStorage ? financialConfig.pricing.addOns.extraCloudStorage : 0;
+  const platformFeeIdr = 2500; // Cloud infrastructure orchestration fee
+
+  const totalPayableIdr = passPricing.finalPriceIdr + priorityQueueFeeIdr + extraStorageFeeIdr + platformFeeIdr;
+  const subtotalPriceIdr = passPricing.finalPriceIdr;
+  
+  // Base USD equivalents for multi-currency conversion
+  const totalPrice = totalPayableIdr / 15800;
+  const subtotalPrice = subtotalPriceIdr / 15800;
+  const platformFee = platformFeeIdr / 15800;
   const formatUSD = (num: number) => formatPrice(num);
 
   const handleStartGame = (game: Game) => {
@@ -947,12 +989,35 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
     setTimeout(() => {
       setPaymentSuccess(true);
 
-      // Step 2: Show success, close modal, set rent success, and launch game animation (1 second)
+      // Step 2: Show success, close modal, set rent success, and record real transaction to audit ledger
       setTimeout(() => {
         setIsProcessingPayment(false);
         setPaymentSuccess(false);
         setShowPaymentModal(false);
         setIsRentSuccess(true);
+
+        // Record live transaction to audit ledger (Separation of Live vs Simulation)
+        recordLiveTransaction({
+          user: 'Current Gamer (Authenticated)',
+          itemTitle: selectedGame?.title || 'OmniPlay Cloud Session',
+          category: 'Gaming',
+          nodeId: currentNode.id,
+          nodeName: currentNode.name,
+          gpuTier: currentNode.gpu,
+          durationHours: rentalHours,
+          amountIdr: totalPayableIdr,
+          paymentMethod: paymentMethod.toUpperCase(),
+          paymentStatus: 'PAID',
+          rentalStatus: 'ACTIVE',
+          metadata: {
+            isBundle: passPricing.isBundle,
+            isDayPass: passPricing.isDayPass,
+            hasPriorityQueue: includePriorityQueue,
+            hasExtraStorage: includeExtraStorage,
+            period: passPricing.periodLabel,
+            multiplier: passPricing.dynamicMultiplier
+          }
+        });
 
         // Langsung animasi proses masuk game
         if (selectedGame) {
@@ -1177,6 +1242,22 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   {cat}
                 </button>
               ))}
+              <button 
+                onClick={() => setShowComputeModal(true)}
+                className="filter-pill"
+                type="button"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  borderColor: 'rgba(168, 85, 247, 0.4)',
+                  color: '#c084fc',
+                  background: 'rgba(168, 85, 247, 0.08)'
+                }}
+              >
+                <Cpu style={{ width: 13, height: 13 }} />
+                <span>Cloud Compute (AI / 3D)</span>
+              </button>
             </div>
           </div>
 
@@ -1650,29 +1731,209 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     </div>
                   </div>
 
-                  {/* 2. Duration Slider (1 to 5 Hours) */}
+                  {/* 2. Cloud Pass & Duration Options */}
                   <div className="rental-field">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                      <label className="rental-label">2. Rental Duration:</label>
-                      <span className="rental-hours-badge">{rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <label className="rental-label">2. Cloud Pass & Duration:</label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span 
+                          style={{
+                            fontSize: 10,
+                            padding: '2px 8px',
+                            borderRadius: 10,
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            background: dynamicStatus.isPeak ? 'rgba(239, 68, 68, 0.15)' : dynamicStatus.isOffPeak ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.15)',
+                            color: dynamicStatus.isPeak ? '#ef4444' : dynamicStatus.isOffPeak ? '#10b981' : '#60a5fa',
+                            border: `1px solid ${dynamicStatus.isPeak ? 'rgba(239, 68, 68, 0.3)' : dynamicStatus.isOffPeak ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`
+                          }}
+                        >
+                          {dynamicStatus.periodLabel} ({dynamicStatus.markupPercent >= 0 ? `+${dynamicStatus.markupPercent}%` : `${dynamicStatus.markupPercent}%`})
+                        </span>
+                        <span className="rental-hours-badge">
+                          {rentalHours === 24 ? 'Day Pass (24h)' : `${rentalHours} ${rentalHours === 1 ? 'Hour' : 'Hours'}`}
+                        </span>
+                      </div>
                     </div>
 
-                    <input 
-                      type="range" 
-                      min="1" 
-                      max="5" 
-                      step="1"
-                      value={rentalHours} 
-                      onChange={e => setRentalHours(parseInt(e.target.value))}
-                      className="rental-slider"
-                    />
+                    {/* Cloud Pass Bundles Row */}
+                    <div className="bundle-selector-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
+                      <button
+                        type="button"
+                        className={`bundle-btn ${rentalHours === 1 ? 'active' : ''}`}
+                        onClick={() => setRentalHours(1)}
+                        style={{
+                          padding: '8px 4px',
+                          borderRadius: 8,
+                          border: `1px solid ${rentalHours === 1 ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.08)'}`,
+                          background: rentalHours === 1 ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255,255,255,0.02)',
+                          color: rentalHours === 1 ? '#ffffff' : 'var(--text-muted)',
+                          fontSize: 11,
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ fontWeight: 700 }}>1 Hour</div>
+                        <div style={{ fontSize: 9, opacity: 0.8 }}>Standard</div>
+                      </button>
 
-                    <div className="slider-ticks">
-                      <span>1h</span>
-                      <span>2h</span>
-                      <span>3h</span>
-                      <span>4h</span>
-                      <span>5h</span>
+                      <button
+                        type="button"
+                        className={`bundle-btn ${rentalHours === 5 ? 'active' : ''}`}
+                        onClick={() => setRentalHours(5)}
+                        style={{
+                          padding: '8px 4px',
+                          borderRadius: 8,
+                          border: `1px solid ${rentalHours === 5 ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.08)'}`,
+                          background: rentalHours === 5 ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255,255,255,0.02)',
+                          color: rentalHours === 5 ? '#ffffff' : 'var(--text-muted)',
+                          fontSize: 11,
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ fontWeight: 700 }}>5h Bundle</div>
+                        <div style={{ fontSize: 9, color: 'var(--neon-emerald)' }}>Save ~6%</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`bundle-btn ${rentalHours === 10 ? 'active' : ''}`}
+                        onClick={() => setRentalHours(10)}
+                        style={{
+                          padding: '8px 4px',
+                          borderRadius: 8,
+                          border: `1px solid ${rentalHours === 10 ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.08)'}`,
+                          background: rentalHours === 10 ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255,255,255,0.02)',
+                          color: rentalHours === 10 ? '#ffffff' : 'var(--text-muted)',
+                          fontSize: 11,
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ fontWeight: 700 }}>10h Bundle</div>
+                        <div style={{ fontSize: 9, color: 'var(--neon-emerald)' }}>Save ~11%</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`bundle-btn ${rentalHours === 24 ? 'active' : ''}`}
+                        onClick={() => setRentalHours(24)}
+                        style={{
+                          padding: '8px 4px',
+                          borderRadius: 8,
+                          border: `1px solid ${rentalHours === 24 ? 'var(--neon-purple)' : 'rgba(255,255,255,0.08)'}`,
+                          background: rentalHours === 24 ? 'rgba(168, 85, 247, 0.15)' : 'rgba(255,255,255,0.02)',
+                          color: rentalHours === 24 ? '#ffffff' : 'var(--text-muted)',
+                          fontSize: 11,
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ fontWeight: 700 }}>Day Pass</div>
+                        <div style={{ fontSize: 9, color: '#c084fc' }}>24 Hours</div>
+                      </button>
+                    </div>
+
+                    {/* Day Pass Disclaimer (Section 6) */}
+                    {rentalHours === 24 && (
+                      <div 
+                        style={{ 
+                          fontSize: 10, 
+                          color: '#fbbf24', 
+                          background: 'rgba(245, 158, 11, 0.08)', 
+                          padding: '8px 10px', 
+                          borderRadius: 6, 
+                          marginBottom: 10,
+                          border: '1px solid rgba(245, 158, 11, 0.2)',
+                          lineHeight: 1.4
+                        }}
+                      >
+                        ⚠️ <strong>OmniPlay Day Pass:</strong> Grants 24 consecutive hours of premium cloud gaming session access. This service provides hardware streaming duration and does not transfer permanent game ownership.
+                      </div>
+                    )}
+
+                    {/* Fine-grained slider for 1-12 hours */}
+                    {rentalHours !== 24 && (
+                      <>
+                        <input 
+                          type="range" 
+                          min="1" 
+                          max="12" 
+                          step="1"
+                          value={rentalHours} 
+                          onChange={e => setRentalHours(parseInt(e.target.value))}
+                          className="rental-slider"
+                        />
+                        <div className="slider-ticks" style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
+                          <span>1h</span>
+                          <span>3h</span>
+                          <span>5h (Bundle)</span>
+                          <span>8h</span>
+                          <span>10h (Bundle)</span>
+                          <span>12h</span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Premium Add-ons (Section 10) */}
+                    <div style={{ marginTop: 14, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 8 }}>
+                        Optional Premium Add-ons:
+                      </span>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                        <label 
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            fontSize: 11,
+                            padding: '6px 8px',
+                            borderRadius: 6,
+                            background: includePriorityQueue ? 'rgba(6, 182, 212, 0.1)' : 'rgba(255,255,255,0.02)',
+                            border: `1px solid ${includePriorityQueue ? 'rgba(6, 182, 212, 0.3)' : 'rgba(255,255,255,0.06)'}`,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <input 
+                            type="checkbox" 
+                            checked={includePriorityQueue} 
+                            onChange={e => setIncludePriorityQueue(e.target.checked)} 
+                            style={{ accentColor: 'var(--neon-cyan)' }}
+                          />
+                          <span>
+                            <strong>Priority Queue</strong> (+{formatPrice(financialConfig.pricing.addOns.priorityQueue / 15800)})
+                          </span>
+                        </label>
+
+                        <label 
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            fontSize: 11,
+                            padding: '6px 8px',
+                            borderRadius: 6,
+                            background: includeExtraStorage ? 'rgba(6, 182, 212, 0.1)' : 'rgba(255,255,255,0.02)',
+                            border: `1px solid ${includeExtraStorage ? 'rgba(6, 182, 212, 0.3)' : 'rgba(255,255,255,0.06)'}`,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <input 
+                            type="checkbox" 
+                            checked={includeExtraStorage} 
+                            onChange={e => setIncludeExtraStorage(e.target.checked)} 
+                            style={{ accentColor: 'var(--neon-cyan)' }}
+                          />
+                          <span>
+                            <strong>Cloud Save+</strong> (+{formatPrice(financialConfig.pricing.addOns.extraCloudStorage / 15800)})
+                          </span>
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -1683,15 +1944,29 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                       <span>{formatPrice(currentNode.ratePerHour)}/h</span>
                     </div>
                     <div className="price-row">
-                      <span>Rental Duration</span>
-                      <span>{rentalHours} {rentalHours === 1 ? 'Hour' : 'Hours'}</span>
+                      <span>Rental Duration & Plan</span>
+                      <span>{rentalHours === 24 ? '24h Day Pass' : `${rentalHours}h ${passPricing.isBundle ? '(Bundle)' : ''}`}</span>
                     </div>
+                    {passPricing.discountIdr > 0 && (
+                      <div className="price-row" style={{ color: 'var(--neon-emerald)' }}>
+                        <span>Pass Bundle Savings</span>
+                        <span>-{formatPrice(passPricing.discountIdr / 15800)}</span>
+                      </div>
+                    )}
+                    {dynamicStatus.markupPercent !== 0 && (
+                      <div className="price-row" style={{ color: dynamicStatus.isPeak ? '#f87171' : '#34d399' }}>
+                        <span>{dynamicStatus.periodLabel} Rate ({dynamicStatus.markupPercent > 0 ? `+${dynamicStatus.markupPercent}%` : `${dynamicStatus.markupPercent}%`})</span>
+                        <span>{dynamicStatus.markupPercent > 0 ? '+' : ''}{Math.round(dynamicStatus.markupPercent)}%</span>
+                      </div>
+                    )}
+                    {(includePriorityQueue || includeExtraStorage) && (
+                      <div className="price-row">
+                        <span>Selected Add-ons</span>
+                        <span>+{formatPrice((priorityQueueFeeIdr + extraStorageFeeIdr) / 15800)}</span>
+                      </div>
+                    )}
                     <div className="price-row">
-                      <span>Subtotal ({formatPrice(currentNode.ratePerHour)} × {rentalHours}h)</span>
-                      <span>{formatPrice(subtotalPrice)}</span>
-                    </div>
-                    <div className="price-row">
-                      <span>Cloud Orchestration Fee</span>
+                      <span>Cloud Orchestration & Buffer Fee</span>
                       <span>{formatPrice(platformFee)}</span>
                     </div>
                     <div className="price-row total">
@@ -2016,6 +2291,287 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   : "SELECT PAYMENT METHOD"
                 }
               </button>
+            </div>
+          </div>
+        </div>
+      , document.body)}
+
+      {/* 5. CLOUD COMPUTE WORKLOAD MODAL (Section 8) */}
+      {showComputeModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="compute-modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !computeProcessing) {
+              setShowComputeModal(false);
+              setComputeSuccessNotice(null);
+            }
+          }}
+        >
+          <div className="compute-modal-card">
+            {/* Header */}
+            <div className="compute-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(168, 85, 247, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc' }}>
+                  <Cpu style={{ width: 20, height: 20 }} />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#ffffff' }}>OmniPlay Cloud Compute</h3>
+                  <p style={{ margin: 0, fontSize: 11, color: 'var(--text-muted)' }}>High-Performance GPU Compute for AI, 3D Rendering & Science</p>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => {
+                  if (!computeProcessing) {
+                    setShowComputeModal(false);
+                    setComputeSuccessNotice(null);
+                  }
+                }}
+                className="payment-back-btn"
+                title="Close"
+              >
+                <X style={{ width: 18, height: 18 }} />
+              </button>
+            </div>
+
+            {/* Content Body */}
+            <div className="compute-modal-body">
+              {computeSuccessNotice ? (
+                <div style={{ textAlign: 'center', padding: '24px 16px' }}>
+                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--neon-emerald)' }}>
+                    <CheckCircle2 style={{ width: 32, height: 32 }} />
+                  </div>
+                  <h4 style={{ fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Compute Instance Allocated!</h4>
+                  <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16, lineHeight: 1.5 }}>
+                    {computeSuccessNotice}
+                  </p>
+                  <div style={{ background: 'rgba(0,0,0,0.4)', borderRadius: 8, padding: 12, marginBottom: 20, fontFamily: 'monospace', fontSize: 11, color: '#38bdf8', textAlign: 'left' }}>
+                    $ ssh -i ~/.ssh/omniplay.pem root@{computeRegion.toLowerCase().slice(0, 5)}.omniplay.cloud<br />
+                    # GPU: NVIDIA {computeGpu} | Container: PyTorch 2.3 CUDA 12.4<br />
+                    # Session active for {computeDuration} hours
+                  </div>
+                  <button
+                    type="button"
+                    className="hero-btn-primary"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    onClick={() => {
+                      setShowComputeModal(false);
+                      setComputeSuccessNotice(null);
+                    }}
+                  >
+                    Done & Return to Library
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* Notice banner */}
+                  <div style={{ background: 'rgba(168, 85, 247, 0.08)', border: '1px solid rgba(168, 85, 247, 0.25)', borderRadius: 8, padding: '10px 12px', marginBottom: 16, fontSize: 11, color: '#d8b4fe', lineHeight: 1.4 }}>
+                    💡 <strong>Idle Capacity Monetization:</strong> Tap into dedicated enterprise GPUs when gamer demand is off-peak. All instances are containerized, isolated, and billed strictly per GPU-hour.
+                  </div>
+
+                  {/* 1. Workload Type */}
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
+                      1. Select Compute Workload:
+                    </label>
+                    <select 
+                      value={computeWorkload} 
+                      onChange={e => setComputeWorkload(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: 8,
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        color: '#ffffff',
+                        fontSize: 12,
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="AI / Machine Learning (LLM Fine-Tuning)">AI / Machine Learning (LLM Fine-Tuning & Inference)</option>
+                      <option value="3D Rendering (Blender / Unreal / Octane)">3D Rendering (Blender / Unreal Engine / Octane)</option>
+                      <option value="Video Processing & VFX (8K Transcoding)">Video Processing & VFX (8K Transcoding / DaVinci)</option>
+                      <option value="Scientific Simulation & Physics">Scientific Simulation & Physics (CUDA acceleration)</option>
+                      <option value="General GPU Compute & Development">General GPU Dev (Jupyter Notebook / Docker)</option>
+                    </select>
+                  </div>
+
+                  {/* 2. GPU Tier Selector */}
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
+                      2. GPU Hardware Tier:
+                    </label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                      {(['RTX 4070', 'RTX 4080', 'RTX 4090'] as const).map(gpu => {
+                        const rate = financialConfig.pricing.cloudCompute[gpu];
+                        const isSelected = computeGpu === gpu;
+                        return (
+                          <div 
+                            key={gpu}
+                            onClick={() => setComputeGpu(gpu)}
+                            style={{
+                              padding: '10px 8px',
+                              borderRadius: 8,
+                              border: `1px solid ${isSelected ? 'var(--neon-purple)' : 'rgba(255,255,255,0.08)'}`,
+                              background: isSelected ? 'rgba(168, 85, 247, 0.15)' : 'rgba(255,255,255,0.02)',
+                              cursor: 'pointer',
+                              textAlign: 'center',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            <p style={{ margin: 0, fontWeight: 700, fontSize: 12, color: isSelected ? '#ffffff' : 'var(--text-muted)' }}>{gpu}</p>
+                            <p style={{ margin: '4px 0 0', fontSize: 11, color: isSelected ? '#c084fc' : 'var(--text-muted)' }}>
+                              {formatPrice(rate / 15800)}/h
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 3. Cloud Region & Duration */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
+                        3. Cloud Region:
+                      </label>
+                      <select 
+                        value={computeRegion} 
+                        onChange={e => setComputeRegion(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '10px 12px',
+                          borderRadius: 8,
+                          background: 'rgba(255,255,255,0.04)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          color: '#ffffff',
+                          fontSize: 12,
+                          outline: 'none'
+                        }}
+                      >
+                        <option value="JK-01 (Jakarta Edge)">🇮🇩 JK-01 (Jakarta)</option>
+                        <option value="SG-01 (Singapore Edge)">🇸🇬 SG-01 (Singapore)</option>
+                        <option value="TY-01 (Tokyo Core)">🇯🇵 TY-01 (Tokyo)</option>
+                        <option value="EU-01 (London Core)">🇬🇧 EU-01 (London)</option>
+                        <option value="EU-02 (Frankfurt Central)">🇩🇪 EU-02 (Frankfurt)</option>
+                        <option value="US-01 (California West)">🇺🇸 US-01 (California)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
+                        4. Duration ({computeDuration}h):
+                      </label>
+                      <select 
+                        value={computeDuration} 
+                        onChange={e => setComputeDuration(parseInt(e.target.value))}
+                        style={{
+                          width: '100%',
+                          padding: '10px 12px',
+                          borderRadius: 8,
+                          background: 'rgba(255,255,255,0.04)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          color: '#ffffff',
+                          fontSize: 12,
+                          outline: 'none'
+                        }}
+                      >
+                        <option value={1}>1 Hour Batch</option>
+                        <option value={4}>4 Hours Standard</option>
+                        <option value={8}>8 Hours Workday</option>
+                        <option value={12}>12 Hours Heavy</option>
+                        <option value={24}>24 Hours Full Pipeline</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* 4. Cost Breakdown */}
+                  {(() => {
+                    const rateIdr = financialConfig.pricing.cloudCompute[computeGpu];
+                    const computeTotalIdr = rateIdr * computeDuration;
+                    const computeTotalUsd = computeTotalIdr / 15800;
+
+                    return (
+                      <div className="rental-pricing-breakdown" style={{ marginBottom: 16 }}>
+                        <div className="price-row">
+                          <span>Workload / Service</span>
+                          <span style={{ maxWidth: 180, textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{computeWorkload}</span>
+                        </div>
+                        <div className="price-row">
+                          <span>Rate per GPU-hour</span>
+                          <span>{formatPrice(rateIdr / 15800)}/h</span>
+                        </div>
+                        <div className="price-row">
+                          <span>Allocated GPU Duration</span>
+                          <span>{computeDuration} GPU-hours</span>
+                        </div>
+                        <div className="price-row total">
+                          <span>Estimated Compute Cost</span>
+                          <div style={{ textAlign: 'right' }}>
+                            <span className="total-amount" style={{ color: '#c084fc' }}>{formatPrice(computeTotalUsd)}</span>
+                            {selectedCurrency !== 'USD' && (
+                              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                                (${computeTotalUsd.toFixed(2)} USD)
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Deploy Action Button */}
+                  <button
+                    type="button"
+                    disabled={computeProcessing}
+                    onClick={() => {
+                      setComputeProcessing(true);
+                      const rateIdr = financialConfig.pricing.cloudCompute[computeGpu];
+                      const computeTotalIdr = rateIdr * computeDuration;
+
+                      setTimeout(() => {
+                        // Record to real audit transaction ledger
+                        recordLiveTransaction({
+                          user: 'Enterprise / AI Developer (OmniCompute)',
+                          itemTitle: `Compute: ${computeWorkload.slice(0, 32)}`,
+                          category: 'Compute',
+                          nodeId: computeRegion.split(' ')[0],
+                          nodeName: computeRegion,
+                          gpuTier: computeGpu,
+                          durationHours: computeDuration,
+                          amountIdr: computeTotalIdr,
+                          paymentMethod: 'CORPORATE_INVOICE',
+                          paymentStatus: 'PAID',
+                          rentalStatus: 'ACTIVE',
+                          metadata: {
+                            workload: computeWorkload,
+                            node: computeRegion
+                          }
+                        });
+
+                        setComputeProcessing(false);
+                        setComputeSuccessNotice(`Allocated ${computeDuration} GPU-hours on ${computeGpu} in ${computeRegion}. Orchestration telemetry active.`);
+                      }, 1200);
+                    }}
+                    className="hero-btn-primary"
+                    style={{
+                      width: '100%',
+                      justifyContent: 'center',
+                      background: 'linear-gradient(135deg, #9333ea, #6366f1)',
+                      borderColor: '#a855f7'
+                    }}
+                  >
+                    {computeProcessing ? (
+                      <span>Allocating GPU Cluster...</span>
+                    ) : (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        <Terminal style={{ width: 16, height: 16 }} />
+                        <span>Deploy Workload Instance ({formatPrice((financialConfig.pricing.cloudCompute[computeGpu] * computeDuration) / 15800)})</span>
+                      </span>
+                    )}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
