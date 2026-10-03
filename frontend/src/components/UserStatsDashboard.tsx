@@ -1,4 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Trophy, Calendar, CheckCircle2, Zap
 } from 'lucide-react';
@@ -539,8 +541,21 @@ export default function UserStatsDashboard() {
     return generateUserStats(currentName);
   }, [currentName]);
 
+  const statsContainerRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Entrance Choreography
+  useGSAP(() => {
+    if (statsContainerRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.user-profile-summary', { opacity: 0, y: 16, duration: 0.4 })
+        .from('.user-kpi-card', { opacity: 0, y: 14, stagger: 0.08, duration: 0.35 }, '-=0.25')
+        .from('.games-breakdown-card', { opacity: 0, y: 14, duration: 0.35 }, '-=0.2')
+        .from('.achievements-showcase-card', { opacity: 0, y: 14, duration: 0.35 }, '-=0.25');
+    }
+  }, { scope: statsContainerRef });
+
   return (
-    <div className="user-stats-container">
+    <div ref={statsContainerRef} className="user-stats-container">
       {/* 1. Profile & Header Banner */}
       <header className="user-stats-header">
         <div className="user-profile-summary">

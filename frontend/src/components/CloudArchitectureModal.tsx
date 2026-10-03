@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { 
@@ -133,6 +135,16 @@ interface CloudArchitectureModalProps {
 export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchitectureModalProps) {
   const [activeTier, setActiveTier] = useState<number>(3);
   const [isHovered3D, setIsHovered3D] = useState(false);
+  const modalCardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (modalCardRef.current) {
+      gsap.fromTo(modalCardRef.current,
+        { scale: 0.92, opacity: 0, y: 25 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: 'back.out(1.4)' }
+      );
+    }
+  }, { scope: modalCardRef, dependencies: [isOpen] });
 
   // Close on ESC
   useEffect(() => {
@@ -232,7 +244,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
 
   return createPortal(
     <div className="arch-modal-overlay" onClick={onClose}>
-      <div className="arch-modal-card" onClick={(e) => e.stopPropagation()}>
+      <div ref={modalCardRef} className="arch-modal-card" onClick={(e) => e.stopPropagation()}>
         
         {/* Modal Header */}
         <div className="arch-modal-header">

@@ -114,19 +114,18 @@ export default function ThreeDIcon({ type, size = 26, className = '', glowColor 
         justifyContent: 'center',
         position: 'relative',
         flexShrink: 0,
-        borderRadius: size > 32 ? '10px' : '7px',
-        background: config.bgGradient,
-        border: `1px solid ${config.borderColor}`,
-        boxShadow: `0 0 12px ${activeGlow}, inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
-        transition: 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease'
+        borderRadius: size > 32 ? '9px' : '6px',
+        background: 'rgba(255, 255, 255, 0.05)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.35)',
+        transition: 'transform 0.2s ease, border-color 0.2s ease, background 0.2s ease'
       }}
     >
       <IconComponent 
         style={{
           width: iconPixelSize,
           height: iconPixelSize,
-          color: config.color,
-          filter: `drop-shadow(0 0 6px ${config.color})`
+          color: config.color
         }} 
       />
     </div>

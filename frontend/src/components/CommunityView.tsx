@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Users, UserPlus, Search, MessageSquare, Gamepad2, 
   CheckCircle2, Sparkles, Send, Radio, Volume2, Shield
@@ -147,8 +149,21 @@ export default function CommunityView() {
     (f.game && f.game.toLowerCase().includes(searchFriend.toLowerCase()))
   );
 
+  const communityRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Entrance Animation
+  useGSAP(() => {
+    if (communityRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.community-title-group', { opacity: 0, y: 15, duration: 0.4 })
+        .from('.comm-stat-card', { opacity: 0, y: 12, stagger: 0.08, duration: 0.3 }, '-=0.25')
+        .from('.community-friends-card', { opacity: 0, x: -16, duration: 0.38 }, '-=0.2')
+        .from('.community-chat-card', { opacity: 0, x: 16, duration: 0.38 }, '-=0.35');
+    }
+  }, { scope: communityRef });
+
   return (
-    <div className="community-view-container">
+    <div ref={communityRef} className="community-view-container">
       {/* 1. Community Header Banner */}
       <header className="community-header">
         <div className="community-title-group">

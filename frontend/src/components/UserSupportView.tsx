@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   LifeBuoy, Send, AlertCircle, CheckCircle2, Clock, 
   MessageSquare, HelpCircle, Shield, Wifi, RefreshCw, ChevronRight
@@ -162,8 +164,34 @@ export default function UserSupportView() {
     }, 1500);
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+    tl.fromTo('.user-support-header',
+      { opacity: 0, y: -16 },
+      { opacity: 1, y: 0, duration: 0.35 }
+    )
+    .fromTo('.support-form-card',
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, duration: 0.4 },
+      '-=0.2'
+    )
+    .fromTo('.support-chat-card',
+      { opacity: 0, x: 20 },
+      { opacity: 1, x: 0, duration: 0.4 },
+      '-=0.3'
+    )
+    .fromTo('.ticket-row',
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.3, stagger: 0.06 },
+      '-=0.2'
+    );
+  }, { scope: containerRef });
+
   return (
-    <div className="user-support-container">
+    <div ref={containerRef} className="user-support-container">
       {/* 1. Header */}
       <header className="user-support-header">
         <div>

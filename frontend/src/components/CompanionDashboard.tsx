@@ -17,14 +17,14 @@ interface GameTab {
 }
 
 const gameTabs: GameTab[] = [
-  { key: 'gta6', label: 'GTA VI', activeClass: 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.5)] italic' },
+  { key: 'gta6', label: 'GTA VI', activeClass: 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md italic' },
   { key: 'cod', label: 'Black Ops 6', activeClass: 'bg-orange-600 text-black shadow-lg shadow-orange-500/20 font-black tracking-widest' },
-  { key: 'starfield', label: 'Starfield', activeClass: 'bg-white text-black font-mono shadow-[0_0_15px_rgba(255,255,255,0.4)]' },
-  { key: 'valorant', label: 'Valorant', activeClass: 'bg-[#ff4655] text-white shadow-[0_0_15px_rgba(255,70,85,0.4)]' },
+  { key: 'starfield', label: 'Starfield', activeClass: 'bg-white text-black font-mono shadow-md' },
+  { key: 'valorant', label: 'Valorant', activeClass: 'bg-[#ff4655] text-white shadow-md' },
   { key: 'minecraft', label: 'Minecraft', activeClass: 'bg-green-600 text-white border-2 border-green-800 shadow-[inset_0_-4px_0_rgba(0,0,0,0.3)] font-mono' },
   { key: 'eafc25', label: 'EA FC 25', activeClass: 'bg-gradient-to-r from-emerald-400 to-teal-500 text-black shadow-lg shadow-teal-500/20' },
   { key: 'cyberpunk', label: 'Cyberpunk 2077', activeClass: 'bg-yellow-400 text-black shadow-lg shadow-yellow-400/20' },
-  { key: 'helldivers', label: 'Helldivers 2', activeClass: 'bg-yellow-500 text-black font-mono shadow-[0_0_10px_rgba(234,179,8,0.5)]' },
+  { key: 'helldivers', label: 'Helldivers 2', activeClass: 'bg-yellow-500 text-black font-mono shadow-md' },
   { key: 'forza', label: 'Forza Horizon 5', activeClass: 'bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white shadow-lg shadow-pink-500/30 italic' },
   { key: 'wukong', label: 'Wukong', activeClass: 'bg-gradient-to-r from-amber-700 to-amber-900 text-amber-100 border border-amber-500/50' },
   { key: 'rdr2', label: 'RDR 2', activeClass: 'bg-[#3b1715] text-[#d4c4a8] border border-[#d4c4a8]/30 font-serif' },
@@ -50,35 +50,11 @@ export default function CompanionDashboard() {
 
   return (
     <div className="h-full flex items-center justify-center p-8 bg-gray-950/50 relative overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 opacity-15 pointer-events-none transition-all duration-1000">
-        {selectedGame === 'gta6' && <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-600 blur-[100px]"></div>}
-        {selectedGame === 'cod' && <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-black blur-[100px]"></div>}
-        {selectedGame === 'starfield' && <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-white blur-[100px]"></div>}
-        {selectedGame === 'valorant' && <div className="absolute inset-0 bg-gradient-to-br from-[#ff4655] to-[#111111] blur-[100px]"></div>}
-        {selectedGame === 'minecraft' && <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-amber-800 blur-[100px]"></div>}
-        {selectedGame === 'eafc25' && <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-blue-600 blur-[100px]"></div>}
-        {selectedGame === 'cyberpunk' && <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-red-600 blur-[100px]"></div>}
-        {selectedGame === 'helldivers' && <div className="absolute inset-0 bg-gradient-to-br from-yellow-600 to-black blur-[100px]"></div>}
-        {selectedGame === 'forza' && <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600 to-yellow-500 blur-[100px]"></div>}
-        {selectedGame === 'wukong' && <div className="absolute inset-0 bg-gradient-to-br from-amber-700 to-stone-900 blur-[100px]"></div>}
-        {selectedGame === 'rdr2' && <div className="absolute inset-0 bg-gradient-to-br from-orange-900 to-red-900 blur-[100px]"></div>}
-        {selectedGame === 'ghost' && <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-gray-400 blur-[100px]"></div>}
-        {selectedGame === 'witcher3' && <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-gray-900 blur-[100px]"></div>}
-        {selectedGame === 'godofwar' && <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-orange-800 blur-[100px]"></div>}
-        {selectedGame === 'spiderman' && <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-blue-800 blur-[100px]"></div>}
-        {selectedGame === 'doom' && <div className="absolute inset-0 bg-gradient-to-br from-red-800 to-black blur-[100px]"></div>}
-        {selectedGame === 'horizon' && <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-teal-600 blur-[100px]"></div>}
-        {selectedGame === 're4' && <div className="absolute inset-0 bg-gradient-to-br from-red-950 to-gray-950 blur-[100px]"></div>}
-        {selectedGame === 'ff7r' && <div className="absolute inset-0 bg-gradient-to-br from-blue-700 to-purple-900 blur-[100px]"></div>}
-        {selectedGame === 'deathstranding' && <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-cyan-900 blur-[100px]"></div>}
-      </div>
+      {/* Clean Dark Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-950/60 to-black pointer-events-none" />
 
       {/* Mobile Device Mockup - Ultra Premium */}
-      <div className="w-[375px] h-[812px] bg-black border-[12px] border-gray-800 rounded-[3.5rem] shadow-[0_0_60px_rgba(0,0,0,0.8),inset_0_0_15px_rgba(255,255,255,0.1)] overflow-hidden relative flex flex-col z-10 ring-4 ring-gray-900">
-        
-        {/* Glass Glare */}
-        <div className="absolute inset-0 z-50 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-[-20deg] translate-x-[-150%] animate-[glare_8s_infinite]"></div>
+      <div className="w-[375px] max-w-full h-[812px] max-h-full bg-black border-[8px] sm:border-[12px] border-gray-800 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-2xl overflow-hidden relative flex flex-col z-10 ring-2 sm:ring-4 ring-gray-900">
 
         {/* Dynamic Island */}
         <div className={`absolute top-2 left-1/2 -translate-x-1/2 bg-black rounded-full z-50 flex items-center border border-white/10 shadow-[0_5px_20px_rgba(0,0,0,0.5)] transition-all duration-300 overflow-hidden ${notification ? 'w-56 h-10 px-3' : 'w-32 h-7 px-3 justify-between'}`}>
@@ -153,7 +129,7 @@ function EAFC25View({ notify }: { notify: any }) {
   return (
     <div className="flex-1 overflow-y-auto bg-gradient-to-br from-emerald-950 via-slate-900 to-blue-950 px-5 py-6 custom-scrollbar">
       <div className="flex items-center gap-3 mb-6">
-        <Trophy className="w-8 h-8 text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
+        <Trophy className="w-8 h-8 text-yellow-400 " />
         <h2 className="text-2xl font-black italic tracking-tight text-white">CLUB TACTICS</h2>
       </div>
       <div className="mb-6 flex justify-between items-center bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
@@ -189,7 +165,7 @@ function EAFC25View({ notify }: { notify: any }) {
           </div>
         ))}
       </div>
-      <button onClick={() => notify("Tactics Applied In Game!")} className="w-full mt-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.3)] cursor-pointer">Apply Quick Tactics</button>
+      <button onClick={() => notify("Tactics Applied In Game!")} className="w-full mt-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-md cursor-pointer">Apply Quick Tactics</button>
     </div>
   );
 }
@@ -239,7 +215,7 @@ function CyberpunkView({ notify }: { notify: any }) {
             <span className="text-sm font-bold text-gray-400">OPTICAL CAMO</span><span className="text-xs text-red-500 font-bold">CD: 12.4s</span>
           </div>
         </div>
-        <button onClick={() => notify("Vehicle Called", <Target className="w-4 h-4 text-yellow-500"/>)} className="w-full mt-8 py-4 bg-yellow-400 text-black font-black text-lg uppercase tracking-widest hover:bg-yellow-300 active:scale-95 transition-all cursor-pointer shadow-[0_0_15px_rgba(250,204,21,0.3)]">CALL VEHICLE</button>
+        <button onClick={() => notify("Vehicle Called", <Target className="w-4 h-4 text-yellow-500"/>)} className="w-full mt-8 py-4 bg-yellow-400 text-black font-black text-lg uppercase tracking-widest hover:bg-yellow-300 active:scale-95 transition-all cursor-pointer shadow-md">CALL VEHICLE</button>
       </div>
     </div>
   );
@@ -282,7 +258,7 @@ function HelldiversView({ notify }: { notify: any }) {
           <span className="text-blue-400 font-bold tracking-widest text-lg">↑↓→←↑</span>
         </button>
       </div>
-      <button onClick={() => notify("Pelican-1 Inbound!", <Radio className="w-4 h-4 text-black"/>)} className="w-full mt-8 py-4 bg-yellow-500 text-black font-black uppercase tracking-widest hover:bg-yellow-400 active:scale-95 transition-all cursor-pointer border-b-4 border-yellow-700 flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(234,179,8,0.4)]"><Radio className="w-5 h-5" />Request Extraction</button>
+      <button onClick={() => notify("Pelican-1 Inbound!", <Radio className="w-4 h-4 text-black"/>)} className="w-full mt-8 py-4 bg-yellow-500 text-black font-black uppercase tracking-widest hover:bg-yellow-400 active:scale-95 transition-all cursor-pointer border-b-4 border-yellow-700 flex justify-center items-center gap-2 shadow-md"><Radio className="w-5 h-5" />Request Extraction</button>
     </div>
   );
 }
@@ -303,7 +279,7 @@ function ForzaView({ notify }: { notify: any }) {
     <div className="flex-1 overflow-y-auto bg-gradient-to-br from-[#1a001a] via-[#3d003d] to-[#1a0033] px-5 py-6 custom-scrollbar">
       <h2 className="text-3xl font-black italic mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-400 tracking-tighter">HORIZON TELEMETRY</h2>
       <div className="relative mb-8 flex justify-center">
-        <div className="w-48 h-48 rounded-full border-[12px] border-gray-900 bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.4)] flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300">
+        <div className="w-48 h-48 rounded-full border-[12px] border-gray-900 bg-black/50 shadow-md flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300">
           <svg className="absolute inset-0 w-full h-full transition-all duration-300" viewBox="0 0 100 100"><path d="M 20 80 A 45 45 0 1 1 80 80" fill="none" stroke="#4c1d95" strokeWidth="8" strokeLinecap="round" /><path d="M 20 80 A 45 45 0 1 1 90 60" fill="none" stroke="#ec4899" strokeWidth="8" strokeLinecap="round" strokeDasharray="150" strokeDashoffset={150 - (speed / 300) * 150} className="transition-all duration-300 ease-linear" /></svg>
           <div className="font-black text-6xl text-white italic z-10 tracking-tighter transition-all duration-300">{speed}</div><div className="text-sm font-bold text-pink-500 italic z-10">KM/H</div>
         </div>
@@ -319,7 +295,7 @@ function ForzaView({ notify }: { notify: any }) {
         <div className="bg-gradient-to-r from-yellow-900/40 to-transparent border-l-4 border-yellow-500 p-3 rounded flex justify-between items-center skew-x-[-5deg]"><span className="text-xs font-black text-white italic">RL</span><span className="font-bold text-yellow-400">95°C</span></div>
         <div className="bg-gradient-to-l from-yellow-900/40 to-transparent border-r-4 border-yellow-500 p-3 rounded flex justify-between items-center skew-x-[-5deg]"><span className="font-bold text-yellow-400">96°C</span><span className="text-xs font-black text-white italic">RR</span></div>
       </div>
-      <button onClick={() => notify("Tune Applied", <Gauge className="w-4 h-4 text-pink-500"/>)} className="w-full mt-8 py-4 bg-white text-black font-black text-lg italic uppercase tracking-widest rounded hover:bg-pink-100 active:scale-95 transition-all cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] skew-x-[-5deg]">Apply Track Tune</button>
+      <button onClick={() => notify("Tune Applied", <Gauge className="w-4 h-4 text-pink-500"/>)} className="w-full mt-8 py-4 bg-white text-black font-black text-lg italic uppercase tracking-widest rounded hover:bg-pink-100 active:scale-95 transition-all cursor-pointer shadow-md skew-x-[-5deg]">Apply Track Tune</button>
     </div>
   );
 }
@@ -335,9 +311,9 @@ function WukongView({ notify }: { notify: any }) {
       </div>
       <div className="grid grid-cols-2 gap-4 mb-8">
         <button onClick={() => notify("Gourd Used", <Heart className="w-4 h-4 text-green-500" />)} className="bg-[#211a17] border border-[#3d2f25] p-4 rounded text-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] active:scale-95 transition-transform cursor-pointer"><Flame className="w-5 h-5 text-[#e5c07b] mx-auto mb-2 opacity-80" /><span className="text-[10px] text-[#8b6f53] uppercase tracking-widest block mb-1">Gourd</span><span className="text-xl font-bold text-[#e5c07b]">4 / 5</span></button>
-        <div className="bg-[#211a17] border border-[#3d2f25] p-4 rounded text-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"><Zap className="w-5 h-5 text-white mx-auto mb-2 opacity-80" /><span className="text-[10px] text-[#8b6f53] uppercase tracking-widest block mb-1">Focus</span><div className="flex justify-center gap-1.5 mt-2"><div className="w-3 h-3 rotate-45 bg-white shadow-[0_0_8px_white]"></div><div className="w-3 h-3 rotate-45 bg-white shadow-[0_0_8px_white]"></div><div className="w-3 h-3 rotate-45 bg-[#3d2f25]"></div></div></div>
+        <div className="bg-[#211a17] border border-[#3d2f25] p-4 rounded text-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"><Zap className="w-5 h-5 text-white mx-auto mb-2 opacity-80" /><span className="text-[10px] text-[#8b6f53] uppercase tracking-widest block mb-1">Focus</span><div className="flex justify-center gap-1.5 mt-2"><div className="w-3 h-3 rotate-45 bg-white border border-white/40"></div><div className="w-3 h-3 rotate-45 bg-white border border-white/40"></div><div className="w-3 h-3 rotate-45 bg-[#3d2f25]"></div></div></div>
       </div>
-      <div className="text-center"><h3 className="text-[10px] font-bold text-[#a88d73] uppercase tracking-[0.2em] mb-4">Staff Stance</h3><div className="flex justify-center gap-3"><div className="w-20 h-20 rounded-full border-2 border-[#e5c07b] bg-[#e5c07b]/10 flex items-center justify-center shadow-[0_0_15px_rgba(229,192,123,0.2)] cursor-pointer"><span className="text-[#e5c07b] font-bold text-sm">SMASH</span></div><div className="w-16 h-16 rounded-full border border-[#3d2f25] bg-[#211a17] flex items-center justify-center opacity-60 cursor-pointer"><span className="text-[#8b6f53] text-xs">PILLAR</span></div><div className="w-16 h-16 rounded-full border border-[#3d2f25] bg-[#211a17] flex items-center justify-center opacity-60 cursor-pointer"><span className="text-[#8b6f53] text-xs">THRUST</span></div></div></div>
+      <div className="text-center"><h3 className="text-[10px] font-bold text-[#a88d73] uppercase tracking-[0.2em] mb-4">Staff Stance</h3><div className="flex justify-center gap-3"><div className="w-20 h-20 rounded-full border-2 border-[#e5c07b] bg-[#e5c07b]/10 flex items-center justify-center shadow-md cursor-pointer"><span className="text-[#e5c07b] font-bold text-sm">SMASH</span></div><div className="w-16 h-16 rounded-full border border-[#3d2f25] bg-[#211a17] flex items-center justify-center opacity-60 cursor-pointer"><span className="text-[#8b6f53] text-xs">PILLAR</span></div><div className="w-16 h-16 rounded-full border border-[#3d2f25] bg-[#211a17] flex items-center justify-center opacity-60 cursor-pointer"><span className="text-[#8b6f53] text-xs">THRUST</span></div></div></div>
     </div>
   );
 }
@@ -362,7 +338,7 @@ function GhostView({ notify }: { notify: any }) {
   return (
     <div className="flex-1 overflow-y-auto bg-black px-6 py-8 custom-scrollbar font-serif relative">
       <div className="flex justify-between items-center mb-8 border-b border-white/20 pb-4"><div><h2 className="text-2xl font-bold text-white tracking-widest uppercase">The Ghost</h2><p className="text-xs text-gray-400 tracking-[0.2em] uppercase mt-1">Jin Sakai</p></div><Wind className="w-8 h-8 text-gray-500" /></div>
-      <div className="mb-8"><span className="text-[10px] text-gray-400 uppercase tracking-[0.2em]">Health</span><div className="h-1.5 w-full bg-white/10 overflow-hidden mt-2 mb-6"><div className="h-full bg-red-600 w-[75%] shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div></div><span className="text-[10px] text-gray-400 uppercase tracking-[0.2em]">Resolve</span><div className="flex gap-2 mt-3">{[1,2,3].map(i => <div key={i} className="w-5 h-5 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.4)] animate-[pulse_2s_infinite]"></div>)}{[4,5].map(i => <div key={i} className="w-5 h-5 rounded-full bg-white/10"></div>)}</div></div>
+      <div className="mb-8"><span className="text-[10px] text-gray-400 uppercase tracking-[0.2em]">Health</span><div className="h-1.5 w-full bg-white/10 overflow-hidden mt-2 mb-6"><div className="h-full bg-red-600 w-[75%] shadow-md"></div></div><span className="text-[10px] text-gray-400 uppercase tracking-[0.2em]">Resolve</span><div className="flex gap-2 mt-3">{[1,2,3].map(i => <div key={i} className="w-5 h-5 rounded-full bg-yellow-500 shadow-md animate-[pulse_2s_infinite]"></div>)}{[4,5].map(i => <div key={i} className="w-5 h-5 rounded-full bg-white/10"></div>)}</div></div>
       <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Combat Stance</h3>
       <div className="grid grid-cols-2 gap-3 mb-8">
         <button onClick={() => notify("Stone Stance Equipped", <Swords className="w-4 h-4 text-white" />)} className="bg-white text-black p-3 text-center border-l-4 border-red-600 cursor-pointer active:scale-95 transition-transform"><span className="text-sm font-bold uppercase tracking-wider">Stone</span></button>
@@ -389,13 +365,13 @@ function Witcher3View({ notify }: { notify: any }) {
         <div><h2 className="text-xl font-bold text-white">Geralt of Rivia</h2><p className="text-[10px] text-red-400 uppercase tracking-widest">White Wolf • Witcher</p></div>
       </div>
       <div className="space-y-3 mb-6">
-        <div><div className="flex justify-between text-xs mb-1"><span className="text-red-400 uppercase tracking-widest font-bold text-[10px]">Vitality</span><span className="text-red-400 font-bold">3800 / 4200</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-red-900/30"><div className="h-full bg-gradient-to-r from-red-800 to-red-500 w-[90%] shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div></div></div>
+        <div><div className="flex justify-between text-xs mb-1"><span className="text-red-400 uppercase tracking-widest font-bold text-[10px]">Vitality</span><span className="text-red-400 font-bold">3800 / 4200</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-red-900/30"><div className="h-full bg-gradient-to-r from-red-800 to-red-500 w-[90%] shadow-md"></div></div></div>
         <div><div className="flex justify-between text-xs mb-1"><span className="text-green-400 uppercase tracking-widest font-bold text-[10px]">Toxicity</span><span className="text-green-400 font-bold">45%</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-green-900/30"><div className="h-full bg-gradient-to-r from-green-900 to-green-500 w-[45%]"></div></div></div>
         <div><div className="flex justify-between text-xs mb-1"><span className="text-yellow-500 uppercase tracking-widest font-bold text-[10px]">Adrenaline</span><span className="text-yellow-500 font-bold">2 / 3</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-yellow-900/30"><div className="h-full bg-gradient-to-r from-yellow-800 to-yellow-500 w-[66%]"></div></div></div>
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Active Sign</h3>
       <div className="flex gap-2 mb-6 flex-wrap">
-        {signs.map(s => (<button onClick={() => notify(`${s.name} Equipped`, <Hexagon className="w-4 h-4 text-white"/>)} key={s.name} className={`px-3 py-2 rounded-lg border text-xs font-bold cursor-pointer transition-all active:scale-95 ${s.active ? s.color + ' shadow-[0_0_15px_rgba(249,115,22,0.3)]' : 'bg-white/5 text-gray-500 border-gray-700 hover:border-gray-500'}`}>{s.name}</button>))}
+        {signs.map(s => (<button onClick={() => notify(`${s.name} Equipped`, <Hexagon className="w-4 h-4 text-white"/>)} key={s.name} className={`px-3 py-2 rounded-lg border text-xs font-bold cursor-pointer transition-all active:scale-95 ${s.active ? s.color + ' shadow-md' : 'bg-white/5 text-gray-500 border-gray-700 hover:border-gray-500'}`}>{s.name}</button>))}
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipped Swords</h3>
       <div className="space-y-2">
@@ -414,8 +390,8 @@ function GodOfWarView({ notify }: { notify: any }) {
         <div><h2 className="text-xl font-bold text-white tracking-wider">KRATOS</h2><p className="text-[10px] text-blue-400 uppercase tracking-widest">God of War • Ghost of Sparta</p></div>
       </div>
       <div className="space-y-3 mb-6">
-        <div><div className="flex justify-between text-xs mb-1"><span className="text-green-400 uppercase tracking-widest font-bold text-[10px]">Health</span></div><div className="h-2.5 bg-black rounded-full overflow-hidden border border-green-900/50"><div className="h-full bg-gradient-to-r from-green-700 to-green-400 w-[70%] shadow-[0_0_8px_rgba(74,222,128,0.3)]"></div></div></div>
-        <div><div className="flex justify-between text-xs mb-1"><span className="text-orange-400 uppercase tracking-widest font-bold text-[10px]">Spartan Rage</span></div><div className="h-2.5 bg-black rounded-full overflow-hidden border border-orange-900/50"><div className="h-full bg-gradient-to-r from-orange-700 to-orange-400 w-[85%] shadow-[0_0_15px_rgba(251,146,60,0.6)] animate-[pulse_1s_infinite]"></div></div></div>
+        <div><div className="flex justify-between text-xs mb-1"><span className="text-green-400 uppercase tracking-widest font-bold text-[10px]">Health</span></div><div className="h-2.5 bg-black rounded-full overflow-hidden border border-green-900/50"><div className="h-full bg-gradient-to-r from-green-700 to-green-400 w-[70%] shadow-md"></div></div></div>
+        <div><div className="flex justify-between text-xs mb-1"><span className="text-orange-400 uppercase tracking-widest font-bold text-[10px]">Spartan Rage</span></div><div className="h-2.5 bg-black rounded-full overflow-hidden border border-orange-900/50"><div className="h-full bg-gradient-to-r from-orange-700 to-orange-400 w-[85%] shadow-md animate-[pulse_1s_infinite]"></div></div></div>
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Runic Attacks</h3>
       <div className="grid grid-cols-2 gap-3 mb-6">
@@ -425,7 +401,7 @@ function GodOfWarView({ notify }: { notify: any }) {
         <div className="bg-orange-900/20 border border-orange-700/30 p-3 rounded-xl text-center opacity-50"><p className="text-xs font-bold text-orange-300">Meteoric Slam</p><p className="text-[10px] text-orange-400 mt-1">Blades Heavy</p><span className="text-xs text-red-400 mt-2 block font-bold">CD: 48s</span></div>
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Atreus</h3>
-      <div className="bg-white/5 border border-gray-700 p-3 rounded-lg flex justify-between items-center"><div><p className="text-sm font-bold text-gray-200">Arrow Type</p><p className="text-[10px] text-gray-500 mt-1">Light Arrows (Shock)</p></div><div className="flex gap-1">{[1,2,3].map(i => <div key={i} className="w-2 h-8 bg-cyan-400 rounded-full shadow-[0_0_6px_rgba(34,211,238,0.5)]"></div>)}{[4,5].map(i => <div key={i} className="w-2 h-8 bg-gray-700 rounded-full"></div>)}</div></div>
+      <div className="bg-white/5 border border-gray-700 p-3 rounded-lg flex justify-between items-center"><div><p className="text-sm font-bold text-gray-200">Arrow Type</p><p className="text-[10px] text-gray-500 mt-1">Light Arrows (Shock)</p></div><div className="flex gap-1">{[1,2,3].map(i => <div key={i} className="w-2 h-8 bg-cyan-400 rounded-full shadow-md"></div>)}{[4,5].map(i => <div key={i} className="w-2 h-8 bg-gray-700 rounded-full"></div>)}</div></div>
     </div>
   );
 }
@@ -454,7 +430,7 @@ function SpiderManView({ notify }: { notify: any }) {
         </div></div>
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Suit Power</h3>
-      <button onClick={() => notify("Web Blossom Activated", <Target className="w-4 h-4 text-white" />)} className="w-full text-left bg-red-900/20 border border-red-700/30 p-4 rounded-xl mb-6 hover:bg-red-900/40 active:scale-95 transition-all cursor-pointer shadow-[0_0_15px_rgba(220,38,38,0.2)]"><p className="text-sm font-bold text-white">Web Blossom</p><p className="text-[10px] text-red-300 mt-1">Releases web all directions for instant crowd control.</p><span className="text-xs text-green-400 font-bold mt-2 block animate-pulse">CHARGED - TAP TO USE</span></button>
+      <button onClick={() => notify("Web Blossom Activated", <Target className="w-4 h-4 text-white" />)} className="w-full text-left bg-red-900/20 border border-red-700/30 p-4 rounded-xl mb-6 hover:bg-red-900/40 active:scale-95 transition-all cursor-pointer shadow-md"><p className="text-sm font-bold text-white">Web Blossom</p><p className="text-[10px] text-red-300 mt-1">Releases web all directions for instant crowd control.</p><span className="text-xs text-green-400 font-bold mt-2 block animate-pulse">CHARGED - TAP TO USE</span></button>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Gadgets</h3>
       <div className="space-y-2">
         {[{ name: 'Impact Web', ammo: '8 / 10', color: 'text-cyan-400' }, { name: 'Web Bomb', ammo: '3 / 5', color: 'text-blue-400' }, { name: 'Spider Drone', ammo: '2 / 3', color: 'text-purple-400' }, { name: 'Trip Mine', ammo: '5 / 5', color: 'text-green-400' }].map(g => (
@@ -477,13 +453,13 @@ function DoomView({ notify }: { notify: any }) {
         </div>
         <h3 className="text-[10px] font-bold text-red-500 uppercase tracking-widest mb-3">Equipment</h3>
         <div className="space-y-3 mb-6">
-          <button onClick={() => notify("Blood Punch Ready", <Flame className="w-4 h-4 text-red-500" />)} className="w-full flex justify-between items-center bg-[#1a0000] border-l-4 border-red-500 p-3 active:scale-95 transition-transform cursor-pointer"><span className="text-sm font-bold text-gray-200 uppercase">Blood Punch</span><div className="flex gap-1"><div className="w-4 h-4 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-[pulse_1s_infinite]"></div><div className="w-4 h-4 bg-gray-800"></div></div></button>
-          <div className="flex justify-between items-center bg-[#1a0000] border-l-4 border-yellow-600 p-3"><span className="text-sm font-bold text-gray-200 uppercase">Chainsaw Fuel</span><div className="flex gap-1">{[1,2,3].map(i => <div key={i} className="w-2 h-5 bg-yellow-500 rounded-sm shadow-[0_0_5px_rgba(234,179,8,0.4)]"></div>)}</div></div>
+          <button onClick={() => notify("Blood Punch Ready", <Flame className="w-4 h-4 text-red-500" />)} className="w-full flex justify-between items-center bg-[#1a0000] border-l-4 border-red-500 p-3 active:scale-95 transition-transform cursor-pointer"><span className="text-sm font-bold text-gray-200 uppercase">Blood Punch</span><div className="flex gap-1"><div className="w-4 h-4 bg-red-500 shadow-md animate-[pulse_1s_infinite]"></div><div className="w-4 h-4 bg-gray-800"></div></div></button>
+          <div className="flex justify-between items-center bg-[#1a0000] border-l-4 border-yellow-600 p-3"><span className="text-sm font-bold text-gray-200 uppercase">Chainsaw Fuel</span><div className="flex gap-1">{[1,2,3].map(i => <div key={i} className="w-2 h-5 bg-yellow-500 rounded-sm shadow-md"></div>)}</div></div>
           <button onClick={() => notify("Flame Belch Fired", <Flame className="w-4 h-4 text-orange-500" />)} className="w-full flex justify-between items-center bg-[#1a0000] border-l-4 border-orange-500 p-3 active:scale-95 transition-transform cursor-pointer"><span className="text-sm font-bold text-gray-200 uppercase">Flame Belch</span><span className="text-xs text-green-400 font-bold">READY</span></button>
-          <div className="flex justify-between items-center bg-[#1a0000] border-l-4 border-cyan-500 p-3"><span className="text-sm font-bold text-gray-200 uppercase">Dash</span><div className="flex gap-1"><div className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_6px_rgba(34,211,238,0.5)]"></div><div className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_6px_rgba(34,211,238,0.5)]"></div></div></div>
+          <div className="flex justify-between items-center bg-[#1a0000] border-l-4 border-cyan-500 p-3"><span className="text-sm font-bold text-gray-200 uppercase">Dash</span><div className="flex gap-1"><div className="w-3 h-3 bg-cyan-400 rounded-full shadow-md"></div><div className="w-3 h-3 bg-cyan-400 rounded-full shadow-md"></div></div></div>
         </div>
         <h3 className="text-[10px] font-bold text-red-500 uppercase tracking-widest mb-3">Crucible</h3>
-        <div className="bg-[#1a0000] border border-red-900 p-3 flex justify-between items-center"><span className="text-sm font-bold text-orange-400 uppercase">Blade Charges</span><div className="flex gap-2">{[1,2].map(i => <div key={i} className="w-2 h-6 bg-orange-500 rounded-sm shadow-[0_0_10px_rgba(249,115,22,0.6)]"></div>)}<div className="w-2 h-6 bg-gray-800 rounded-sm"></div></div></div>
+        <div className="bg-[#1a0000] border border-red-900 p-3 flex justify-between items-center"><span className="text-sm font-bold text-orange-400 uppercase">Blade Charges</span><div className="flex gap-2">{[1,2].map(i => <div key={i} className="w-2 h-6 bg-orange-500 rounded-sm shadow-md"></div>)}<div className="w-2 h-6 bg-gray-800 rounded-sm"></div></div></div>
       </div>
     </div>
   );
@@ -498,12 +474,12 @@ function HorizonView({ notify }: { notify: any }) {
       </div>
       <div className="space-y-3 mb-6">
         <div><div className="flex justify-between text-xs mb-1"><span className="text-green-400 uppercase tracking-widest font-bold text-[10px]">Health</span><span className="text-green-400 font-bold">420 / 500</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-green-900/30"><div className="h-full bg-gradient-to-r from-green-700 to-green-400 w-[84%]"></div></div></div>
-        <div><div className="flex justify-between text-xs mb-1"><span className="text-purple-400 uppercase tracking-widest font-bold text-[10px]">Concentration</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-purple-900/30"><div className="h-full bg-gradient-to-r from-purple-700 to-purple-400 w-[100%] shadow-[0_0_8px_rgba(192,132,252,0.3)]"></div></div></div>
+        <div><div className="flex justify-between text-xs mb-1"><span className="text-purple-400 uppercase tracking-widest font-bold text-[10px]">Concentration</span></div><div className="h-2 bg-black rounded-full overflow-hidden border border-purple-900/30"><div className="h-full bg-gradient-to-r from-purple-700 to-purple-400 w-[100%] shadow-md"></div></div></div>
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Weapon Wheel</h3>
       <div className="space-y-2 mb-6">
         {[{ name: 'Sharpshot Bow', ammo: 'Precision: 12 | Tearblast: 5', active: true }, { name: 'Hunter Bow', ammo: 'Fire: 24 | Hardpoint: 18', active: false }, { name: 'Tripcaster', ammo: 'Shock Wire: 8 | Blast: 3', active: false }, { name: 'Ropecaster', ammo: 'Tie Down: 15', active: false }].map(w => (
-          <button key={w.name} onClick={() => notify(`${w.name} Equipped`, <Crosshair className="w-4 h-4 text-orange-400"/>)} className={`w-full text-left p-3 rounded-lg flex flex-col border transition-all active:scale-95 cursor-pointer ${w.active ? 'bg-orange-900/20 border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.2)]' : 'bg-white/5 border-gray-700/50'}`}><span className={`text-sm font-bold ${w.active ? 'text-orange-300' : 'text-gray-300'}`}>{w.name}</span><span className="text-[10px] text-gray-400 mt-1 font-mono">{w.ammo}</span></button>
+          <button key={w.name} onClick={() => notify(`${w.name} Equipped`, <Crosshair className="w-4 h-4 text-orange-400"/>)} className={`w-full text-left p-3 rounded-lg flex flex-col border transition-all active:scale-95 cursor-pointer ${w.active ? 'bg-orange-900/20 border-orange-500/50 shadow-md' : 'bg-white/5 border-gray-700/50'}`}><span className={`text-sm font-bold ${w.active ? 'text-orange-300' : 'text-gray-300'}`}>{w.name}</span><span className="text-[10px] text-gray-400 mt-1 font-mono">{w.ammo}</span></button>
         ))}
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Resources</h3>
@@ -574,11 +550,11 @@ function FF7RView({ notify }: { notify: any }) {
       <div className="space-y-4">
         {characters.map(ch => (
           <button key={ch.name} onClick={() => notify(`Healing ${ch.name}...`, <Heart className="w-4 h-4 text-green-400" />)} className={`w-full text-left bg-white/5 border-l-4 ${ch.color} p-4 rounded-r-xl active:scale-95 transition-transform cursor-pointer hover:bg-white/10`}>
-            <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-white">{ch.name}</span><div className="flex gap-1">{Array.from({ length: ch.atb }).map((_, i) => <div key={i} className="w-5 h-5 bg-gradient-to-t from-orange-500 to-yellow-400 rounded shadow-[0_0_8px_rgba(250,204,21,0.5)]"></div>)}{Array.from({ length: 2 - ch.atb }).map((_, i) => <div key={i} className="w-5 h-5 bg-gray-800 rounded border border-gray-700"></div>)}</div></div>
+            <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-white">{ch.name}</span><div className="flex gap-1">{Array.from({ length: ch.atb }).map((_, i) => <div key={i} className="w-5 h-5 bg-gradient-to-t from-orange-500 to-yellow-400 rounded shadow-md"></div>)}{Array.from({ length: 2 - ch.atb }).map((_, i) => <div key={i} className="w-5 h-5 bg-gray-800 rounded border border-gray-700"></div>)}</div></div>
             <div className="space-y-2">
               <div><div className="flex justify-between text-[10px] mb-0.5"><span className="text-green-400 font-bold">HP</span><span className="text-gray-400">{ch.hp} / {ch.maxHp}</span></div><div className="h-1.5 bg-black rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-green-600 to-green-400" style={{ width: `${(ch.hp/ch.maxHp)*100}%` }}></div></div></div>
               <div><div className="flex justify-between text-[10px] mb-0.5"><span className="text-blue-400 font-bold">MP</span><span className="text-gray-400">{ch.mp} / {ch.maxMp}</span></div><div className="h-1.5 bg-black rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-blue-600 to-blue-400" style={{ width: `${(ch.mp/ch.maxMp)*100}%` }}></div></div></div>
-              <div><div className="flex justify-between text-[10px] mb-0.5"><span className="text-pink-400 font-bold">Limit Break</span><span className="text-gray-400">{ch.limit}%</span></div><div className="h-1.5 bg-black rounded-full overflow-hidden"><div className={`h-full bg-gradient-to-r from-pink-600 to-pink-400 ${ch.limit > 80 ? 'animate-pulse shadow-[0_0_8px_rgba(236,72,153,0.5)]' : ''}`} style={{ width: `${ch.limit}%` }}></div></div></div>
+              <div><div className="flex justify-between text-[10px] mb-0.5"><span className="text-pink-400 font-bold">Limit Break</span><span className="text-gray-400">{ch.limit}%</span></div><div className="h-1.5 bg-black rounded-full overflow-hidden"><div className={`h-full bg-gradient-to-r from-pink-600 to-pink-400 ${ch.limit > 80 ? 'animate-pulse shadow-md' : ''}`} style={{ width: `${ch.limit}%` }}></div></div></div>
             </div>
             <div className="flex gap-1 mt-3">{['green', 'blue', 'red', 'yellow'].slice(0, 3 + (ch.name === 'Aerith' ? 1 : 0)).map((c, i) => <div key={i} className={`w-4 h-4 rounded-full bg-${c}-500 shadow-[0_0_6px_rgba(0,0,0,0.5)] border border-${c}-300`}></div>)}</div>
           </button>
@@ -600,7 +576,7 @@ function DeathStrandingView({ notify }: { notify: any }) {
 
         {/* BB Status */}
         <button onClick={() => notify("Soothed BB", <Baby className="w-4 h-4 text-cyan-300" />)} className="w-full text-left bg-cyan-900/10 border border-cyan-800/30 p-4 rounded-xl mb-5 flex items-center gap-4 hover:bg-cyan-900/20 active:scale-95 transition-all cursor-pointer">
-          <div className="w-14 h-14 rounded-full bg-cyan-900/30 border-2 border-cyan-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.3)] animate-[pulse_3s_infinite]"><Baby className="w-7 h-7 text-cyan-400" /></div>
+          <div className="w-14 h-14 rounded-full bg-cyan-900/30 border-2 border-cyan-500/50 flex items-center justify-center shadow-md animate-[pulse_3s_infinite]"><Baby className="w-7 h-7 text-cyan-400" /></div>
           <div className="flex-1"><p className="text-sm font-bold text-cyan-300">BB-28</p><div className="flex justify-between text-[10px] mb-1 mt-1"><span className="text-gray-400">Stress Level</span><span className="text-green-400 font-bold">Low (12%)</span></div><div className="h-1.5 bg-black rounded-full overflow-hidden border border-cyan-900/30"><div className="h-full bg-gradient-to-r from-green-600 to-green-400 w-[12%]"></div></div></div>
         </button>
 

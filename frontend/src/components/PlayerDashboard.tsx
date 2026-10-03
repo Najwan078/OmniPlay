@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Server, Play, Search, SlidersHorizontal, X, 
   Clock, ExternalLink, CheckCircle2, Shield, ChevronLeft, ChevronRight,
@@ -752,6 +754,71 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // GSAP Animation Refs
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const gameGridRef = useRef<HTMLDivElement>(null);
+  const detailsModalRef = useRef<HTMLDivElement>(null);
+  const paymentModalRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Smooth Hero Slide Choreography
+  useGSAP(() => {
+    if (heroContentRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.fromTo(heroContentRef.current.querySelector('.hero-title'),
+        { opacity: 0, x: slideDirection === 'next' ? 25 : -25 },
+        { opacity: 1, x: 0, duration: 0.45 }
+      )
+      .fromTo(heroContentRef.current.querySelector('.hero-desc'),
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.35 },
+        '-=0.3'
+      )
+      .fromTo(heroContentRef.current.querySelector('.hero-stats-row'),
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.35 },
+        '-=0.25'
+      )
+      .fromTo(heroContentRef.current.querySelector('.hero-actions'),
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 0.3 },
+        '-=0.2'
+      );
+    }
+  }, [currentHeroIndex]);
+
+  // GSAP Smooth Game Grid Stagger Reveal
+  useGSAP(() => {
+    if (gameGridRef.current) {
+      const cards = gameGridRef.current.querySelectorAll('.game-card-wrapper');
+      if (cards.length > 0) {
+        gsap.fromTo(cards,
+          { opacity: 0, y: 16, scale: 0.98 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.35, stagger: 0.025, ease: 'power2.out' }
+        );
+      }
+    }
+  }, [filter, activeSort, search]);
+
+  // GSAP Details Modal Pop-in
+  useGSAP(() => {
+    if (selectedGame && detailsModalRef.current) {
+      gsap.fromTo(detailsModalRef.current,
+        { opacity: 0, scale: 0.94, y: 18 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: 'power3.out' }
+      );
+    }
+  }, [selectedGame]);
+
+  // GSAP Payment Modal Pop-in
+  useGSAP(() => {
+    if (showPaymentModal && paymentModalRef.current) {
+      gsap.fromTo(paymentModalRef.current,
+        { opacity: 0, scale: 0.94, y: 18 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: 'power3.out' }
+      );
+    }
+  }, [showPaymentModal]);
+
   const handleNextHero = () => {
     if (videoRef.current) {
       videoRef.current.pause();
@@ -932,19 +999,11 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           }}
         />
 
-        {/* Ambient Dynamic Accent Lighting */}
-        <div 
-          className="hero-banner-ambient-glow"
-          style={{ 
-            background: `radial-gradient(circle at 25% 65%, ${currentFeatured.glowColor} 0%, transparent 60%)` 
-          }}
-        />
-
         {/* Cinematic Multi-layer Vignettes */}
         <div className="hero-banner-vignette-bottom" />
         <div className="hero-banner-vignette-left" />
 
-        {/* Left Navigation Control (Glassmorphism + Neon Border Hover) */}
+        {/* Left Navigation Control (Glassmorphism + Border Hover) */}
         <button 
           onClick={handlePrevHero} 
           className="hero-nav-btn prev"
@@ -954,7 +1013,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           <ChevronLeft className="hero-nav-icon" />
         </button>
 
-        {/* Right Navigation Control (Glassmorphism + Neon Border Hover) */}
+        {/* Right Navigation Control (Glassmorphism + Border Hover) */}
         <button 
           onClick={handleNextHero} 
           className="hero-nav-btn next"
@@ -964,9 +1023,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           <ChevronRight className="hero-nav-icon" />
         </button>
 
-        {/* Active Slide Content with Dynamic Keyframe Transitions */}
+        {/* Active Slide Content with Dynamic Transitions */}
         <div 
           key={currentHeroIndex} 
+          ref={heroContentRef}
           className={`hero-banner-content slide-${slideDirection}`}
         >
           <h1 className="hero-title">{currentFeatured.title}</h1>
@@ -1181,8 +1241,8 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           </div>
         </div>
 
-        {/* Netflix-Style Game Grid */}
-        <div className="game-grid">
+        {/* Game Grid with GSAP Stagger */}
+        <div ref={gameGridRef} className="game-grid">
           {filteredGames.map((game, idx) => (
             <div 
               key={game.id} 
@@ -1294,7 +1354,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       {/* 3. STEAM GAME DETAILS & TIME-RENTAL MODAL (PRD Section 2.1) */}
       {selectedGame && typeof document !== 'undefined' && createPortal(
         <div className="game-modal-overlay">
-          <div className="game-modal-card">
+          <div ref={detailsModalRef} className="game-modal-card">
             
             <button 
               onClick={() => { setSelectedGame(null); setIsRentSuccess(false); setShowPaymentModal(false); }} 
@@ -1690,7 +1750,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             }
           }}
         >
-          <div className="payment-modal-card">
+          <div ref={paymentModalRef} className="payment-modal-card">
             {/* Header */}
             <div className="payment-modal-header">
               <button 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Wifi, Battery, Mic, MicOff, MessageSquare, Users, 
   Send, Gamepad2, Maximize2, X, Smartphone,
@@ -23,6 +25,16 @@ export default function OmniRemote() {
   const [activeNode] = useState('SG-01');
 
   const stickRef = useRef<HTMLDivElement | null>(null);
+  const lobbyCardRef = useRef<HTMLDivElement | null>(null);
+
+  useGSAP(() => {
+    if (!isActive && lobbyCardRef.current) {
+      gsap.fromTo(lobbyCardRef.current,
+        { opacity: 0, scale: 0.96, y: 18 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'power2.out' }
+      );
+    }
+  }, [isActive]);
 
   // Lock body scroll and prevent touch-drag scrolling when active gamepad overlay is mounted
   useEffect(() => {
@@ -261,9 +273,7 @@ export default function OmniRemote() {
   if (!isActive) {
     return (
       <div className="omni-remote-lobby-viewport">
-        <div className="omni-lobby-card">
-          <div className="lobby-bg-glow" />
-          
+        <div ref={lobbyCardRef} className="omni-lobby-card">
           <div className="lobby-badge">
             <Radio style={{ width: 14, height: 14 }} />
             <span>WEBRTC LOW LATENCY CONTROLLER ENGINE</span>

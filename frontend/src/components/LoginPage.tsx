@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Gamepad2, ShieldAlert, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import * as THREE from 'three';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useUser } from '../context/UserContext';
 import { authApi } from '../services/api';
 import { supabase } from '../supabase';
@@ -490,10 +492,70 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [isTurnstileRendered, setIsTurnstileRendered] = useState(false);
   const [isTurnstileVerified, setIsTurnstileVerified] = useState(false);
+
+  // GSAP Smooth Mount Entrance Animation
+  useGSAP(() => {
+    if (!cardRef.current) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from(cardRef.current, {
+      opacity: 0,
+      y: 28,
+      scale: 0.96,
+      duration: 0.65
+    })
+    .from('.login-card-header > *', {
+      opacity: 0,
+      y: 10,
+      duration: 0.35,
+      stagger: 0.08
+    }, '-=0.35')
+    .from('.login-role-selector', {
+      opacity: 0,
+      y: 8,
+      duration: 0.3
+    }, '-=0.25')
+    .from('.login-input-group', {
+      opacity: 0,
+      y: 10,
+      duration: 0.35,
+      stagger: 0.08
+    }, '-=0.2')
+    .from('.cf-turnstile-outer-wrap, .login-submit-btn, .login-toggle-wrap', {
+      opacity: 0,
+      y: 8,
+      duration: 0.3,
+      stagger: 0.06
+    }, '-=0.2');
+  }, { scope: cardRef });
+
+  // GSAP Smooth Mode Switch Animation (Player vs Admin, Login vs Register)
+  useGSAP(() => {
+    if (formRef.current) {
+      gsap.fromTo(formRef.current,
+        { opacity: 0.4, y: 8 },
+        { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }
+      );
+    }
+  }, [isAdminMode, isCreatingAccount]);
+
+  // GSAP Exit Sequence on Successful Auth
+  useGSAP(() => {
+    if (isExiting && cardRef.current) {
+      gsap.to(cardRef.current, {
+        scale: 0.92,
+        opacity: 0,
+        y: -15,
+        duration: 0.5,
+        ease: 'power2.in'
+      });
+    }
+  }, [isExiting]);
 
   useEffect(() => {
     let isMounted = true;
@@ -693,7 +755,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       <div className="login-overlay-vignette" />
 
       {/* STAGE 1: Glassmorphic Auth Card */}
-      <div className={`login-card ${isExiting ? 'exit-login' : ''}`}>
+      <div ref={cardRef} className={`login-card ${isExiting ? 'exit-login' : ''}`}>
         <div className="login-card-header">
           <div className="login-brand-logo">
             <Gamepad2 className="login-brand-icon" />
@@ -749,7 +811,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </div>
         )}
 
-        <form onSubmit={handleAuth} className="login-form">
+        <form ref={formRef} onSubmit={handleAuth} className="login-form">
           <div className="login-input-group">
             <label className="login-label">
               {isAdminMode ? "Admin Username" : "Email or Nickname"}

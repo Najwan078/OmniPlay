@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Download, ChevronDown, FileText, FileJson, Zap, Activity, 
   Clock, Trophy, Target, Crosshair, Gauge, BarChart3, Check,
@@ -178,8 +180,20 @@ export default function AnalyticsDashboard() {
     { game: 'EA FC 25', stat: 'FUT Win Rate', value: '68.5%', icon: <Trophy style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} /> },
   ];
 
+  const analyticsContainerRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Smooth Analytics Animation
+  useGSAP(() => {
+    if (analyticsContainerRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.analytics-header', { opacity: 0, y: 14, duration: 0.4 })
+        .from('.kpi-card', { opacity: 0, y: 12, stagger: 0.06, duration: 0.35 }, '-=0.25')
+        .from('.heatmap-card, .chart-card, .analytics-section-card', { opacity: 0, y: 14, stagger: 0.05, duration: 0.35 }, '-=0.2');
+    }
+  }, { scope: analyticsContainerRef });
+
   return (
-    <div className="analytics-page-wrap">
+    <div ref={analyticsContainerRef} className="analytics-page-wrap">
       
       {/* 1. Analytics Header with STRICT SINGLE EXPORT BUTTON RULE */}
       <header className="analytics-header">

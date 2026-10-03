@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Gamepad2, Activity, Sliders, CheckCircle2, AlertTriangle, 
   Terminal, RefreshCw, Zap, ShieldAlert, Cpu, Wifi
@@ -72,8 +74,24 @@ export default function AdminOmniRemote() {
     setTimeout(() => setIsRumbling(false), 800);
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+    tl.fromTo('.admin-omni-header',
+      { opacity: 0, y: -16 },
+      { opacity: 1, y: 0, duration: 0.35 }
+    )
+    .fromTo('.admin-omni-card',
+      { opacity: 0, y: 16, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.1 },
+      '-=0.15'
+    );
+  }, { scope: containerRef });
+
   return (
-    <div className="admin-omni-container">
+    <div ref={containerRef} className="admin-omni-container">
       {/* 1. Header */}
       <header className="admin-omni-header">
         <div>

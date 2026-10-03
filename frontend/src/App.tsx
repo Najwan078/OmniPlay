@@ -9,6 +9,8 @@ import {
   Trophy, LifeBuoy, Layers, SlidersHorizontal, 
   AlertTriangle, Users, Menu, X, Edit3
 } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import CloudResourcesDashboard from './components/CloudResourcesDashboard';
 import OmniRemote from './components/OmniRemote';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
@@ -473,6 +475,39 @@ function DashboardShell({
   // Sidebar acts as an optional slide-over console drawer, closed by default
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
+  const pageContainerRef = React.useRef<HTMLDivElement>(null);
+  const launchModalRef = React.useRef<HTMLDivElement>(null);
+  const toastRef = React.useRef<HTMLDivElement>(null);
+
+  // GSAP Smooth Page Tab Transition
+  useGSAP(() => {
+    if (pageContainerRef.current) {
+      gsap.fromTo(pageContainerRef.current,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      );
+    }
+  }, [activeTab]);
+
+  // GSAP Cinematic Cloud Launch Modal Entrance
+  useGSAP(() => {
+    if (launchingGame && launchModalRef.current) {
+      gsap.fromTo(launchModalRef.current,
+        { scale: 0.88, opacity: 0, y: 30 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)' }
+      );
+    }
+  }, [launchingGame]);
+
+  // GSAP Toast Notification Entrance
+  useGSAP(() => {
+    if (globalToast && toastRef.current) {
+      gsap.fromTo(toastRef.current,
+        { opacity: 0, y: 20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }
+      );
+    }
+  }, [globalToast]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
@@ -534,7 +569,7 @@ function DashboardShell({
                 <span>Loading...</span>
               </div>
             ) : (
-              <div key={activeTab} className="futuristic-page-container">
+              <div key={activeTab} ref={pageContainerRef} className="futuristic-page-container gsap-page-view">
                 {children}
               </div>
             )}
@@ -646,7 +681,7 @@ function DashboardShell({
       {/* 3. CINEMATIC STEAM CLOUD LAUNCH MODAL */}
       {launchingGame && (
         <div className="omni-launch-overlay">
-          <div className="omni-launch-modal">
+          <div ref={launchModalRef} className="omni-launch-modal">
             <div className="neon-ring-loader">
               <div className="neon-ring-outer" />
               <div className="neon-ring-middle" />
@@ -716,7 +751,7 @@ function DashboardShell({
 
       {/* 4. GLOBAL NOTIFICATION TOAST */}
       {globalToast && (
-        <div className="omni-toast">
+        <div ref={toastRef} className="omni-toast">
           <div className="omni-toast-icon">{globalToast.icon}</div>
           <span className="omni-toast-message">{globalToast.message}</span>
         </div>
@@ -743,6 +778,29 @@ export default function OmniPlayApp() {
   const [launchingGame, setLaunchingGame] = useState<{ title: string; steamUri?: string } | null>(null);
   const [launchStep, setLaunchStep] = useState(0);
   const [globalToast, setGlobalToast] = useState<{ message: string; icon: React.ReactNode } | null>(null);
+
+  const launchModalRef = React.useRef<HTMLDivElement>(null);
+  const toastRef = React.useRef<HTMLDivElement>(null);
+
+  // GSAP Cinematic Launch Modal Entrance
+  useGSAP(() => {
+    if (launchingGame && launchModalRef.current) {
+      gsap.fromTo(launchModalRef.current,
+        { opacity: 0, scale: 0.94, y: 16 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: 'back.out(1.4)' }
+      );
+    }
+  }, [launchingGame]);
+
+  // GSAP Toast Notification Entrance
+  useGSAP(() => {
+    if (globalToast && toastRef.current) {
+      gsap.fromTo(toastRef.current,
+        { opacity: 0, y: 24, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power3.out' }
+      );
+    }
+  }, [globalToast]);
 
   const isAdmin = role === 'admin';
 

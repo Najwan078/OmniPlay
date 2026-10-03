@@ -39,6 +39,7 @@ ENV/
 *.njsproj
 *.sln
 *.sw?
+scratch/
 .aider*
 .claude
 

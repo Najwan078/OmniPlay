@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Server, Wrench, RefreshCw, AlertTriangle, CheckCircle2, 
   Search, ShieldAlert, Cpu, Zap, Wifi, Terminal, 
@@ -472,8 +474,29 @@ export default function AdminGameLibrary({ onToast }: AdminGameLibraryProps) {
     return matchesSearch && matchesStatus;
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+    tl.fromTo('.admin-gamelib-header',
+      { opacity: 0, y: -16 },
+      { opacity: 1, y: 0, duration: 0.35 }
+    )
+    .fromTo('.admin-gamelib-controls',
+      { opacity: 0, y: -8 },
+      { opacity: 1, y: 0, duration: 0.3 },
+      '-=0.15'
+    )
+    .fromTo('.admin-game-card',
+      { opacity: 0, y: 14, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.35, stagger: 0.03 },
+      '-=0.1'
+    );
+  }, { scope: containerRef, dependencies: [statusFilter] });
+
   return (
-    <div className="admin-gamelib-container">
+    <div ref={containerRef} className="admin-gamelib-container">
       {/* 1. Header Banner */}
       <header className="admin-gamelib-header">
         <div>

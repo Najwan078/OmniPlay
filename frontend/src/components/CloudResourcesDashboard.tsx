@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { 
   Cpu, Zap, HardDrive, Globe, Server, Power, Loader2, 
   Users, ShieldCheck, Database, Laptop, Clock, 
@@ -355,8 +357,19 @@ export default function CloudResourcesDashboard() {
     }
   ];
 
+  const dashboardRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Smooth Dashboard Animation
+  useGSAP(() => {
+    if (dashboardRef.current) {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.infra-header', { opacity: 0, y: 14, duration: 0.4 })
+        .from('.infra-metric-box', { opacity: 0, y: 12, stagger: 0.06, duration: 0.3 }, '-=0.25');
+    }
+  }, { scope: dashboardRef });
+
   return (
-    <div className="admin-infra-container">
+    <div ref={dashboardRef} className="admin-infra-container">
       {/* 1. Infrastructure Manager Header */}
       <header className="infra-header">
         <div>
