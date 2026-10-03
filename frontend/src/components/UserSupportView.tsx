@@ -56,7 +56,7 @@ const initialChatMessages: ChatMessage[] = [
     id: 2,
     sender: 'admin',
     name: 'Admin Alex (SG-01)',
-    text: 'Hello! We received your inquiry. Our technical team is actively monitoring server routes to keep your ping ultra-low and smooth.',
+    text: 'Hello! We received your inquiry. Our technical team is actively monitoring server routes to keep your ping ultra low and smooth.',
     time: '18:22'
   }
 ];
@@ -142,7 +142,7 @@ export default function UserSupportView() {
           id: Date.now() + 1,
           sender: 'admin',
           name: 'Admin Live Desk',
-          text: 'Message received. We are monitoring node telemetry and ensuring your connection maintains sub-5ms latency.',
+          text: 'Message received. We are monitoring node telemetry and ensuring your connection maintains under 5ms latency.',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -208,7 +208,7 @@ export default function UserSupportView() {
             <AlertCircle style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
             <div>
               <h2 className="card-heading">Submit Incident Ticket</h2>
-              <p className="card-subheading">Sends a high-priority diagnostic payload to the Admin</p>
+              <p className="card-subheading">Sends a priority diagnostic payload to the Admin</p>
             </div>
           </div>
 

@@ -210,7 +210,7 @@ const CATALOG_GAMES: CatalogGame[] = [
     genre: 'Competitive FPS',
     trophies: [
       { title: 'Global Elite Ranked', rarity: 'Top 0.7%', icon: '🎯' },
-      { title: 'Ace Round (5-Kill Streak)', rarity: 'Top 4.1%', icon: '💥' },
+      { title: 'Ace Round (5 Kill Streak)', rarity: 'Top 4.1%', icon: '💥' },
       { title: 'Flawless Defuse Hero', rarity: 'Top 11.5%', icon: '💣' },
     ]
   },
@@ -221,7 +221,7 @@ const CATALOG_GAMES: CatalogGame[] = [
     genre: 'Flight / Action',
     trophies: [
       { title: 'Wings of Theve Champion', rarity: 'Top 6.8%', icon: '✈️' },
-      { title: 'Ace of Aces (S-Rank All)', rarity: 'Top 3.2%', icon: '⭐' },
+      { title: 'Ace of Aces (S Rank All)', rarity: 'Top 3.2%', icon: '⭐' },
       { title: 'Hypersonic Dogfight King', rarity: 'Top 9.1%', icon: '🚀' },
     ]
   },
@@ -231,7 +231,7 @@ const CATALOG_GAMES: CatalogGame[] = [
     image: '/gearofwarberandahd.jpeg',
     genre: 'Cover Shooter',
     trophies: [
-      { title: 'E-Day Survivor', rarity: 'Top 7.4%', icon: '⚔️' },
+      { title: 'E Day Survivor', rarity: 'Top 7.4%', icon: '⚔️' },
       { title: 'Delta Squad Legend', rarity: 'Top 5.6%', icon: '🦸' },
       { title: 'Imulsion Free Sera', rarity: 'Top 13.2%', icon: '💀' },
     ]

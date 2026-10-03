@@ -170,7 +170,7 @@ export default function AnalyticsDashboard() {
   );
 
   const gameInsights = [
-    { game: 'Valorant', stat: 'Reflex E-Sports Latency', value: '2.1 ms (JK-01)', icon: <Activity style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} /> },
+    { game: 'Valorant', stat: 'Reflex Esports Latency', value: '2.1 ms (JK-01)', icon: <Activity style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} /> },
     { game: 'Forza Horizon 5', stat: 'Best Lap Time', value: '1:32.458', icon: <Gauge style={{ width: 16, height: 16, color: 'var(--neon-amber)' }} /> },
     { game: 'Helldivers 2', stat: 'Headshot Accuracy', value: '34.2%', icon: <Crosshair style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} /> },
     { game: 'Black Myth: Wukong', stat: 'Bosses Defeated', value: '12 / 28', icon: <Trophy style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} /> },
@@ -272,11 +272,11 @@ export default function AnalyticsDashboard() {
 
         <div className="analytics-kpi-card">
           <div className="kpi-header">
-            <span className="kpi-tag">RATA-RATA FPS</span>
+            <span className="kpi-tag">Rata Rata FPS</span>
             <Zap style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
           </div>
           <p className="kpi-value cyan">118 <span className="unit">fps</span></p>
-          <p className="kpi-sub">1% Low: 94 fps (Rock-Solid)</p>
+          <p className="kpi-sub">1% Low: 94 fps (Rock Solid)</p>
         </div>
 
         <div className="analytics-kpi-card">
@@ -285,7 +285,7 @@ export default function AnalyticsDashboard() {
             <Activity style={{ width: 16, height: 16, color: 'var(--neon-emerald)' }} />
           </div>
           <p className="kpi-value emerald">3.8 <span className="unit">ms</span></p>
-          <p className="kpi-sub">Sub-4ms Cloud WebRTC Pipeline</p>
+          <p className="kpi-sub">Sub 4ms Cloud WebRTC Pipeline</p>
         </div>
 
         <div className="analytics-kpi-card">
@@ -294,7 +294,7 @@ export default function AnalyticsDashboard() {
             <BarChart3 style={{ width: 16, height: 16, color: 'var(--neon-purple)' }} />
           </div>
           <p className="kpi-value purple">48.5 <span className="unit">Mbps</span></p>
-          <p className="kpi-sub">AV1 Codec Hardware-Accelerated</p>
+          <p className="kpi-sub">AV1 Codec Hardware Accelerated</p>
         </div>
       </div>
 
@@ -607,7 +607,7 @@ export default function AnalyticsDashboard() {
             <div className="node-latency-row">
               <div className="node-row-info">
                 <span className="node-flag">🇯🇵 TY-01 (Tokyo)</span>
-                <span className="node-sub">RTX 4090 • Trans-Pacific</span>
+                <span className="node-sub">RTX 4090 • Trans Pacific</span>
               </div>
               <div className="node-bar-track">
                 <div className="node-bar-fill ty" style={{ width: '55%' }} />

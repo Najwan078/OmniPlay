@@ -16,7 +16,7 @@ export default function OmniRemote() {
   const [micMuted, setMicMuted] = useState<boolean>(false);
   const [socialOpen, setSocialOpen] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState([
-    { sender: 'Sarah', text: "Hey, ready for Baldur's Gate co-op?", time: '18:40' },
+    { sender: 'Sarah', text: "Hey, ready for Baldur's Gate party?", time: '18:40' },
     { sender: 'Alex', text: 'Just beat the boss in Wukong!', time: '18:42' },
   ]);
   const [inputText, setInputText] = useState('');
@@ -266,7 +266,7 @@ export default function OmniRemote() {
           
           <div className="lobby-badge">
             <Radio style={{ width: 14, height: 14 }} />
-            <span>WEBRTC LOW-LATENCY CONTROLLER ENGINE</span>
+            <span>WEBRTC LOW LATENCY CONTROLLER ENGINE</span>
           </div>
 
           <div className="lobby-icon-wrapper">
@@ -275,7 +275,7 @@ export default function OmniRemote() {
 
           <div className="lobby-header-text">
             <h1 className="lobby-title">OmniRemote Cloud Gamepad</h1>
-            <p className="lobby-subtitle">Zero-driver virtual hardware gamepad bridge</p>
+            <p className="lobby-subtitle">Zero driver virtual hardware gamepad bridge</p>
           </div>
 
           {/* CRITICAL PROMPT REQUIREMENT */}

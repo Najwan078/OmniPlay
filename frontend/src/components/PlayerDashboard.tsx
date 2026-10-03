@@ -184,7 +184,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '64 hrs', 
       image: '/eafc26_beranda.jpg', 
       banner: '/eafc26hd_details.jpeg',
-      synopsis: 'The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting-edge volumetric animations, enhanced tactical IQ, and connected cross-platform Ultimate Team with direct Steam Cloud launch.',
+      synopsis: 'The next evolution of the World’s Game. EA SPORTS FC™ 26 delivers cutting edge volumetric animations, enhanced tactical IQ, and connected cross-platform Ultimate Team with direct Steam Cloud launch.',
       reviewSentiment: 'Very Positive (85%)',
       ratingScore: 85,
       steamTags: ['Football', 'Sports', 'Simulation', 'Soccer', 'Multiplayer'],
@@ -204,7 +204,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'Create a team with up to 3 friends in Tom Clancy’s Ghost Recon® Wildlands and enjoy the ultimate military shooter experience set in a massive, responsive open world.',
       reviewSentiment: 'Very Positive (82%)',
       ratingScore: 82,
-      steamTags: ['Open World', 'Co-op', 'Action', 'Shooter', 'Tactical', 'Military'],
+      steamTags: ['Open World', 'Coop', 'Action', 'Shooter', 'Tactical', 'Military'],
       videoUrl: null
     },
     { 
@@ -234,7 +234,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '86 hrs', 
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg', 
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg',
-      synopsis: 'Cyberpunk 2077 is an open-world, action-adventure RPG set in the dark future of Night City, an immense metropolis obsessed with power, glamour, and body modding.',
+      synopsis: 'Cyberpunk 2077 is an open world, action adventure RPG set in the dark future of Night City, an immense metropolis obsessed with power, glamour, and body modding.',
       reviewSentiment: 'Overwhelmingly Positive (92%)',
       ratingScore: 92,
       steamTags: ['Cyberpunk', 'Open World', 'RPG', 'Story Rich'],
@@ -250,7 +250,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '40 hrs', 
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2215430/header.jpg', 
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2215430/library_hero.jpg',
-      synopsis: 'Forge a new path and wage an unconventional war for the freedom of Tsushima in this critically acclaimed open-world action adventure masterpiece.',
+      synopsis: 'Forge a new path and wage an unconventional war for the freedom of Tsushima in this critically acclaimed open world action adventure masterpiece.',
       reviewSentiment: 'Overwhelmingly Positive (93%)',
       ratingScore: 93,
       steamTags: ['Open World', 'Action', 'Historical', 'Swordplay'],
@@ -285,7 +285,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.',
       reviewSentiment: 'Very Positive (91%)',
       ratingScore: 91,
-      steamTags: ['Souls-like', 'Dark Fantasy', 'Open World', 'RPG'],
+      steamTags: ['Souls like', 'Dark Fantasy', 'Open World', 'RPG'],
       videoUrl: null
     },
     { 
@@ -301,7 +301,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'You shall set out as the Destined One to venture into the challenges and marvels ahead, to uncover the obscured truth beneath the veil of a glorious legend.',
       reviewSentiment: 'Overwhelmingly Positive (95%)',
       ratingScore: 95,
-      steamTags: ['Mythology', 'Action RPG', 'Souls-like', 'Difficult'],
+      steamTags: ['Mythology', 'Action RPG', 'Souls like', 'Difficult'],
       videoUrl: '/videos/wukong.mp4'
     },
     { 
@@ -314,10 +314,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '45 hrs', 
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/header.jpg', 
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/library_hero.jpg',
-      synopsis: 'Join the Helldivers and fight for freedom across a hostile galaxy in a fast, frantic, and ferocious third-person shooter.',
+      synopsis: 'Join the Helldivers and fight for freedom across a hostile galaxy in a fast, frantic, and ferocious third person shooter.',
       reviewSentiment: 'Mostly Positive (78%)',
       ratingScore: 78,
-      steamTags: ['Co-op', 'Shooter', 'Action', 'Sci-Fi'],
+      steamTags: ['Coop', 'Shooter', 'Action', 'Sci Fi'],
       videoUrl: null
     },
     { 
@@ -330,7 +330,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '210 hrs', 
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg', 
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1551360/library_hero.jpg',
-      synopsis: 'Your Ultimate Horizon Adventure awaits! Explore the vibrant and ever-evolving open world landscapes of Mexico with limitless, fun driving action in hundreds of the world’s greatest cars.',
+      synopsis: 'Your Ultimate Horizon Adventure awaits! Explore the vibrant and ever evolving open world landscapes of Mexico with limitless, fun driving action in hundreds of the world’s greatest cars.',
       reviewSentiment: 'Very Positive (88%)',
       ratingScore: 88,
       steamTags: ['Racing', 'Open World', 'Automobile Sim', 'Multiplayer'],
@@ -378,7 +378,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '340 hrs', 
       image: '/valorant.jpg', 
       banner: '/valorant.jpg',
-      synopsis: 'A 5v5 character-based tactical shooter where precise gunplay meets unique agent abilities. Stream with sub-2ms input latency via OmniPlay Jakarta Edge and official Steam Cloud integration.',
+      synopsis: 'A 5v5 character based tactical shooter where precise gunplay meets unique agent abilities. Stream with under 2ms input latency via OmniPlay Jakarta Edge and official Steam Cloud integration.',
       reviewSentiment: 'Very Positive (94%)',
       ratingScore: 94,
       steamTags: ['Tactical', 'FPS', 'Competitive', 'Multiplayer'],
@@ -394,7 +394,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '18 hrs',
       image: '/meccha_chameleon.jpg',
       banner: '/meccha_chameleon.jpg',
-      synopsis: 'The breakout viral sensation of 2026! Play as an ultra-adaptive robotic chameleon with high-speed color camouflaging and tongue-grapple physics across chaotic neon arenas.',
+      synopsis: 'The breakout viral sensation of 2026! Play as an ultra adaptive robotic chameleon with high speed color camouflaging and tongue grapple physics across chaotic neon arenas.',
       reviewSentiment: 'Overwhelmingly Positive (98%)',
       ratingScore: 98,
       steamTags: ['Viral Sensation', 'Action', 'Indie', 'Physics', 'Multiplayer'],
@@ -410,7 +410,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '164 hrs',
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1623730/header.jpg',
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1623730/library_hero.jpg',
-      synopsis: 'Fight, farm, build and work alongside mysterious creatures called "Pals" in this completely new multiplayer, open-world survival crafting game.',
+      synopsis: 'Fight, farm, build and work alongside mysterious creatures called "Pals" in this completely new multiplayer, open world survival crafting game.',
       reviewSentiment: 'Very Positive (93%)',
       ratingScore: 93,
       steamTags: ['Open World', 'Creature Collector', 'Survival', 'Crafting', 'Multiplayer'],
@@ -426,10 +426,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '420 hrs',
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1085660/header.jpg',
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1085660/library_hero.jpg',
-      synopsis: 'Dive into the world of Destiny 2 to explore the mysteries of the solar system and experience responsive first-person shooter combat in the Final Shape expansion era.',
+      synopsis: 'Dive into the world of Destiny 2 to explore the mysteries of the solar system and experience responsive first person shooter combat in the Final Shape expansion era.',
       reviewSentiment: 'Very Positive (84%)',
       ratingScore: 84,
-      steamTags: ['Action MMO', 'FPS', 'Looter Shooter', 'Co-op', 'Sci-Fi'],
+      steamTags: ['Action MMO', 'FPS', 'Looter Shooter', 'Coop', 'Sci Fi'],
       videoUrl: null
     },
     {
@@ -442,7 +442,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '280 hrs',
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg',
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_hero.jpg',
-      synopsis: 'You are Geralt of Rivia, mercenary monster slayer. As war rages, track down the Child of Prophecy in the enhanced Next-Gen visual update.',
+      synopsis: 'You are Geralt of Rivia, mercenary monster slayer. As war rages, track down the Child of Prophecy in the enhanced Next Gen visual update.',
       reviewSentiment: 'Overwhelmingly Positive (97%)',
       ratingScore: 97,
       steamTags: ['RPG', 'Open World', 'Story Rich', 'Masterpiece', 'Fantasy'],
@@ -461,7 +461,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'Carve your own clever path to vengeance in this critically acclaimed adventure from developer FromSoftware, creators of Bloodborne and Dark Souls.',
       reviewSentiment: 'Overwhelmingly Positive (95%)',
       ratingScore: 95,
-      steamTags: ['Souls-like', 'Action', 'Difficult', 'Ninja', 'Singleplayer'],
+      steamTags: ['Souls like', 'Action', 'Difficult', 'Ninja', 'Singleplayer'],
       videoUrl: null
     },
     {
@@ -493,7 +493,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'Risk it all to breakout from the toughest prisons in the world. Explore the biggest prisons yet, with multiple floors, roofs, vents and underground tunnels!',
       reviewSentiment: 'Very Positive (90%)',
       ratingScore: 90,
-      steamTags: ['Strategy', 'Multiplayer', 'Pixel Graphics', 'Co-op', 'Funny'],
+      steamTags: ['Strategy', 'Multiplayer', 'Pixel Graphics', 'Coop', 'Funny'],
       videoUrl: null
     },
     {
@@ -506,7 +506,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '512 hrs',
       image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
       banner: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/library_hero.jpg',
-      synopsis: 'The biggest technical leap in Counter-Strike history. CS2 delivers a complete overhaul with Source 2 engine, sub-tick architecture for ultra-precise hit registration, and volumetric smoke grenades.',
+      synopsis: 'The biggest technical leap in Counter-Strike history. CS2 delivers a complete overhaul with Source 2 engine, subtick architecture for ultra precise hit registration, and volumetric smoke grenades.',
       reviewSentiment: 'Very Positive (89%)',
       ratingScore: 89,
       steamTags: ['FPS', 'Competitive', 'Tactical', 'Multiplayer', 'Free to Play'],
@@ -522,7 +522,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '28 hrs',
       image: '/acecombat8beranda.png',
       banner: '/acecombat8detail.png',
-      synopsis: 'Soar into the next era of aerial combat in Ace Combat 8: Wings of Theve. Experience hypersonic dogfights over breathtaking skyscapes with next-gen flight physics and fully orchestrated cinematic storytelling.',
+      synopsis: 'Soar into the next era of aerial combat in Ace Combat 8: Wings of Theve. Experience hypersonic dogfights over breathtaking skyscapes with next gen flight physics and fully orchestrated cinematic storytelling.',
       reviewSentiment: 'Very Positive (90%)',
       ratingScore: 90,
       steamTags: ['Flight', 'Action', 'Arcade', 'Cinematic', 'Singleplayer'],
@@ -541,7 +541,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       synopsis: 'The harrowing origin story of E-Day — the day the Locust first emerged from underground and changed humanity forever. Play as young Marcus Fenix and Dom Santiago in this gripping prequel built on Unreal Engine 5.',
       reviewSentiment: 'Very Positive (91%)',
       ratingScore: 91,
-      steamTags: ['Cover Shooter', 'Action', 'Sci-Fi', 'Co-op', 'Story Rich'],
+      steamTags: ['Cover Shooter', 'Action', 'Sci Fi', 'Coop', 'Story Rich'],
       videoUrl: null
     },
     {
@@ -554,7 +554,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '44 hrs',
       image: '/wardogsberandahd.png',
       banner: '/wardogsdetailhd.png',
-      synopsis: 'An intense squad-based tactical shooter set in near-future conflict zones. Build your squad of elite mercenaries, manage resources under fire, and survive brutal asymmetric warfare across global hot zones.',
+      synopsis: 'An intense squad based tactical shooter set in near future conflict zones. Build your squad of elite mercenaries, manage resources under fire, and survive brutal asymmetric warfare across global hot zones.',
       reviewSentiment: 'Mostly Positive (81%)',
       ratingScore: 81,
       steamTags: ['Tactical', 'Military', 'Shooter', 'Multiplayer', 'Strategy'],
@@ -586,7 +586,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '36 hrs',
       image: '/controlresonantberanda.png',
       banner: '/controlresonantdetail.png',
-      synopsis: 'Return to the Oldest House in this direct sequel to the award-winning Control. Jesse Faden faces a new supernatural resonance threat that rewrites reality itself, powered by Northlight Engine 2 with full ray tracing.',
+      synopsis: 'Return to the Oldest House in this direct sequel to the award winning Control. Jesse Faden faces a new supernatural resonance threat that rewrites reality itself, powered by Northlight Engine 2 with full ray tracing.',
       reviewSentiment: 'Overwhelmingly Positive (94%)',
       ratingScore: 94,
       steamTags: ['Action', 'Supernatural', 'Story Rich', 'Ray Tracing', 'Third Person'],
@@ -602,7 +602,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '87 hrs',
       image: '/forzahorizon6beranda.png',
       banner: '/forzahorizon6detail.png',
-      synopsis: 'The Horizon Festival roars across the stunning landscapes of Japan. Race through neon-soaked cities, mountain passes, and coastal highways in hundreds of the world\'s finest cars with 8K visual fidelity.',
+      synopsis: 'The Horizon Festival roars across the stunning landscapes of Japan. Race through neon soaked cities, mountain passes, and coastal highways in hundreds of the world\'s finest cars with 8K visual fidelity.',
       reviewSentiment: 'Overwhelmingly Positive (95%)',
       ratingScore: 95,
       steamTags: ['Racing', 'Open World', 'Automobile Sim', 'Multiplayer', 'Beautiful'],
@@ -618,7 +618,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '52 hrs',
       image: '/marvelspiderman2beranda.png',
       banner: '/marvelspiderman2detail.png',
-      synopsis: 'Swing through Marvel\'s New York as both Peter Parker and Miles Morales against Kraven the Hunter and the alien symbiote in this exhilarating action-adventure sequel with seamless world traversal.',
+      synopsis: 'Swing through Marvel\'s New York as both Peter Parker and Miles Morales against Kraven the Hunter and the alien symbiote in this exhilarating action adventure sequel with seamless world traversal.',
       reviewSentiment: 'Very Positive (90%)',
       ratingScore: 90,
       steamTags: ['Action', 'Superhero', 'Open World', 'Story Rich', 'Marvel'],
@@ -650,7 +650,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       hours: '63 hrs',
       image: '/nba2k27beranda.png',
       banner: '/nba2k27detail.png',
-      synopsis: 'The most authentic NBA experience ever. NBA 2K27 delivers next-level player motion with ProPlay AI, an immersive MyCAREER story mode, and the ultimate MyTEAM card-collecting competition.',
+      synopsis: 'The most authentic NBA experience ever. NBA 2K27 delivers next level player motion with ProPlay AI, an immersive MyCAREER story mode, and the ultimate MyTEAM card collecting competition.',
       reviewSentiment: 'Mostly Positive (78%)',
       ratingScore: 78,
       steamTags: ['Sports', 'Basketball', 'Simulation', 'Multiplayer', 'Career Mode'],
@@ -666,9 +666,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       title: 'EA SPORTS FC™ 26',
       gameTitle: 'EA FC 26',
       genre: 'Sports & Simulation',
-      badge: 'OFFICIAL 2026 EDITION • SG-01',
+      badge: 'Official 2026 Edition',
       nodeBadge: 'Instant Steam Cloud Launch',
-      desc: 'Experience unrivaled realism in EA SPORTS FC™ 26 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam deep-link integration.',
+      desc: 'Experience unrivaled realism in EA SPORTS FC™ 26 with HyperMotionV and volumetric motion capture. Rent by the hour and stream immediately via official Steam direct link integration.',
       hourlyRate: '$1.25',
       rateUnit: '/ hr',
       ratingScore: '85%',
@@ -685,10 +685,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       appId: 1091500,
       title: 'Cyberpunk 2077: Phantom Liberty',
       gameTitle: 'Cyberpunk 2077',
-      genre: 'Sci-Fi Action RPG',
-      badge: 'RAY TRACING OVERDRIVE • SG-01',
+      genre: 'Sci Fi Action RPG',
+      badge: 'Ray Tracing Overdrive',
       nodeBadge: 'Path Tracing & DLSS 3.5',
-      desc: 'Enter the neon-soaked underworld of Night City. Rent high-end cloud compute with full path tracing, DLSS 3.5 ray reconstruction, and ultra-low input latency.',
+      desc: 'Enter the neon soaked underworld of Night City. Rent high performance cloud compute with full path tracing, DLSS 3.5 ray reconstruction, and ultra low input latency.',
       hourlyRate: '$1.50',
       rateUnit: '/ hr',
       ratingScore: '92%',
@@ -706,9 +706,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       title: 'Valorant',
       gameTitle: 'Valorant',
       genre: 'Tactical 5v5 Shooter',
-      badge: 'COMPETITIVE EDGE • JK-01',
+      badge: 'Esports Ready',
       nodeBadge: 'Instant Steam Cloud Launch • 2ms',
-      desc: 'Blend pinpoint gunplay with game-changing tactical agent abilities. Stream direct from Jakarta Edge with sub-2ms network routing, NVIDIA Reflex 360Hz tuning, and Steam Cloud synchronization.',
+      desc: 'Blend pinpoint gunplay with tactical agent abilities. Stream direct from Jakarta Edge with under 2ms network routing, NVIDIA Reflex 360Hz tuning, and Steam Cloud synchronization.',
       hourlyRate: '$0.99',
       rateUnit: '/ hr',
       ratingScore: '94%',
@@ -726,9 +726,9 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
       title: 'Black Myth: Wukong',
       gameTitle: 'Black Myth: Wukong',
       genre: 'Mythological Action RPG',
-      badge: 'GLOBAL BLOCKBUSTER • TY-01',
+      badge: 'Global Blockbuster',
       nodeBadge: 'Unreal Engine 5 Nanite',
-      desc: 'Set out as the Destined One to venture into the marvels and perils of ancient Chinese mythology. Powered by cutting-edge Nanite geometry and Lumen lighting on cloud nodes.',
+      desc: 'Set out as the Destined One to venture into the marvels and perils of ancient Chinese mythology. Powered by cutting edge Nanite geometry and Lumen lighting on cloud nodes.',
       hourlyRate: '$1.40',
       rateUnit: '/ hr',
       ratingScore: '95%',
@@ -995,7 +995,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             >
               <span className="hero-btn-content">
                 <Play style={{ width: 20, height: 20, fill: '#ffffff' }} />
-                <span>START NOW {activeGameObj.appId ? '(STEAM)' : '(CLOUD)'}</span>
+                <span>Play on {activeGameObj.appId ? 'Steam' : 'Cloud'}</span>
               </span>
             </button>
             <button 
@@ -1104,7 +1104,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
           <div className="library-title-group">
             <h2>
               Game Library
-              <span className="library-count-tag">({games.length} Steam Cloud Ready Titles)</span>
+              <span className="library-count-tag">({games.length} Games)</span>
             </h2>
             <div className="filter-pills-row">
               {['All Games', 'Recent', 'Action', 'RPG', 'Shooter'].map(cat => (
@@ -1390,12 +1390,12 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     <span className="meta-v" style={{ color: 'var(--neon-emerald)' }}>4K HDR 120 FPS</span>
                   </div>
                   <div className="meta-col">
-                    <span className="meta-k">Verified Anti-Cheat</span>
+                    <span className="meta-k">Verified Anti Cheat</span>
                     <span className="meta-v">VAC & Steam Guard Safe</span>
                   </div>
                   <div className="meta-col">
                     <span className="meta-k">Cloud Save Sync</span>
-                    <span className="meta-v" style={{ color: 'var(--neon-cyan)' }}>Real-Time Bidirectional</span>
+                    <span className="meta-v" style={{ color: 'var(--neon-cyan)' }}>Real Time Bidirectional</span>
                   </div>
                 </div>
 
@@ -1458,13 +1458,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   <div className="overview-features-grid">
                     <div className="feature-pill-card">
                       <div>
-                        <p className="pill-title">NVIDIA RTX 40-Series (RTX 4070 Ti - 4090)</p>
+                        <p className="pill-title">NVIDIA RTX 40 Series (RTX 4070 Ti to 4090)</p>
                         <p className="pill-sub">Full Ray Tracing & DLSS 3.5</p>
                       </div>
                     </div>
                     <div className="feature-pill-card">
                       <div>
-                        <p className="pill-title">Sub-2ms Input Latency</p>
+                        <p className="pill-title">Sub 2ms Input Latency</p>
                         <p className="pill-sub">Jakarta & Singapore Edge Nodes</p>
                       </div>
                     </div>
@@ -1490,10 +1490,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     About The Game & Cloud Optimization
                   </h4>
                   <p className="synopsis-text" style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                    Optimized specifically for OmniPlay cloud streaming architecture. Shaders are pre-compiled and warmed across all edge clusters, eliminating compilation stutter and in-game frame drops. Input packets utilize synchronized UDP sub-tick streams with automatic packet recovery.
+                    Optimized specifically for OmniPlay cloud streaming architecture. Shaders are precompiled and warmed across all edge clusters, eliminating compilation stutter and in game frame drops. Input packets utilize synchronized UDP subtick streams with automatic packet recovery.
                   </p>
                   <p className="synopsis-text" style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                    Whether you are playing on a low-end ultrabook, tablet, or handheld terminal, you get the fidelity of a multi-thousand dollar dedicated gaming rig powered by green energy cloud compute centers.
+                    Whether you are playing on a low spec ultrabook, tablet, or handheld terminal, you get the fidelity of a high performance dedicated gaming rig powered by green energy cloud compute centers.
                   </p>
                 </div>
 
@@ -1507,13 +1507,13 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                     <div className="feature-pill-card">
                       <div>
                         <p className="pill-title">DualSense & Xbox Gamepads</p>
-                        <p className="pill-sub">Haptic feedback & rumble pass-through</p>
+                        <p className="pill-sub">Haptic feedback & rumble passthrough</p>
                       </div>
                     </div>
                     <div className="feature-pill-card">
                       <div>
                         <p className="pill-title">OmniRemote Touch Virtual Pad</p>
-                        <p className="pill-sub">Mobile browser on-screen controls</p>
+                        <p className="pill-sub">Mobile browser on screen controls</p>
                       </div>
                     </div>
                   </div>
@@ -1525,7 +1525,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 <div className="rental-panel-card">
                   <h3 className="rental-panel-title">
                     <Clock style={{ width: 16, height: 16, color: 'var(--neon-cyan)' }} />
-                    Rent-to-Play Cloud Pass
+                    Rent to Play Cloud Pass
                   </h3>
 
                   {/* 1. Cloud Node Selection */}
@@ -1751,10 +1751,10 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 {expandedSection === "card" && (
                   <div className="payment-section-items">
                     {[
-                      { id: "card", name: "Credit / Debit Card (Visa, MC, Amex, JCB)", sub: "Global 3D-Secure 256-bit encrypted checkout", icon: "💳" },
+                      { id: "card", name: "Credit / Debit Card (Visa, MC, Amex, JCB)", sub: "Global 3D Secure 256 bit encrypted checkout", icon: "💳" },
                       { id: "paypal", name: "PayPal Express Checkout", sub: "Worldwide instant buyer protected checkout", icon: "🅿️" },
-                      { id: "apple_pay", name: "Apple Pay", sub: "One-click biometric FaceID/TouchID pay", icon: "🍎" },
-                      { id: "google_pay", name: "Google Pay", sub: "Fast 1-tap checkout with Google account", icon: "🌐" }
+                      { id: "apple_pay", name: "Apple Pay", sub: "One Click biometric Face ID or Touch ID pay", icon: "🍎" },
+                      { id: "google_pay", name: "Google Pay", sub: "Fast 1 tap checkout with Google account", icon: "🌐" }
                     ].map(item => (
                       <div
                         key={item.id}
@@ -1790,7 +1790,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                 >
                   <div className="payment-section-left">
                     <Coins style={{ width: 18, height: 18, color: "#10b981" }} />
-                    <span>Crypto & Web3 (Zero Cross-Border Fee)</span>
+                    <span>Crypto & Web3 (Zero Cross Border Fee)</span>
                   </div>
                   <ChevronDown className={"payment-chevron " + (expandedSection === "crypto" ? "open" : "")} />
                 </button>
@@ -1843,7 +1843,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
                   <div className="payment-section-items">
                     {[
                       { id: "qris", name: "Universal Instant QR (QRIS, Pix, PromptPay)", sub: "Scan & play immediately from any banking app", icon: "📷" },
-                      { id: "cash_app", name: "Cash App / Revolut Pay", sub: "Fast US, UK & EU peer-to-peer checkout", icon: "💸" },
+                      { id: "cash_app", name: "Cash App / Revolut Pay", sub: "Fast US, UK & EU peer to peer checkout", icon: "💸" },
                       { id: "gopay_dana", name: "GoPay / OVO / Dana / ShopeePay", sub: "Southeast Asia instant mobile balance", icon: "📱" }
                     ].map(item => (
                       <div
@@ -1943,7 +1943,7 @@ export default function PlayerDashboard({ onLaunchGame }: { onLaunchGame?: (titl
             <div className="payment-modal-footer">
               <div className="payment-footer-info">
                 <Lock style={{ width: 13, height: 13 }} />
-                <span>256-Bit SSL Encrypted & Secure Checkout</span>
+                <span>256 Bit SSL Encrypted & Secure Checkout</span>
               </div>
               <button
                 type="button"

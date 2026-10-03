@@ -35,7 +35,7 @@ export default function CloudResourcesDashboard() {
     if (isSimulatingSpike) return;
     setIsSimulatingSpike(true);
     setCurrentCpuLoad('94%');
-    setSpikeNotification('⚠️ Heavy Traffic Surge Detected (CPU 94%, VRAM 89%)! Auto-Scaler triggered rapid elasticity...');
+    setSpikeNotification('⚠️ Heavy Traffic Surge Detected (CPU 94%, VRAM 89%)! Auto Scaler triggered rapid elasticity...');
 
     // Phase 1: Rapid Elasticity -> Auto scale-out (+2 pods)
     setTimeout(() => {
@@ -47,7 +47,7 @@ export default function CloudResourcesDashboard() {
     // Phase 2: Graceful stabilization
     setTimeout(() => {
       setIsSimulatingSpike(false);
-      setSpikeNotification('✅ Spike Test Complete: Elastic cluster kept latency sub-4ms with zero dropped frames.');
+      setSpikeNotification('✅ Spike Test Complete: Elastic cluster kept latency sub 4ms with zero dropped frames.');
       setTimeout(() => {
         setSpikeNotification(null);
         setActiveWorkerPods(4);
@@ -105,21 +105,21 @@ export default function CloudResourcesDashboard() {
     // Generate real JSON export of current cloud infrastructure, security, and sessions state
     const backupData = {
       backup_id: `OMNI-SNAP-${Date.now()}`,
-      cluster: "OmniPlay High-Performance Cloud Fleet",
+      cluster: "OmniPlay High Performance Cloud Fleet",
       timestamp: new Date().toISOString(),
       security_matrix: {
         encryption_in_transit: "TLS 1.3 / AES-256-GCM (Enforced)",
-        stream_protocol: "WebRTC DTLS-SRTP (Sub-2ms Encrypted Datagrams)",
+        stream_protocol: "WebRTC DTLS-SRTP (Sub 2ms Encrypted Datagrams)",
         authentication: "HttpOnly JWT Cookie Shield (XSS/CSRF Protected)",
         sandbox_isolation: "Docker/KVM Ephemeral Pods (Zero Local Footprint Per Rental)",
         firewall: "Cloudflare Enterprise Layer 3/4/7 DDoS Shield (0 Breaches)",
-        anti_cheat_compatibility: "Valve Anti-Cheat (VAC) & Steam Guard Pass-Through Safe"
+        anti_cheat_compatibility: "Valve Anti Cheat (VAC) & Steam Guard Passthrough Safe"
       },
       disaster_recovery: {
-        recovery_time_objective: "< 30 seconds (Automatic Multi-PoP Failover)",
-        recovery_point_objective: "0 seconds (Continuous Write-Ahead Log Stream)",
+        recovery_time_objective: "< 30 seconds (Automatic Multi PoP Failover)",
+        recovery_point_objective: "0 seconds (Continuous Write Ahead Log Stream)",
         primary_storage: "NVMe SAN Cluster (10.0 TB Pool, 583.7 GB Distributed Cache)",
-        cold_storage_target: "AWS S3 Multi-Region Glacier Vault (ap-southeast-1 & ap-northeast-1)",
+        cold_storage_target: "AWS S3 Multi Region Glacier Vault (ap-southeast-1 & ap-northeast-1)",
         cross_region_sync: "Active Global Mesh (JK-01 <-> SG-01 <-> TY-01 <-> US-01 <-> EU-01 <-> EU-02)"
       },
       edge_nodes: topologyNodes,
@@ -164,7 +164,7 @@ export default function CloudResourcesDashboard() {
       gpu: '2x NVIDIA RTX 4080 (32GB VRAM)',
       cpu: 'Intel Xeon Platinum 8380',
       storage: '3.8 TB Gen5 NVMe Array',
-      ping: '3.9ms (Cross-Border)',
+      ping: '3.9ms (Cross Border)',
       status: 'active',
       load: '78%'
     },
@@ -175,7 +175,7 @@ export default function CloudResourcesDashboard() {
       gpu: '2x NVIDIA RTX 4090 (48GB VRAM)',
       cpu: 'AMD EPYC 9654 Genoa',
       storage: '4.2 TB Gen5 NVMe Array',
-      ping: '22.4ms (Trans-Pacific)',
+      ping: '22.4ms (Trans Pacific)',
       status: 'active',
       load: '62%'
     },
@@ -227,7 +227,7 @@ export default function CloudResourcesDashboard() {
       title: 'Red Dead Redemption 2',
       appId: 1174180,
       size: '119.8 GB',
-      format: 'NVMe Striped Direct-IO',
+      format: 'NVMe Striped Direct IO',
       clientsBenefiting: '14 Concurrent Users',
       savings: 'Saved 1.6 TB client storage'
     },
@@ -235,7 +235,7 @@ export default function CloudResourcesDashboard() {
       title: 'Forza Horizon 5',
       appId: 1551360,
       size: '135.2 GB',
-      format: 'Zero-Copy Shared Cache',
+      format: 'Zero Copy Shared Cache',
       clientsBenefiting: '18 Concurrent Users',
       savings: 'Saved 2.4 TB client storage'
     },
@@ -243,7 +243,7 @@ export default function CloudResourcesDashboard() {
       title: 'Cyberpunk 2077: Phantom Liberty',
       appId: 1091500,
       size: '88.3 GB',
-      format: 'Pre-Warmed Shader Cache Pool',
+      format: 'Pre Warmed Shader Cache Pool',
       clientsBenefiting: '29 Concurrent Users',
       savings: 'Saved 2.5 TB client storage'
     },
@@ -366,7 +366,7 @@ export default function CloudResourcesDashboard() {
           </div>
           <h1 className="infra-title">Cloud Server & Security Control Center</h1>
           <p className="infra-sub">
-            Real-time server health, data protection, automated backups, and system repairs.
+            Real time server health, data protection, automated backups, and system repairs.
           </p>
         </div>
 
@@ -412,7 +412,7 @@ export default function CloudResourcesDashboard() {
           <div className="infra-metric-info">
             <span className="infra-metric-label">GPU Memory (VRAM)</span>
             <span className="infra-metric-value">72 GB / 96 GB</span>
-            <span className="infra-metric-sub">75% Load • RTX 40-Series</span>
+            <span className="infra-metric-sub">75% Load • RTX 40 Series</span>
           </div>
         </div>
 
@@ -433,7 +433,7 @@ export default function CloudResourcesDashboard() {
           </div>
           <div className="infra-metric-info">
             <span className="infra-metric-label">Backup Status</span>
-            <span className="infra-metric-value">S3 Multi-Region</span>
+            <span className="infra-metric-value">S3 Multi Region</span>
             <span className="infra-metric-sub">Recovery &lt; 30 seconds</span>
           </div>
         </div>
@@ -453,7 +453,7 @@ export default function CloudResourcesDashboard() {
           </div>
           <span className="topology-badge" style={{ borderColor: 'rgba(0, 210, 255, 0.4)', color: 'var(--neon-cyan)' }}>
             <Sparkles style={{ width: 13, height: 13, marginRight: 5, verticalAlign: 'middle' }} />
-            Auto-Repair Engine Active
+            Auto Repair Engine Active
           </span>
         </div>
 
@@ -619,7 +619,7 @@ export default function CloudResourcesDashboard() {
                 type="button" 
                 className="repair-action-btn"
                 disabled={!!activeRepairing}
-                onClick={() => handleRunRepair('force_s3_sync', 'Force S3 Cold Vault Sync', 'Force sync to Multi-Region S3 bucket completed. 100% data verified.')}
+                onClick={() => handleRunRepair('force_s3_sync', 'Force S3 Cold Vault Sync', 'Force sync to Multi Region S3 bucket completed. 100% data verified.')}
               >
                 {activeRepairing === 'force_s3_sync' ? <Loader2 className="btn-spinner" /> : <Cloud style={{ width: 14, height: 14 }} />}
                 <span>{activeRepairing === 'force_s3_sync' ? 'Syncing...' : 'Force S3 Cold Vault Sync'}</span>
@@ -652,7 +652,7 @@ export default function CloudResourcesDashboard() {
         <div className="section-title-strip">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <TrendingUp style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
-            <h2 className="section-heading">Auto-Scaling & Rapid Elasticity Orchestrator</h2>
+            <h2 className="section-heading">Auto Scaling & Rapid Elasticity Orchestrator</h2>
           </div>
           <span className="topology-badge" style={{ borderColor: 'rgba(168, 85, 247, 0.4)', color: 'var(--neon-purple)' }}>
             NIST Standard: Rapid Elasticity
@@ -672,7 +672,7 @@ export default function CloudResourcesDashboard() {
             <div className="scaling-card-top">
               <div>
                 <h3 className="scaling-card-title">Worker Pod Fleet Status</h3>
-                <p className="scaling-card-sub">Dynamic KVM & Docker GPU container auto-scaling</p>
+                <p className="scaling-card-sub">Dynamic KVM & Docker GPU container auto scaling</p>
               </div>
               <span className={`scaling-live-tag ${isSimulatingSpike ? 'scaling-up' : 'stable'}`}>
                 {isSimulatingSpike ? '⚡ SCALING OUT (+2 PODS)' : 'STABLE (NORMAL)'}
@@ -689,7 +689,7 @@ export default function CloudResourcesDashboard() {
                 <span className={`val ${isSimulatingSpike ? 'amber' : 'green'}`}>{currentCpuLoad}</span>
               </div>
               <div className="scale-metric-box">
-                <span className="lbl">Anti-Flap Cooldown</span>
+                <span className="lbl">Anti Flap Cooldown</span>
                 <span className="val">180 Seconds</span>
               </div>
             </div>
@@ -709,7 +709,7 @@ export default function CloudResourcesDashboard() {
                 ) : (
                   <>
                     <Zap style={{ width: 16, height: 16 }} />
-                    <span>Test Traffic Spike (Auto-Scale)</span>
+                    <span>Test Traffic Spike (Auto Scale)</span>
                   </>
                 )}
               </button>
@@ -726,7 +726,7 @@ export default function CloudResourcesDashboard() {
             <div className="rules-list">
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Scale-Out (Auto Add Capacity):</strong>
+                  <strong>Scale Out (Auto Add Capacity):</strong>
                   <span>If CPU &gt; 80% or GPU VRAM &gt; 85% for 3 consecutive minutes.</span>
                 </div>
                 <span className="rule-pill green">ACTIVE (+1 Pod)</span>
@@ -734,7 +734,7 @@ export default function CloudResourcesDashboard() {
 
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Scale-In (Cost Saver when Idle):</strong>
+                  <strong>Scale In (Cost Saver when Idle):</strong>
                   <span>If server is idle for 15 minutes, standby pods shut down to optimize FinOps.</span>
                 </div>
                 <span className="rule-pill cyan">ACTIVE (-1 Pod)</span>
@@ -742,7 +742,7 @@ export default function CloudResourcesDashboard() {
 
               <div className="rule-item">
                 <div className="rule-info">
-                  <strong>Anti-Flapping Protection:</strong>
+                  <strong>Anti Flapping Protection:</strong>
                   <span>Prevents continuous creation/destruction of pods within short time frames.</span>
                 </div>
                 <span className="rule-pill purple">ACTIVE (180s)</span>
@@ -772,7 +772,7 @@ export default function CloudResourcesDashboard() {
               <span className="finops-rate">$0.85 – $1.75 / hr</span>
             </div>
             <p className="finops-total">$398.50 <span className="unit">/ mo</span></p>
-            <p className="finops-sub">6 Global Edge Pools (RTX 40-Series)</p>
+            <p className="finops-sub">6 Global Edge Pools (RTX 40 Series)</p>
           </div>
 
           <div className="finops-card">
@@ -795,7 +795,7 @@ export default function CloudResourcesDashboard() {
 
           <div className="finops-card">
             <div className="finops-card-top">
-              <span className="finops-label">Cloudflare Anti-DDoS Shield</span>
+              <span className="finops-label">Cloudflare Anti DDoS Shield</span>
               <span className="finops-rate">Flat Tier</span>
             </div>
             <p className="finops-total">$30.00 <span className="unit">/ mo</span></p>
@@ -917,10 +917,10 @@ export default function CloudResourcesDashboard() {
               </div>
               <div className="security-detail-item">
                 <span className="sec-key">Client Privacy:</span>
-                <span className="sec-val green">Auto-Wiped on Session End</span>
+                <span className="sec-val green">Auto Wiped on Session End</span>
               </div>
               <div className="security-detail-item">
-                <span className="sec-key">Anti-Cheat Safety:</span>
+                <span className="sec-key">Anti Cheat Safety:</span>
                 <span className="sec-val">VAC & Steam Guard Safe</span>
               </div>
             </div>
@@ -933,18 +933,18 @@ export default function CloudResourcesDashboard() {
                 <div className="security-pillar-icon" style={{ color: '#00d2ff', background: 'rgba(0, 210, 255, 0.12)' }}>
                   <Lock style={{ width: 16, height: 16 }} />
                 </div>
-                <h3 className="security-pillar-title">End-to-End Cryptography</h3>
+                <h3 className="security-pillar-title">End to End Cryptography</h3>
               </div>
               <span className="security-badge-live">ENCRYPTED</span>
             </div>
             <div className="security-detail-list">
               <div className="security-detail-item">
                 <span className="sec-key">API Transport:</span>
-                <span className="sec-val cyan">TLS 1.3 / 256-bit SSL</span>
+                <span className="sec-val cyan">TLS 1.3 / 256 bit SSL</span>
               </div>
               <div className="security-detail-item">
                 <span className="sec-key">Stream Protocol:</span>
-                <span className="sec-val green">WebRTC DTLS-SRTP sub-2ms</span>
+                <span className="sec-val green">WebRTC DTLS-SRTP under 2ms</span>
               </div>
               <div className="security-detail-item">
                 <span className="sec-key">Payment Tokens:</span>
@@ -975,7 +975,7 @@ export default function CloudResourcesDashboard() {
               </div>
               <div className="security-detail-item">
                 <span className="sec-key">Token Expiry:</span>
-                <span className="sec-val">24h Auto-Revocation</span>
+                <span className="sec-val">24h Auto Revocation</span>
               </div>
             </div>
           </div>
@@ -987,7 +987,7 @@ export default function CloudResourcesDashboard() {
                 <div className="security-pillar-icon" style={{ color: '#fbbf24', background: 'rgba(245, 158, 11, 0.12)' }}>
                   <ShieldAlert style={{ width: 16, height: 16 }} />
                 </div>
-                <h3 className="security-pillar-title">Edge Perimeter & Anti-DDoS</h3>
+                <h3 className="security-pillar-title">Edge Perimeter & Anti DDoS</h3>
               </div>
               <span className="security-badge-live">SHIELDED</span>
             </div>
@@ -1092,12 +1092,12 @@ export default function CloudResourcesDashboard() {
               <span className="chip-val green">{lastBackupTime}</span>
             </div>
             <div className="backup-status-chip">
-              <span className="chip-lbl">Inter-Node Replication</span>
+              <span className="chip-lbl">Inter Node Replication</span>
               <span className="chip-val cyan">Jakarta ⟷ Singapore Active</span>
             </div>
             <div className="backup-status-chip">
               <span className="chip-lbl">Secure Storage</span>
-              <span className="chip-val">AWS S3 Glacier Multi-Region</span>
+              <span className="chip-val">AWS S3 Glacier Multi Region</span>
             </div>
             <div className="backup-status-chip">
               <span className="chip-lbl">Data Verification</span>
@@ -1113,7 +1113,7 @@ export default function CloudResourcesDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Activity style={{ width: 18, height: 18, color: 'var(--neon-purple)' }} />
             <div>
-              <h3 className="sessions-title">Real-Time Server History & Activity Logs</h3>
+              <h3 className="sessions-title">Real Time Server History & Activity Logs</h3>
               <p className="sessions-sub">Live log of server operations, container provisioning, and backup executions</p>
             </div>
           </div>
@@ -1153,7 +1153,7 @@ export default function CloudResourcesDashboard() {
         <div className="section-title-strip">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Server style={{ width: 18, height: 18, color: 'var(--neon-cyan)' }} />
-            <h2 className="section-heading">Multi-Region Server Topology & Edge PoPs</h2>
+            <h2 className="section-heading">Multi Region Server Topology & Edge PoPs</h2>
           </div>
           <span className="topology-badge">4 Cloud Edge PoPs Operational</span>
         </div>
@@ -1263,7 +1263,7 @@ export default function CloudResourcesDashboard() {
               <th>User</th>
               <th>Running Title</th>
               <th>Node</th>
-              <th>Client PC Hardware (Low-Spec Device)</th>
+              <th>Client PC Hardware (Low Spec Device)</th>
               <th>Playtime</th>
               <th>VRAM</th>
               <th>Latency</th>

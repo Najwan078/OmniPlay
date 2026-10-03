@@ -112,7 +112,7 @@ export default function AdminOmniRemote() {
           <div className="card-top-bar">
             <div>
               <h2 className="admin-card-title">Live Controller Inputs</h2>
-              <p className="admin-card-sub">Real-time thumbstick motion and button press detection</p>
+              <p className="admin-card-sub">Real time thumbstick motion and button press detection</p>
             </div>
             <span className="active-driver-chip">
               <Zap style={{ width: 12, height: 12, color: 'var(--neon-cyan)' }} />

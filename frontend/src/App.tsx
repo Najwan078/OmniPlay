@@ -282,7 +282,7 @@ function TopNavbar({
                   className={`omni-menu-item ${activeTab === 'support' ? 'active' : ''}`} 
                   onClick={() => onTabChange('support')}
                 >
-                  Help/Support
+                  Support
                 </span>
               </>
             )}
@@ -352,9 +352,9 @@ function Sidebar({
       <div>
         <div className="sidebar-role-indicator">
           {isAdmin ? (
-            <span className="role-tag admin">ADMINISTRATOR CONSOLE</span>
+            <span className="role-tag admin">ADMIN CONSOLE</span>
           ) : (
-            <span className="role-tag customer">OPERATOR CONSOLE</span>
+            <span className="role-tag customer">MAIN MENU</span>
           )}
           {onClose && (
             <button 
@@ -433,7 +433,7 @@ function Sidebar({
               />
               <NavItem 
                 icon={<ThreeDIcon type="support" size={24} glowColor="rgba(244, 63, 94, 0.5)" />} 
-                label="Help/Support" 
+                label="Support" 
                 active={activeTab === 'support'} 
                 onClick={() => onTabChange('support')} 
               />
@@ -661,7 +661,7 @@ function DashboardShell({
             <h3 className="omni-launch-title">{launchingGame.title}</h3>
             <p className="omni-launch-desc">
               {launchStep === 0 && "Connecting to Steam & cloud server..."}
-              {launchStep === 1 && "Preparing high-speed gaming rig..."}
+              {launchStep === 1 && "Preparing high speed gaming rig..."}
               {launchStep === 2 && "Loading game save and profile..."}
               {launchStep === 3 && "Starting your game in Steam..."}
             </p>
@@ -684,7 +684,7 @@ function DashboardShell({
                     fontWeight: 600
                   }}
                 >
-                  <span>🎮 Steam Deep-Link: {launchingGame.steamUri}</span>
+                  <span>🎮 Steam Direct Link: {launchingGame.steamUri}</span>
                 </a>
               </div>
             )}

@@ -50,13 +50,13 @@ const initialAdminGames: AdminGame[] = [
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
     image: '/eafc26_beranda.jpg',
-    errorLog: '[18:52:11] EA Anti-Cheat kernel driver: Clean handshake. Dedicated UDP stream active.'
+    errorLog: '[18:52:11] EA Anti Cheat kernel driver: Clean handshake. Dedicated UDP stream active.'
   },
   {
     id: 103,
     appId: 460930,
     title: "Tom Clancy's Ghost Recon Wildlands",
-    genre: 'Shooter / Tactical Co-op',
+    genre: 'Shooter / Tactical Coop',
     status: 'online',
     activeSessions: 19,
     assignedNode: 'JK-01 (RTX 4080)',
@@ -80,7 +80,7 @@ const initialAdminGames: AdminGame[] = [
     frameDrop: '0.01%',
     shaderStatus: 'Verified',
     image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/header.jpg',
-    errorLog: '[18:40:12] EA Anti-Cheat service: Handshake OK. Shader cache warmed.'
+    errorLog: '[18:40:12] EA Anti Cheat service: Handshake OK. Shader cache warmed.'
   },
   {
     id: 2,
@@ -125,7 +125,7 @@ const initialAdminGames: AdminGame[] = [
     frameDrop: '0.00%',
     shaderStatus: 'Verified',
     image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
-    errorLog: '[18:45:00] Sub-tick stream packet synchronization: 1000Hz active.'
+    errorLog: '[18:45:00] Subtick stream packet synchronization: 1000Hz active.'
   },
   {
     id: 5,
@@ -215,7 +215,7 @@ const initialAdminGames: AdminGame[] = [
     frameDrop: '0.05%',
     shaderStatus: 'Verified',
     image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg',
-    errorLog: '[18:53:20] Next-Gen DirectX 12 Ultimate pipeline active.'
+    errorLog: '[18:53:20] Next Gen DirectX 12 Ultimate pipeline active.'
   },
   {
     id: 11,

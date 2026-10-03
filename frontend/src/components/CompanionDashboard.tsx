@@ -189,7 +189,7 @@ function EAFC25View({ notify }: { notify: any }) {
           </div>
         ))}
       </div>
-      <button onClick={() => notify("Tactics Applied In-Game!")} className="w-full mt-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.3)] cursor-pointer">Apply Quick Tactics</button>
+      <button onClick={() => notify("Tactics Applied In Game!")} className="w-full mt-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.3)] cursor-pointer">Apply Quick Tactics</button>
     </div>
   );
 }
@@ -502,7 +502,7 @@ function HorizonView({ notify }: { notify: any }) {
       </div>
       <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Weapon Wheel</h3>
       <div className="space-y-2 mb-6">
-        {[{ name: 'Sharpshot Bow', ammo: 'Precision: 12 | Tearblast: 5', active: true }, { name: 'Hunter Bow', ammo: 'Fire: 24 | Hardpoint: 18', active: false }, { name: 'Tripcaster', ammo: 'Shock Wire: 8 | Blast: 3', active: false }, { name: 'Ropecaster', ammo: 'Tie-Down: 15', active: false }].map(w => (
+        {[{ name: 'Sharpshot Bow', ammo: 'Precision: 12 | Tearblast: 5', active: true }, { name: 'Hunter Bow', ammo: 'Fire: 24 | Hardpoint: 18', active: false }, { name: 'Tripcaster', ammo: 'Shock Wire: 8 | Blast: 3', active: false }, { name: 'Ropecaster', ammo: 'Tie Down: 15', active: false }].map(w => (
           <button key={w.name} onClick={() => notify(`${w.name} Equipped`, <Crosshair className="w-4 h-4 text-orange-400"/>)} className={`w-full text-left p-3 rounded-lg flex flex-col border transition-all active:scale-95 cursor-pointer ${w.active ? 'bg-orange-900/20 border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.2)]' : 'bg-white/5 border-gray-700/50'}`}><span className={`text-sm font-bold ${w.active ? 'text-orange-300' : 'text-gray-300'}`}>{w.name}</span><span className="text-[10px] text-gray-400 mt-1 font-mono">{w.ammo}</span></button>
         ))}
       </div>

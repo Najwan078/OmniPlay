@@ -704,7 +704,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           <p className="login-subtitle">
             {isCreatingAccount
               ? "Create Account • Cloud Gaming Service"
-              : "Next-Gen Cloud Gaming & Cloud Computing"}
+              : "Next Gen Cloud Gaming & Cloud Computing"}
           </p>
         </div>
 

@@ -35,7 +35,7 @@ const initialFriends: Friend[] = [
     status: 'in-game',
     game: 'EA SPORTS FC™ 25',
     node: 'SG-01 (RTX 4090)',
-    activityText: 'In-Game: Division Rivals (1st Half, 2-1)'
+    activityText: 'Playing: Division Rivals (1st Half, 2-1)'
   },
   {
     id: 'f-2',
@@ -45,7 +45,7 @@ const initialFriends: Friend[] = [
     status: 'in-game',
     game: 'Baldur\'s Gate 3',
     node: 'SG-01 (RTX 4090)',
-    activityText: 'In-Game: Act II Moonrise Towers Co-op'
+    activityText: 'Playing: Act II Moonrise Towers Party'
   },
   {
     id: 'f-3',
@@ -55,7 +55,7 @@ const initialFriends: Friend[] = [
     status: 'in-game',
     game: 'Black Myth: Wukong',
     node: 'JK-01 (RTX 4080)',
-    activityText: 'In-Game: Chapter 3 Pagoda Realm'
+    activityText: 'Playing: Chapter 3 Pagoda Realm'
   },
   {
     id: 'f-4',
@@ -80,7 +80,7 @@ const initialChatMessages: CommunityMessage[] = [
     id: 1,
     sender: 'Alex',
     omniId: 'Alex#SG01',
-    text: 'Anyone up for 2v2 co-op on EA FC 25? The Singapore SG-01 node is running at 3.5ms ping tonight!',
+    text: 'Anyone up for 2v2 on EA FC 25? The Singapore SG-01 node is running at 3.5ms ping tonight!',
     time: '20:15'
   },
   {
@@ -158,7 +158,7 @@ export default function CommunityView() {
           </div>
           <h1 className="community-title">Player Community Hub</h1>
           <p className="community-sub">
-            Form multiplayer lobbies, spectate cloud gaming streams, and exchange real-time game strategies with friends.
+            Form multiplayer lobbies, spectate cloud gaming streams, and exchange real time game strategies with friends.
           </p>
         </div>
 
@@ -168,7 +168,7 @@ export default function CommunityView() {
             <span className="stat-v cyan">5 LIVE</span>
           </div>
           <div className="comm-stat-card">
-            <span className="stat-k">IN-GAME SESSIONS</span>
+            <span className="stat-k">IN GAME SESSIONS</span>
             <span className="stat-v emerald">3 Streaming</span>
           </div>
           <div className="comm-stat-card">
@@ -258,7 +258,7 @@ export default function CommunityView() {
                     <span className="friend-name">{friend.name}</span>
                     <span className="friend-omni-tag">{friend.omniId}</span>
                     <span className={`friend-badge ${friend.status}`}>
-                      {friend.status === 'in-game' ? 'IN-GAME' : friend.status.toUpperCase()}
+                      {friend.status === 'in-game' ? 'IN GAME' : friend.status.toUpperCase()}
                     </span>
                   </div>
                   <p className="friend-activity">{friend.activityText}</p>
@@ -276,7 +276,7 @@ export default function CommunityView() {
                     <button 
                       type="button" 
                       className="friend-action-btn join-btn"
-                      onClick={() => alert(`Sending Co-op / Lobby Join request to ${friend.name}!`)}
+                      onClick={() => alert(`Sending Party / Lobby Join request to ${friend.name}!`)}
                     >
                       Join Lobby
                     </button>
@@ -315,7 +315,7 @@ export default function CommunityView() {
           <div className="community-messages-stream">
             <div className="chat-channel-banner">
               <Sparkles style={{ width: 14, height: 14, color: 'var(--neon-cyan)' }} />
-              <span>You are viewing {activeChannel} • End-to-end encrypted WebRTC gaming room</span>
+              <span>You are viewing {activeChannel} • End to end encrypted WebRTC gaming room</span>
             </div>
 
             {messages.map((msg) => (

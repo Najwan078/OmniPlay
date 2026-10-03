@@ -162,7 +162,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
       badge: 'WebRTC & HID',
       components: [
         'Client Browser / WebRTC HTML5 Player (AV1 / H.264)',
-        'Budget & Low-Spec Devices: Intel Celeron Laptops / Phones / Tablets',
+        'Budget & Low Spec Devices: Intel Celeron Laptops / Phones / Tablets',
         'OmniRemote: Virtual Gamepad & Touch Controls via UDP DataChannel',
         'Zero Local Storage Footprint: Direct stream with no game downloads'
       ],
@@ -224,7 +224,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
         'Primary Storage: 10.0 TB NVMe Gen5 SAN Cluster (7,200 MB/s Read)',
         'Distributed Steam Cache: 583.7 GB pre-installed games ready to stream',
         'Synchronous WAL Replication: Jakarta Core (JK-01) ⟷ Singapore Standby (SG-01)',
-        'Cold Vault Backup: AWS S3 Glacier Multi-Region (RTO < 30s, RPO = 0s)'
+        'Cold Vault Backup: AWS S3 Glacier Multi Region (RTO < 30s, RPO = 0s)'
       ],
       description: 'Ultra-fast storage pool that holds game libraries and automatically backs up save files across multiple cloud regions.'
     }
@@ -276,7 +276,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
               <span className="live-pulse-chip">
                 <span className="pulse-dot" /> 3D Live Cluster Core View
               </span>
-              <h3 className="arch-core-name">OmniPlay Multi-Region Cloud Fabric</h3>
+              <h3 className="arch-core-name">OmniPlay Multi Region Cloud Fabric</h3>
               <p className="arch-core-meta">
                 Distributed architecture connected via Anycast WebRTC sub-4ms between JK-01 (Jakarta), SG-01 (Singapore), and TY-01 (Tokyo).
               </p>
@@ -363,7 +363,7 @@ export default function CloudArchitectureModal({ isOpen, onClose }: CloudArchite
               <div className="flow-step-box">
                 <span className="step-num">4</span>
                 <strong>GPU Worker Pod</strong>
-                <span>120 FPS Real-time Render</span>
+                <span>120 FPS Real Time Render</span>
               </div>
               <ArrowDown className="flow-arrow" />
               <div className="flow-step-box">
