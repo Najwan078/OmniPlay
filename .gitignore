@@ -43,3 +43,7 @@ scratch/
 .aider*
 .claude
 
+# Project presentation & network simulation artifacts
+*.pkt
+*.pptx
+PPT OmniPlay/

@@ -21,6 +21,7 @@ import UserStatsDashboard from './components/UserStatsDashboard';
 import UserSupportView from './components/UserSupportView';
 import AdminOmniRemote from './components/AdminOmniRemote';
 import CommunityView from './components/CommunityView';
+import LeaderboardView from './components/LeaderboardView';
 import ThreeDIcon from './components/ThreeDIcon';
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
 import { useUser } from './context/UserContext';
@@ -275,6 +276,12 @@ function TopNavbar({
                   Community
                 </span>
                 <span 
+                  className={`omni-menu-item ${activeTab === 'leaderboard' ? 'active' : ''}`} 
+                  onClick={() => onTabChange('leaderboard')}
+                >
+                  Leaderboard
+                </span>
+                <span 
                   className={`omni-menu-item ${activeTab === 'remote' ? 'active' : ''}`} 
                   onClick={() => onTabChange('remote')}
                 >
@@ -426,6 +433,12 @@ function Sidebar({
                 label="Community" 
                 active={activeTab === 'community'} 
                 onClick={() => onTabChange('community')} 
+              />
+              <NavItem 
+                icon={<Trophy style={{ width: 18, height: 18, color: activeTab === 'leaderboard' ? '#fbbf24' : 'var(--text-muted)' }} />} 
+                label="Leaderboard" 
+                active={activeTab === 'leaderboard'} 
+                onClick={() => onTabChange('leaderboard')} 
               />
               <NavItem 
                 icon={<ThreeDIcon type="remote" size={24} glowColor="rgba(59, 130, 246, 0.5)" />} 
@@ -656,13 +669,13 @@ function DashboardShell({
             </button>
             <button
               type="button"
-              className={`omni-bottom-nav-item ${activeTab === 'remote' ? 'active' : ''}`}
-              onClick={() => handleMenuClick('remote')}
+              className={`omni-bottom-nav-item ${activeTab === 'leaderboard' ? 'active' : ''}`}
+              onClick={() => handleMenuClick('leaderboard')}
             >
               <div className="bottom-nav-icon-wrap">
-                <Smartphone style={{ width: 20, height: 20 }} />
+                <Trophy style={{ width: 20, height: 20 }} />
               </div>
-              <span className="omni-bottom-nav-label">Remote</span>
+              <span className="omni-bottom-nav-label">Ranks</span>
             </button>
             <button
               type="button"
@@ -814,7 +827,7 @@ export default function OmniPlayApp() {
       return;
     }
     // Guard: Prevent Admin from accessing User-only routes
-    if (isAdmin && (tab === 'stats' || tab === 'community' || tab === 'support')) {
+    if (isAdmin && (tab === 'stats' || tab === 'community' || tab === 'support' || tab === 'leaderboard')) {
       navigate('/library');
       return;
     }
@@ -951,6 +964,25 @@ export default function OmniPlayApp() {
               globalToast={globalToast}
             >
               <CommunityView />
+            </DashboardShell>
+          </ProtectedRoute>
+        } 
+      />
+
+      {/* Protected: Leaderboard & Achievements */}
+      <Route 
+        path="/leaderboard" 
+        element={
+          <ProtectedRoute>
+            <DashboardShell
+              activeTab="leaderboard"
+              onTabChange={handleTabChange}
+              onLogout={handleLogout}
+              launchingGame={launchingGame}
+              launchStep={launchStep}
+              globalToast={globalToast}
+            >
+              <LeaderboardView />
             </DashboardShell>
           </ProtectedRoute>
         } 
